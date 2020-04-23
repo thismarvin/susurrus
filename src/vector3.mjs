@@ -28,6 +28,10 @@ export default class Vector3 {
         }
     }
 
+    toArray() {
+        return [this.x, this.y, this.z];
+    }
+
     static dot(a, b) {
         return a.x * b.x + a.y * b.y + a.z * b.z;
     }
