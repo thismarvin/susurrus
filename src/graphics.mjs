@@ -6,6 +6,10 @@ export default class Graphics {
     constructor(gl) {
         this.gl = gl;
 
+        this.extensions = {
+            "ANGLE_instanced_arrays": this.gl.getExtension("ANGLE_instanced_arrays")
+        };                
+
         this.currentProgram = null;
     }
 
@@ -33,7 +37,7 @@ export default class Graphics {
 
         if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
             const error = new Error(`An error occurred will compiling the shader: ${this.gl.getShaderInfoLog(shader)}`);
-            gl.deleteShader(shader);
+            this.gl.deleteShader(shader);
             throw error;
         }
 
@@ -89,14 +93,11 @@ export default class Graphics {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
-    /**
-     * 
-     * @param {WebGLBuffer} buffer 
-     */
-    setBuffer(buffer) {
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-    }
 
+
+
+
+    
     /**
      * 
      * @param {WebGLProgram} program 
@@ -106,11 +107,19 @@ export default class Graphics {
         this.gl.useProgram(this.currentProgram);
     }
 
-    setAttribute(attribute) {
-        const index = this.gl.getAttribLocation(this.currentProgram, attribute);
+    bindBuffer(buffer) {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.buffer);
 
-        this.gl.vertexAttribPointer(index, 3, this.gl.FLOAT, false, 0, 0);
-        this.gl.enableVertexAttribArray(index);
+        for (let element of buffer.attributeSchema.elements) {
+            const index = this.gl.getAttribLocation(this.currentProgram, element.name);
+
+            this.gl.vertexAttribPointer(index, element.size, element.type, false, element.stride, element.offset);
+            this.gl.enableVertexAttribArray(index);
+
+            if (buffer.instanceFrequency > 0) {
+                this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(index, buffer.instanceFrequency);
+            }
+        }
     }
 
     setUniform(uniform, value) {
@@ -121,5 +130,7 @@ export default class Graphics {
     drawPrimitives(type, offset, primitiveCount) {
         this.gl.drawArrays(type, offset, primitiveCount);
     }
+
+
 
 }

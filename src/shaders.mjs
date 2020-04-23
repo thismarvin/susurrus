@@ -1,16 +1,22 @@
 const shaders = {
     "vertex": `
-        attribute vec3 position;
-
         uniform mat4 worldViewProjection;
 
+        attribute vec3 a_position;
+        attribute vec4 a_color;
+
+        varying lowp vec4 v_color;
+
         void main() {
-            gl_Position  = worldViewProjection * vec4(position, 1);
+            gl_Position  = worldViewProjection * vec4(a_position, 1);
+            v_color = a_color;
         }
     `,
     "fragment": `
+        varying lowp vec4 v_color;
+
         void main() {
-            gl_FragColor = vec4(0, 0, 0, 1);
+            gl_FragColor = v_color;
         }
     `
 };
