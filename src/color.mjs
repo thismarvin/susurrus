@@ -1,20 +1,95 @@
-export default class Color {
+class Color {
     constructor(r, g, b, a) {
-        this.r = r || 0;
-        this.g = g || 0;
-        this.b = b || 0;
-        this.a = a || 255;
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+
+        return new Proxy(this, handler);
     }
 
     toArray() {
         return [this.r, this.g, this.b, this.a];
     }
 
-    static fromHex(hex, a) {
-        const r = (hex & 0xFF0000) >> 16;
-        const g = (hex & 0xFF00) >> 8;
-        const b = hex & 0xFF;
-
-        return new Color(r, g, b, a || 255);
+    toString() {
+        return `( ${parseInt(this.r * 255)} ${parseInt(this.g * 255)} ${parseInt(this.b * 255)} ${parseInt(this.a * 255)} )`;
     }
 }
+
+class HexColor {
+    constructor(hex, a) {
+        const r = ((hex & 0xFF0000) >> 16) / 255;
+        const g = ((hex & 0xFF00) >> 8) / 255;
+        const b = (hex & 0xFF) / 255;
+        return new Color(r, g, b, a);
+    }
+}
+
+function processColorValue(value) {
+    // A valid value must be within the range [0, 1]!
+
+    // If the value is less than one, we can assume the color has already been mapped.
+    // Just check the lower bound to be safe. 😉
+    if (value < 1) {
+        return Math.max(0, value);
+    }
+
+    // The value probably has not been mapped, so lets map the color and check both bounds.
+    let result = value / 255;
+    result = Math.max(0, result);
+    result = Math.min(1, result);
+
+    return result;
+};
+
+const expectedProperties = new Set(["r", "g", "b", "a"]);
+
+const handler = {
+    construct(_, args) {
+        // Make sure all arguments are numbers.
+        for (let argument of args) {
+            if (typeof argument !== "number") {
+                throw new TypeError("Expected a number; invalid constructor arguments.");
+            }
+        }
+
+        const processedArguments = args.map(i => processColorValue(i));
+
+        switch (args.length) {
+            case 0:
+                return new Color();
+            case 1:
+                return new HexColor(args[0], 1);
+            case 2:
+                return new HexColor(args[0], processedArguments[1]);
+            case 3:
+                return new Color(...processedArguments);
+            case 4:
+                return new Color(...processedArguments);
+            default:
+                throw new Error(`'Color' does not have a constructor with ${args.length} arguments.`);
+        }
+    },
+    set(object, property, value) {
+        // Make sure the value is a number.
+        if (typeof value !== "number") {
+            throw new TypeError("Expected a nummber; invalid value.");
+        }
+
+        // Make sure the property even exists.
+        if (!expectedProperties.has(property)) {
+            throw new Error("Cannot set value of a property that does not exist.");
+        }
+
+        // Process the value and then set it to its respective property.
+        return Reflect.set(object, property, processColorValue(value));
+    }
+}
+
+const colorProxy = new Proxy(Color, handler);
+
+export {
+    colorProxy as
+    default
+};

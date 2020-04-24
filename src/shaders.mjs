@@ -41,7 +41,7 @@ const shaders = {
         void main() {
             mat4 transform = createTranslation(a_rotationOffset) * createRotationZ(a_rotation) * createTranslation(-a_rotationOffset + a_translation) * createScale(a_scale);
             gl_Position = transform * vec4(a_position, 1) * worldViewProjection;
-            v_color = vec4(a_color.r / 255.0, a_color.g / 255.0, a_color.b / 255.0, a_color.a / 255.0);
+            v_color = a_color;
         }   
     `,
     "fragment": `

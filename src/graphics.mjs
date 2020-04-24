@@ -83,8 +83,12 @@ export default class Graphics {
 
 
     clear(color) {
-        this.gl.clearColor(color.r / 255, color.g / 255, color.b / 255, color.a / 255);
+        this.gl.clearColor(color.r, color.g, color.b, color.a);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+        // Premultiplied Alpha.
+        this.gl.enable(this.gl.BLEND);
+        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
     }
 
 
