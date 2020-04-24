@@ -43,7 +43,8 @@ function processColorValue(value) {
     return result;
 };
 
-const expectedProperties = new Set(["r", "g", "b", "a"]);
+const gettableProperties = new Set(["r", "g", "b", "a", "toArray", "toString"]);
+const modifiableProperties = new Set(["r", "g", "b", "a"]);
 
 const handler = {
     construct(_, args) {
@@ -71,19 +72,42 @@ const handler = {
                 throw new Error(`'Color' does not have a constructor with ${args.length} arguments.`);
         }
     },
-    set(object, property, value) {
+    set(object, property, value, _) {
+        // Make sure the property exists.
+        if (!gettableProperties.has(property)) {
+            throw new Error("Cannot set value of a property that does not exist.");
+        }
+
+        // Make sure the property is modifiable.
+        if (!modifiableProperties.has(property)) {
+            throw new Error(`Cannot set value of '${property}' property.`);
+        }
+
         // Make sure the value is a number.
         if (typeof value !== "number") {
             throw new TypeError("Expected a nummber; invalid value.");
         }
 
-        // Make sure the property even exists.
-        if (!expectedProperties.has(property)) {
-            throw new Error("Cannot set value of a property that does not exist.");
-        }
-
         // Process the value and then set it to its respective property.
         return Reflect.set(object, property, processColorValue(value));
+    },
+    get(object, property, _) {
+        // Make sure the property even exists.
+        if (!gettableProperties.has(property)) {
+            throw new Error("Cannot get value of a property that does not exist.");
+        }
+
+        // Premultiply Alpha
+        switch (property) {
+            case "r":
+                return object.r * object.a;
+            case "g":
+                return object.g * object.a;
+            case "b":
+                return object.b * object.a;
+            default:
+                return Reflect.get(...arguments);
+        }
     }
 }
 

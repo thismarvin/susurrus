@@ -22,7 +22,7 @@ export default class Polygon {
         this.rotationOffset = new Vector3(0, 0, 0);
         this.rotation = 0;
 
-        this.color = new Color(0x7E2553);           
+        this.color = new Color(0x7E2553);
     }
 
     update() {
