@@ -8,7 +8,7 @@ export default class Graphics {
 
         this.extensions = {
             "ANGLE_instanced_arrays": this.gl.getExtension("ANGLE_instanced_arrays")
-        };                
+        };
 
         this.currentProgram = null;
     }
@@ -82,22 +82,12 @@ export default class Graphics {
     }
 
 
-
-
-
-
-
-
     clear(color) {
         this.gl.clearColor(color.r / 255, color.g / 255, color.b / 255, color.a / 255);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     }
 
 
-
-
-
-    
     /**
      * 
      * @param {WebGLProgram} program 
@@ -112,6 +102,10 @@ export default class Graphics {
 
         for (let element of buffer.attributeSchema.elements) {
             const index = this.gl.getAttribLocation(this.currentProgram, element.name);
+
+            if (index < 0) {
+                throw new Error(`The current program does not have a(n) '${element.name}' attribute.`);
+            }
 
             this.gl.vertexAttribPointer(index, element.size, element.type, false, element.stride, element.offset);
             this.gl.enableVertexAttribArray(index);
@@ -130,7 +124,4 @@ export default class Graphics {
     drawPrimitives(type, offset, primitiveCount) {
         this.gl.drawArrays(type, offset, primitiveCount);
     }
-
-
-
 }
