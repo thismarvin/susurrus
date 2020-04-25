@@ -1,11 +1,49 @@
 class Color {
-    constructor(r, g, b, a) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
+    _r;
+    _g;
+    _b;
+    _a;
 
-        return new Proxy(this, handler);
+    constructor(r, g, b, a) {
+        this._r = r;
+        this._g = g;
+        this._b = b;
+        this._a = a;
+
+        Object.defineProperty(this, "r", {
+            get() {
+                return this._r * this._a;
+            },
+            set(value) {
+                this._r = value;
+            }
+        });
+        Object.defineProperty(this, "g", {
+            get() {
+                return this._g * this._a;
+            },
+            set(value) {
+                this._g = value;
+            }
+        });
+        Object.defineProperty(this, "b", {
+            get() {
+                return this._b * this._a;
+            },
+            set(value) {
+                this._b = value;
+            }
+        });
+        Object.defineProperty(this, "a", {
+            get() {
+                return this._a;
+            },
+            set(value) {
+                this._a = value;
+            }
+        });
+
+        return new Proxy(this, proxySetTrap);
     }
 
     toArray() {
@@ -17,7 +55,7 @@ class Color {
     }
 }
 
-class HexColor {
+class ColorFromHex {
     constructor(hex, a) {
         const r = ((hex & 0xFF0000) >> 16) / 255;
         const g = ((hex & 0xFF00) >> 8) / 255;
@@ -26,27 +64,37 @@ class HexColor {
     }
 }
 
-function processColorValue(value) {
-    // A valid value must be within the range [0, 1]!
+const lowpLowerBounds = 0.00390625;
 
-    // If the value is less than one, we can assume the color has already been mapped.
-    // Just check the lower bound to be safe. 😉
-    if (value < 1) {
-        return Math.max(0, value);
+/**
+ * Maps a given value to be within the range [0, 1]. Note that if the value is greater than one
+ * then the functions assumes we are working with integer RGB values that are in the range [0, 255].
+ * @param {number} value The number to be mapped.
+ */
+function mapColorValue(value) {
+    // Don't store a number with more precision than lowp even has.
+    if (value <= lowpLowerBounds) {
+        return 0;
     }
 
-    // The value probably has not been mapped, so lets map the color and check both bounds.
-    let result = value / 255;
+    // If the value is less than one, we can assume the color has already been mapped.
+    if (value <= 1) {
+        return value;
+    }
+
+    // The value has not been mapped, so let us map the color and check both bounds.
+    let result = parseInt(value) / 255;
     result = Math.max(0, result);
     result = Math.min(1, result);
 
     return result;
 };
 
-const gettableProperties = new Set(["r", "g", "b", "a", "toArray", "toString"]);
-const modifiableProperties = new Set(["r", "g", "b", "a"]);
-
-const handler = {
+/**
+ * This trap is specifically for Color's constructor. Essentially this trap handles overloading,
+ * but in a hacky JavaScript kinda way.
+ */
+const proxyConstructTrap = {
     construct(_, args) {
         // Make sure all arguments are numbers.
         for (let argument of args) {
@@ -55,32 +103,42 @@ const handler = {
             }
         }
 
-        const processedArguments = args.map(i => processColorValue(i));
+        // Map all arguments to valid values.
+        const processedArguments = args.map(i => mapColorValue(i));
 
         switch (args.length) {
             case 0:
-                return new Color();
+                return new Color(0, 0, 0, 1);
             case 1:
-                return new HexColor(args[0], 1);
+                return new ColorFromHex(args[0], 1);
             case 2:
-                return new HexColor(args[0], processedArguments[1]);
+                return new ColorFromHex(args[0], processedArguments[1]);
             case 3:
-                return new Color(...processedArguments);
+                return new Color(...processedArguments, 1);
             case 4:
                 return new Color(...processedArguments);
             default:
-                throw new Error(`'Color' does not have a constructor with ${args.length} arguments.`);
+                throw new TypeError(`'Color' does not have a constructor with ${args.length} arguments.`);
         }
-    },
-    set(object, property, value, _) {
-        // Make sure the property exists.
-        if (!gettableProperties.has(property)) {
-            throw new Error("Cannot set value of a property that does not exist.");
-        }
+    }
+}
 
-        // Make sure the property is modifiable.
+/** 
+ * I'll admit, this is sort of unnecessary.
+ * However, without this, users can create properties that should not exist. 😯
+ * It might be a hassle to maintain, but I think it is worth it.
+ */
+const modifiableProperties = new Set(["r", "g", "b", "a", "_r", "_g", "_b", "_a"]);
+/**
+ * This trap is essentially used for validation. Color is a pretty simple class, so all
+ * I really have to do is make sure the value is a number and map it between [0, 1]. Note that this trap is ignored
+ * when initially setting all properties in the constructor. Also, who knew you could change what an Object's constructor
+ * returns? 😵
+ */
+const proxySetTrap = {
+    set(target, property, value) {
         if (!modifiableProperties.has(property)) {
-            throw new Error(`Cannot set value of '${property}' property.`);
+            throw new TypeError(`Color does not have a(n) '${property}' property; cannot set value.`);
         }
 
         // Make sure the value is a number.
@@ -88,30 +146,20 @@ const handler = {
             throw new TypeError("Expected a nummber; invalid value.");
         }
 
-        // Process the value and then set it to its respective property.
-        return Reflect.set(object, property, processColorValue(value));
-    },
-    get(object, property, _) {
-        // Make sure the property even exists.
-        if (!gettableProperties.has(property)) {
-            throw new Error("Cannot get value of a property that does not exist.");
-        }
+        const mappedValue = mapColorValue(value);
 
-        // Premultiply Alpha
-        switch (property) {
-            case "r":
-                return object.r * object.a;
-            case "g":
-                return object.g * object.a;
-            case "b":
-                return object.b * object.a;
-            default:
-                return Reflect.get(...arguments);
-        }
+        return Reflect.set(target, property, mappedValue);
     }
-}
+};
 
-const colorProxy = new Proxy(Color, handler);
+/**
+ * The default export needs to be a Proxy in order for a "construct" trap to work.
+ * The fact that this is a const and it's being exported feels kinda hacky,
+ * but hey, Proxies are hacky in the first place! 😎
+ * In the future, if you are ever going to refactor this, just know that if this is a
+ * class then everything breaks.
+ */
+const colorProxy = new Proxy(Color, proxyConstructTrap);
 
 export {
     colorProxy as
