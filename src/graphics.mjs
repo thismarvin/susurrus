@@ -25,6 +25,15 @@ export default class Graphics {
         return buffer;
     }
 
+    // This is sort of temporary for now. Essentially this is just for an IndexBuffer.
+    createElementBuffer(data) {
+        const buffer = this.gl.createBuffer();
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer);
+        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data), this.gl.STATIC_DRAW);
+
+        return buffer;
+    }
+
     /**
      * 
      * @param {String} source 
@@ -73,6 +82,9 @@ export default class Graphics {
         this.gl.attachShader(program, vertexShader);
         this.gl.attachShader(program, fragmentShader);
         this.gl.linkProgram(program);
+        // Not sure if this is happening automatically somewhere, or if it is even needed?
+        // this.gl.detachShader(program, vertexShader);
+        // this.gl.detachShader(program, fragmentShader);   
 
         if (!this.gl.getProgramParameter(program, this.gl.LINK_STATUS)) {
             throw new Error(`An error occurred while initializing the shader program:  ${this.gl.getProgramInfoLog(program)}`);
@@ -80,7 +92,6 @@ export default class Graphics {
 
         return program;
     }
-
 
     clear(color) {
         this.gl.clearColor(color.r, color.g, color.b, color.a);
@@ -91,13 +102,8 @@ export default class Graphics {
         this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
     }
 
-
-    /**
-     * 
-     * @param {WebGLProgram} program 
-     */
-    apply(program) {
-        this.currentProgram = program;
+    begin(effect) {
+        this.currentProgram = effect.program;
         this.gl.useProgram(this.currentProgram);
     }
 
@@ -120,12 +126,42 @@ export default class Graphics {
         }
     }
 
+    setIndices(buffer) {
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer.buffer);
+    }
+
     setUniform(uniform, value) {
         const location = this.gl.getUniformLocation(this.currentProgram, uniform);
         this.gl.uniformMatrix4fv(location, false, value);
     }
 
-    drawPrimitives(type, offset, primitiveCount) {
-        this.gl.drawArrays(type, offset, primitiveCount);
+    drawArrays(mode, offset, primitiveCount) {
+        this.gl.drawArrays(mode, offset, primitiveCount);
+    }
+
+    drawElements(mode, totalTriangles, offset) {
+        this.gl.drawElements(mode, totalTriangles * 3, this.gl.UNSIGNED_SHORT, offset);
+    }
+
+    drawInstancedElements(mode, totalTriangles, offset, primitiveCount) {
+        this.extensions["ANGLE_instanced_arrays"].drawElementsInstancedANGLE(mode, totalTriangles * 3, this.gl.UNSIGNED_SHORT, offset, primitiveCount);
+    }
+
+    deleteBuffer(buffer) {
+        for (let element of buffer.attributeSchema.elements) {
+            const index = this.gl.getAttribLocation(this.currentProgram, element.name);
+
+            if (index < 0) {
+                throw new Error(`The current program does not have a(n) '${element.name}' attribute.`);
+            }
+
+            this.gl.disableVertexAttribArray(index);
+        }
+
+        this.gl.deleteBuffer(buffer.buffer);
+    }
+
+    end() {
+        this.currentProgram = null;
     }
 }

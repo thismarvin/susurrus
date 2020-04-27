@@ -21,8 +21,7 @@ export default class Polygon {
         this.scale = new Vector3(1, 1, 1);
         this.rotationOffset = new Vector3(0, 0, 0);
         this.rotation = 0;
-
-        this.color = new Color(0x7E2553);
+        this.color = new Color(0xFFFFFF);
     }
 
     update() {
@@ -45,10 +44,13 @@ export default class Polygon {
             1
         );
 
-        graphics.apply(effect.program);
+        graphics.begin(effect);
         graphics.bindBuffer(this.geometry.vertexBuffer);
         graphics.bindBuffer(mutationBuffer);
+        graphics.setIndices(this.geometry.indexBuffer);
         graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
-        graphics.drawPrimitives(graphics.gl.TRIANGLES, 0, 3);
+        graphics.drawElements(graphics.gl.TRIANGLES, this.geometry.totalTriangles, 0);
+        graphics.deleteBuffer(mutationBuffer);
+        graphics.end();
     }
 }
