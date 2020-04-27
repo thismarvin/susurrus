@@ -1,4 +1,5 @@
 export { default as Color } from "./color.mjs";
+export * as Colors from "./colors.mjs";
 export { default as Sketch } from "./sketch.mjs";
 export { default as Polygon } from "./polygon.mjs";
 export { default as PolygonData } from "./polygonData.mjs";
