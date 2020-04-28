@@ -53,4 +53,7 @@ const shaders = {
     `
 };
 
-export { shaders as default };
+export {
+    shaders as
+    default
+};

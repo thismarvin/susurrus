@@ -13,16 +13,33 @@ export default class Graphics {
         this.currentProgram = null;
     }
 
-    /**
-     * 
-     * @param {Array} data 
-     */
-    createBuffer(data) {
+
+    allocateVertexBuffer(size, vertexUsage) {
         const buffer = this.gl.createBuffer();
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), this.gl.STATIC_DRAW);
 
+        /**
+         * I am not sure if I am going to keep this.
+         * For some reason I cannot use DYNAMIC DRAW unless the allocated
+         * size is three times the initial size???
+         * STATIC_DRAW works perfectly fine with the initial size.
+         * I am not even sure if DYNAMIC_DRAW is even better than STATIC_DRAW in the
+         * first place.
+         */
+        let modifiedSize = size;
+        switch (vertexUsage) {
+            case (this.gl.DYNAMIC_DRAW):
+                modifiedSize = size * 3;
+                break;
+        }
+
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, modifiedSize, vertexUsage);
         return buffer;
+    }
+
+    setVertexBufferData(buffer, data) {
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, data);
     }
 
     // This is sort of temporary for now. Essentially this is just for an IndexBuffer.
@@ -82,6 +99,7 @@ export default class Graphics {
         this.gl.attachShader(program, vertexShader);
         this.gl.attachShader(program, fragmentShader);
         this.gl.linkProgram(program);
+
         // Not sure if this is happening automatically somewhere, or if it is even needed?
         // this.gl.detachShader(program, vertexShader);
         // this.gl.detachShader(program, fragmentShader);   
@@ -107,7 +125,7 @@ export default class Graphics {
         this.gl.useProgram(this.currentProgram);
     }
 
-    bindBuffer(buffer) {
+    setVertexBuffer(buffer) {
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.buffer);
 
         for (let element of buffer.attributeSchema.elements) {
@@ -117,8 +135,8 @@ export default class Graphics {
                 throw new Error(`The current program does not have a(n) '${element.name}' attribute.`);
             }
 
-            this.gl.vertexAttribPointer(index, element.size, element.type, false, element.stride, element.offset);
             this.gl.enableVertexAttribArray(index);
+            this.gl.vertexAttribPointer(index, element.size, element.type, false, element.stride, element.offset);
 
             if (buffer.instanceFrequency > 0) {
                 this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(index, buffer.instanceFrequency);
@@ -126,7 +144,13 @@ export default class Graphics {
         }
     }
 
-    setIndices(buffer) {
+    setVertexBuffers(buffers) {
+        for (let buffer of buffers) {
+            this.setVertexBuffer(buffer);
+        }
+    }
+
+    setIndexBuffer(buffer) {
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer.buffer);
     }
 

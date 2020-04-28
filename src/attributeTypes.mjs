@@ -7,4 +7,7 @@ const attributeTypes = {
     "FLOAT": 5126,
 };
 
-export { attributeTypes as default };
+export {
+    attributeTypes as
+    default
+};
