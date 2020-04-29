@@ -8,6 +8,8 @@ const drawModes = {
     "TRIANGLE_FAN": 6,
 };
 
+Object.freeze(drawModes);
+
 export {
     drawModes as
     default

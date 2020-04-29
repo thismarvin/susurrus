@@ -1,3 +1,4 @@
+import * as WebGL from "./graphics/webGL.mjs";
 import Graphics from "./graphics.mjs";
 
 export default class Sketch {
@@ -5,16 +6,11 @@ export default class Sketch {
         this.parent = document.getElementById(id);
         this.canvas = document.createElement("canvas");
         this.parent.appendChild(this.canvas);
+        this.canvas.id = `${id}-canvas`;
         this.canvas.width = 400;
         this.canvas.height = 400;
 
-        const gl = this.canvas.getContext("webgl");
-
-        if (gl === null) {
-            throw new Error("WebGL is not supported on this device.");
-        }
-
-        this.graphics = new Graphics(gl);
+        this.graphics = new Graphics(WebGL.getWebGLContext(`${id}-canvas`));
 
         this.initialized = false;
         this.running = true;

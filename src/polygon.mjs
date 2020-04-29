@@ -1,9 +1,9 @@
-import AttributeTypes from "./attributeTypes.mjs";
-import AttributeSchema from "./attributeSchema.mjs";
-import AttributeElement from "./attributeElement.mjs";
-import DrawModes from "./drawModes.mjs";
-import VertexUsage from "./vertexUsage.mjs";
-import VertexBuffer from "./vertexBuffer.mjs";
+import AttributeTypes from "./graphics/attributeTypes.mjs";
+import AttributeSchema from "./graphics/attributeSchema.mjs";
+import AttributeElement from "./graphics/attributeElement.mjs";
+import DrawModes from "./graphics/drawModes.mjs";
+import VertexUsage from "./graphics/vertexUsage.mjs";
+import VertexBuffer from "./graphics/vertexBuffer.mjs";
 import Vector3 from "./vector3.mjs";
 import Color from "./color.mjs";
 

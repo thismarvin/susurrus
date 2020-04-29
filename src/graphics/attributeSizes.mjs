@@ -7,6 +7,8 @@ const attributeSizes = {
     "FLOAT": 4,
 };
 
+Object.freeze(attributeSizes);
+
 export {
     attributeSizes as
     default

@@ -7,6 +7,8 @@ const attributeTypes = {
     "FLOAT": 5126,
 };
 
+Object.freeze(attributeTypes);
+
 export {
     attributeTypes as
     default
