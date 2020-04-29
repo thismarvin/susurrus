@@ -1,5 +1,5 @@
 import * as WebGL from "./graphics/webGL.mjs";
-import Graphics from "./graphics.mjs";
+import Graphics from "./graphics/graphics.mjs";
 
 export default class Sketch {
     constructor(id) {

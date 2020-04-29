@@ -1,9 +1,9 @@
-import AttributeType from "./graphics/attributeType.mjs";
-import AttributeSchema from "./graphics/attributeSchema.mjs";
-import AttributeElement from "./graphics/attributeElement.mjs";
-import VertexUsage from "./graphics/vertexUsage.mjs";
-import VertexBuffer from "./graphics/vertexBuffer.mjs";
-import IndexBuffer from "./graphics/indexBuffer.mjs";
+import AttributeType from "./attributeType.mjs";
+import AttributeSchema from "./attributeSchema.mjs";
+import AttributeElement from "./attributeElement.mjs";
+import VertexUsage from "./vertexUsage.mjs";
+import VertexBuffer from "./vertexBuffer.mjs";
+import IndexBuffer from "./indexBuffer.mjs";
 
 const attributeSchema = new AttributeSchema([
     new AttributeElement("a_position", 3, AttributeType.FLOAT)

@@ -1,10 +1,10 @@
-import AttributeType from "./graphics/attributeType.mjs";
-import AttributeSchema from "./graphics/attributeSchema.mjs";
-import AttributeElement from "./graphics/attributeElement.mjs";
-import DrawMode from "./graphics/drawMode.mjs";
-import VertexUsage from "./graphics/vertexUsage.mjs";
-import VertexBuffer from "./graphics/vertexBuffer.mjs";
-import Vector3 from "./maths/vector3.mjs";
+import AttributeType from "./attributeType.mjs";
+import AttributeSchema from "./attributeSchema.mjs";
+import AttributeElement from "./attributeElement.mjs";
+import DrawMode from "./drawMode.mjs";
+import VertexUsage from "./vertexUsage.mjs";
+import VertexBuffer from "./vertexBuffer.mjs";
+import Vector3 from "../maths/vector3.mjs";
 import Color from "./color.mjs";
 
 export default class Polygon {
@@ -26,12 +26,8 @@ export default class Polygon {
         this.color = new Color(0xFFFFFF);
 
         this.transformBuffer = new VertexBuffer(graphics, this.attributeSchema, this.attributeSchema.size * 1, VertexUsage.DYNAMIC, 1);
-    }
 
-    update() {
-        this.rotation += 0.01;
-
-        const mutationData = [].concat(
+        const transformData = [].concat(
             this.position.toArray(),
             this.scale.toArray(),
             this.rotationOffset.toArray(),
@@ -39,7 +35,11 @@ export default class Polygon {
             this.color.toArray()
         );
 
-        this.transformBuffer.setData(mutationData);
+        this.transformBuffer.setData(transformData);
+    }
+
+    update() {
+
     }
 
     draw(graphics, effect, camera) {

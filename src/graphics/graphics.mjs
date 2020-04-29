@@ -1,4 +1,4 @@
-import * as WebGL from "./graphics/webGL.mjs";
+import * as WebGL from "./webGL.mjs";
 
 export default class Graphics {
     /**

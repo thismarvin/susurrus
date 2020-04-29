@@ -1,5 +1,5 @@
-import Matrix from "./maths/matrix.mjs";
-import Vector3 from "./maths/vector3.mjs";
+import Matrix from "../maths/matrix.mjs";
+import Vector3 from "../maths/vector3.mjs";
 
 export default class Camera {
     constructor() {

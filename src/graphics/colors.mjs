@@ -10,6 +10,8 @@ const colors = {
     "SkyBlue": new Color(0x29ADFF),
 }
 
+Object.freeze(colors);
+
 export {
     colors as
     default
