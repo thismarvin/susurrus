@@ -1,6 +1,7 @@
 import AttributeTypes from "./attributeTypes.mjs";
 import AttributeSchema from "./attributeSchema.mjs";
 import AttributeElement from "./attributeElement.mjs";
+import DrawModes from "./drawModes.mjs";
 import VertexUsage from "./vertexUsage.mjs";
 import VertexBuffer from "./vertexBuffer.mjs";
 import Vector3 from "./vector3.mjs";
@@ -22,7 +23,7 @@ export default class Polygon {
         this.scale = new Vector3(1, 1, 1);
         this.rotationOffset = new Vector3(0, 0, 0);
         this.rotation = 0;
-        this.color = new Color(0xFF0000);
+        this.color = new Color(0xFFFFFF);
 
         this.transformBuffer = new VertexBuffer(graphics, this.attributeSchema, this.attributeSchema.size * 1, VertexUsage.DYNAMIC, 1);
     }
@@ -49,7 +50,7 @@ export default class Polygon {
 
         graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
 
-        graphics.drawElements(graphics.gl.TRIANGLES, this.geometry.totalTriangles, 0);
+        graphics.drawElements(DrawModes.TRIANGLES, this.geometry.totalTriangles, 0);
 
         graphics.end();
     }
