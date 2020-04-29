@@ -4,7 +4,7 @@ import AttributeElement from "./graphics/attributeElement.mjs";
 import DrawMode from "./graphics/drawMode.mjs";
 import VertexUsage from "./graphics/vertexUsage.mjs";
 import VertexBuffer from "./graphics/vertexBuffer.mjs";
-import Vector3 from "./vector3.mjs";
+import Vector3 from "./maths/vector3.mjs";
 import Color from "./color.mjs";
 
 export default class Polygon {

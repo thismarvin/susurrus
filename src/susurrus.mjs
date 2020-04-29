@@ -6,5 +6,5 @@ export { default as PolygonData } from "./polygonData.mjs";
 export { default as Effect } from "./graphics/effect.mjs";
 export { default as BasicEffect } from "./graphics/basicEffect.mjs";
 export { default as Camera } from "./camera.mjs";
-export { default as Matrix } from "./matrix.mjs";
-export { default as Vector3 } from "./vector3.mjs";
+export { default as Matrix } from "./maths/matrix.mjs";
+export { default as Vector3 } from "./maths/vector3.mjs";
