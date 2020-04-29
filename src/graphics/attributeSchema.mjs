@@ -1,5 +1,5 @@
-import AttributTypes from "./attributeTypes.mjs";
-import AttributeSizes from "./attributeSizes.mjs";
+import AttributType from "./attributeType.mjs";
+import AttributeSize from "./attributeSize.mjs";
 
 function processAttributeElements(elements) {
     let size = 0;
@@ -12,8 +12,8 @@ function processAttributeElements(elements) {
         strideOffsets.push(stride);
 
         switch (element.type) {
-            case (AttributTypes.FLOAT):
-                stride += AttributeSizes.FLOAT * element.size;
+            case (AttributType.FLOAT):
+                stride += AttributeSize.FLOAT * element.size;
                 break;
             default:
                 throw new TypeError("Unsupported attribute type.");

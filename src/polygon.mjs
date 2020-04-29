@@ -1,7 +1,7 @@
-import AttributeTypes from "./graphics/attributeTypes.mjs";
+import AttributeType from "./graphics/attributeType.mjs";
 import AttributeSchema from "./graphics/attributeSchema.mjs";
 import AttributeElement from "./graphics/attributeElement.mjs";
-import DrawModes from "./graphics/drawModes.mjs";
+import DrawMode from "./graphics/drawMode.mjs";
 import VertexUsage from "./graphics/vertexUsage.mjs";
 import VertexBuffer from "./graphics/vertexBuffer.mjs";
 import Vector3 from "./vector3.mjs";
@@ -12,11 +12,11 @@ export default class Polygon {
         this.geometry = geometry;
 
         this.attributeSchema = new AttributeSchema([
-            new AttributeElement("a_translation", 3, AttributeTypes.FLOAT),
-            new AttributeElement("a_scale", 3, AttributeTypes.FLOAT),
-            new AttributeElement("a_rotationOffset", 3, AttributeTypes.FLOAT),
-            new AttributeElement("a_rotation", 1, AttributeTypes.FLOAT),
-            new AttributeElement("a_color", 4, AttributeTypes.FLOAT)
+            new AttributeElement("a_translation", 3, AttributeType.FLOAT),
+            new AttributeElement("a_scale", 3, AttributeType.FLOAT),
+            new AttributeElement("a_rotationOffset", 3, AttributeType.FLOAT),
+            new AttributeElement("a_rotation", 1, AttributeType.FLOAT),
+            new AttributeElement("a_color", 4, AttributeType.FLOAT)
         ]);
 
         this.position = new Vector3(0, 0, 0);
@@ -50,7 +50,7 @@ export default class Polygon {
 
         graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
 
-        graphics.drawElements(DrawModes.TRIANGLES, this.geometry.totalTriangles, 0);
+        graphics.drawElements(DrawMode.TRIANGLES, this.geometry.totalTriangles, 0);
 
         graphics.end();
     }
