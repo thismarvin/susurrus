@@ -1,3 +1,4 @@
+import * as ProxyHelper from "../utilities/proxyHelper.mjs";
 import AttributeType from "./attributeType.mjs";
 import AttributeSchema from "./attributeSchema.mjs";
 import AttributeElement from "./attributeElement.mjs";
@@ -6,6 +7,47 @@ import VertexUsage from "./vertexUsage.mjs";
 import VertexBuffer from "./vertexBuffer.mjs";
 import Vector3 from "../maths/vector3.mjs";
 import Color from "./color.mjs";
+
+const polygonProperties = new Set([
+    "position", "scale", "rotationOffset", "rotation", "color",
+    "_position", "_scale", "_rotationOffset", "_rotation", "_color",
+    "_transformChanged"
+]);
+
+const proxySetTrap = {
+    set(target, property, value) {
+        // Again, this isn't really necessary. Although I do not want new properties being added! 😡
+        if (!polygonProperties.has(property)) {
+            throw new TypeError(`Polygon does not have a(n) '${property}' property; cannot set value.`);
+        }
+
+        // Validate values before setting them.
+        switch (property) {
+            case "position":
+            case "_position":
+            case "scale":
+            case "_scale":
+            case "rotationOffset":
+            case "_rotationOffset":
+                ProxyHelper.expectInstance(property, value, Vector3);
+                break;
+            case "color":
+            case "_color":
+                ProxyHelper.expectInstance(property, value, Color);
+                break;
+            case "rotation":
+            case "_rotation":
+                ProxyHelper.expectType(property, value, "number");                
+                break;
+            case "_transformChanged":
+                ProxyHelper.expectType(property, value, "boolean");
+                break;
+        }
+
+        // Passed validation; set the value now.
+        return Reflect.set(target, property, value);
+    }
+};
 
 export default class Polygon {
     geometry;
@@ -114,6 +156,8 @@ export default class Polygon {
         this.transformBuffer = new VertexBuffer(graphics, this.attributeSchema, this.attributeSchema.size * 1, VertexUsage.DYNAMIC, 1);
         this._updateBuffer();
         this._transformChanged = false;
+
+        return new Proxy(this, proxySetTrap);
     }
 
     applyChanges() {
