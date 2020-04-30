@@ -21,6 +21,8 @@ const proxySetTrap = {
             throw new TypeError(`Polygon does not have a(n) '${property}' property; cannot set value.`);
         }
 
+        const addendum = `Cannot set '${property}' property.`;
+
         // Validate values before setting them.
         switch (property) {
             case "position":
@@ -29,18 +31,26 @@ const proxySetTrap = {
             case "_scale":
             case "rotationOffset":
             case "_rotationOffset":
-                ProxyHelper.expectInstance(property, value, Vector3);
+                ProxyHelper.expectInstance(value, Vector3, {
+                    "addendum": addendum
+                });
                 break;
             case "color":
             case "_color":
-                ProxyHelper.expectInstance(property, value, Color);
+                ProxyHelper.expectInstance(value, Color, {
+                    "addendum": addendum
+                });
                 break;
             case "rotation":
             case "_rotation":
-                ProxyHelper.expectType(property, value, "number");                
+                ProxyHelper.expectType(value, "number", {
+                    "addendum": addendum
+                });
                 break;
             case "_transformChanged":
-                ProxyHelper.expectType(property, value, "boolean");
+                ProxyHelper.expectType(value, "boolean", {
+                    "addendum": addendum
+                });
                 break;
         }
 

@@ -1,3 +1,5 @@
+import * as ProxyHelper from "../utilities/proxyHelper.mjs";
+
 class Color {
     _r;
     _g;
@@ -98,9 +100,7 @@ const proxyConstructTrap = {
     construct(_, args) {
         // Make sure all arguments are numbers.
         for (let argument of args) {
-            if (typeof argument !== "number") {
-                throw new TypeError("Expected a number; invalid constructor arguments.");
-            }
+            ProxyHelper.expectType(argument, "number");
         }
 
         // Map all arguments to valid values.
@@ -128,7 +128,7 @@ const proxyConstructTrap = {
  * However, without this, users can create properties that should not exist. 😯
  * It might be a hassle to maintain, but I think it is worth it.
  */
-const modifiableProperties = new Set(["r", "g", "b", "a", "_r", "_g", "_b", "_a"]);
+const colorProperties = new Set(["r", "g", "b", "a", "_r", "_g", "_b", "_a"]);
 /**
  * This trap is essentially used for validation. Color is a pretty simple class, so all
  * I really have to do is make sure the value is a number and map it between [0, 1]. Note that this trap is ignored
@@ -137,14 +137,13 @@ const modifiableProperties = new Set(["r", "g", "b", "a", "_r", "_g", "_b", "_a"
  */
 const proxySetTrap = {
     set(target, property, value) {
-        if (!modifiableProperties.has(property)) {
+        // Again, this isn't really necessary. Although I do not want new properties being added! 😡
+        if (!colorProperties.has(property)) {
             throw new TypeError(`Color does not have a(n) '${property}' property; cannot set value.`);
         }
 
         // Make sure the value is a number.
-        if (typeof value !== "number") {
-            throw new TypeError("Expected a nummber; invalid value.");
-        }
+        ProxyHelper.expectType(value, "number");
 
         const mappedValue = mapColorValue(value);
 
