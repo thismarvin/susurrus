@@ -14,6 +14,7 @@ export { default as PolygonData } from "./graphics/polygonData.mjs";
 export { default as VertexBuffer } from "./graphics/vertexBuffer.mjs";
 export { default as VertexUsage } from "./graphics/vertexUsage.mjs";
 
+export { default as DynamicMatrix } from "./maths/dynamicMatrix.mjs";
 export { default as Matrix } from "./maths/matrix.mjs";
 export { default as Vector2 } from "./maths/vector3.mjs";
 export { default as Vector3 } from "./maths/vector3.mjs";
