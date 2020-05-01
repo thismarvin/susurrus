@@ -1,4 +1,4 @@
-import * as ProxyHelper from "../utilities/proxyHelper.mjs";
+import * as PropertyAssent from "../utilities/propertyAssent.mjs";
 import AttributeType from "./attributeType.mjs";
 import AttributeSchema from "./attributeSchema.mjs";
 import AttributeElement from "./attributeElement.mjs";
@@ -31,24 +31,24 @@ const proxySetTrap = {
             case "_scale":
             case "rotationOffset":
             case "_rotationOffset":
-                ProxyHelper.expectInstance(value, Vector3, {
+                PropertyAssent.expectInstance(value, Vector3, {
                     "addendum": addendum
                 });
                 break;
             case "color":
             case "_color":
-                ProxyHelper.expectInstance(value, Color, {
+                PropertyAssent.expectInstance(value, Color, {
                     "addendum": addendum
                 });
                 break;
             case "rotation":
             case "_rotation":
-                ProxyHelper.expectType(value, "number", {
+                PropertyAssent.expectType(value, "number", {
                     "addendum": addendum
                 });
                 break;
             case "_transformChanged":
-                ProxyHelper.expectType(value, "boolean", {
+                PropertyAssent.expectType(value, "boolean", {
                     "addendum": addendum
                 });
                 break;

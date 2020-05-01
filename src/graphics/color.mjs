@@ -1,4 +1,4 @@
-import * as ProxyHelper from "../utilities/proxyHelper.mjs";
+import * as PropertyAssent from "../utilities/propertyAssent.mjs";
 
 class Color {
     // public:
@@ -107,7 +107,7 @@ const proxyConstructTrap = {
     construct(_, args) {
         // Make sure all arguments are numbers.
         for (let argument of args) {
-            ProxyHelper.expectType(argument, "number");
+            PropertyAssent.expectType(argument, "number");
         }
 
         // Map all arguments to valid values.
@@ -150,7 +150,7 @@ const proxySetTrap = {
         }
 
         // Make sure the value is a number.
-        ProxyHelper.expectType(value, "number");
+        PropertyAssent.expectType(value, "number");
 
         const mappedValue = mapColorValue(value);
 
