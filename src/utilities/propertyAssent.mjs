@@ -6,9 +6,18 @@
  * @param options Optional options to apply if validation fails.
  */
 export function expectType(value, type, options) {
-    let valid = typeof value === type;
+    let valid = true;
 
-    return handleOptions(valid, options, `Expected value to be a(n) '${type}'.`);
+    switch (type.toLowerCase()) {
+        case "array":
+            valid = Array.isArray(value);
+            break;
+        default:
+            valid = typeof value === type;
+            break;
+    }
+
+    return validateAssent(valid, options, `Expected value to be a(n) '${type}'.`);
 }
 
 /**
@@ -20,7 +29,7 @@ export function expectType(value, type, options) {
 export function expectInstance(value, instance, options) {
     let valid = value instanceof instance;
 
-    return handleOptions(valid, options, `Expected value to be an instance of '${instance.name}'.`);
+    return validateAssent(valid, options, `Expected value to be an instance of '${instance.name}'.`);
 }
 //#endregion
 
@@ -31,15 +40,15 @@ export function expectInstance(value, instance, options) {
  * @param options 
  * @param {String} defaultErrorMessage
  */
-function handleOptions(valid, options, defaultErrorMessage) {
-    const throwDefaultMessage = () => {
+function validateAssent(valid, options, defaultErrorMessage) {
+    const throwDefaultErrorMessage = () => {
         throw new TypeError(defaultErrorMessage);
     };
 
     // When there are no options, throw an error if 'valid' is false or return nothing if 'valid' is true.
     if (options === undefined) {
         if (!valid) {
-            throwDefaultMessage();
+            throwDefaultErrorMessage();
         }
         return;
     }
@@ -71,7 +80,7 @@ function handleOptions(valid, options, defaultErrorMessage) {
             throw new TypeError(options.errorMessage);
         }
 
-        throwDefaultMessage();
+        throwDefaultErrorMessage();
     }
 
     // If options contains a 'addendum' property and it is a string, throw a TypeError with the original error message and the addendum.
@@ -80,7 +89,7 @@ function handleOptions(valid, options, defaultErrorMessage) {
             throw new TypeError(`${defaultErrorMessage} ${options.addendum}`);
         }
 
-        throwDefaultMessage();
+        throwDefaultErrorMessage();
     }
 }
 //#endregion
