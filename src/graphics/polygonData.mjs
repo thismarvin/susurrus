@@ -10,14 +10,37 @@ const attributeSchema = new AttributeSchema([
 ]);
 
 export default class PolygonData {
+    // public:
+    vertexBuffer; // readonly
+    indexBuffer; // readonly
+    totalVertices; // readonly
+    totalTriangles; // readonly
+
     constructor(graphics, vertices, indices) {
-        this.vertexBuffer = new VertexBuffer(graphics, attributeSchema, vertices.length, VertexUsage.STATIC);
+        Object.defineProperty(this, "vertexBuffer", {
+            "value": new VertexBuffer(graphics, attributeSchema, vertices.length, VertexUsage.STATIC),
+            "writable": false
+        });
+
+
+        Object.defineProperty(this, "indexBuffer", {
+            "value": new IndexBuffer(graphics, indices.length),
+            "writable": false
+        });
+
+
+        Object.defineProperty(this, "totalVertices", {
+            "value": vertices.length / 3,
+            "writable": false
+        });
+
+
+        Object.defineProperty(this, "totalTriangles", {
+            "value": indices.length / 3,
+            "writable": false
+        });
+
         this.vertexBuffer.setData(vertices);
-
-        this.indexBuffer = new IndexBuffer(graphics, indices.length);
         this.indexBuffer.setData(indices);
-
-        this.totalVertices = vertices.length / 3;
-        this.totalTriangles = indices.length / 3;
     }
 }

@@ -1,15 +1,29 @@
 import * as WebGL from "./webGL.mjs";
 
 export default class Graphics {
+    // public:
+    gl; // readonly
+    extensions; // readonly
+
+    // private:
+    _currentProgram;
+
     /**
      * 
      * @param {WebGLRenderingContext} gl 
      */
     constructor(gl) {
-        this.gl = gl;
-        this.extensions = {
-            "ANGLE_instanced_arrays": this.gl.getExtension("ANGLE_instanced_arrays")
-        };
+        Object.defineProperty(this, "gl", {
+            "value": gl,
+            "writable": false
+        });
+
+        Object.defineProperty(this, "extensions", {
+            "value": {
+                "ANGLE_instanced_arrays": this.gl.getExtension("ANGLE_instanced_arrays")
+            },
+            "writable": false
+        });
 
         this._currentProgram = null;
 

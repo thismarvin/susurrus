@@ -4,12 +4,28 @@ import BufferType from "./bufferType.mjs";
 import VertexUsage from "./vertexUsage.mjs";
 
 export default class VertexBuffer extends Buffer {
+    // public:
+    attributeSchema; // readonly
+    vertexUsage; // readonly
+    instanceFrequency; // readonly
+
     constructor(graphics, attributeSchema, length, vertexUsage, instanceFrequency) {
         super(graphics, length, BufferType.VERTEX);
 
-        this.attributeSchema = attributeSchema;
-        this.vertexUsage = vertexUsage ? vertexUsage : VertexUsage.STATIC;
-        this.instanceFrequency = instanceFrequency ? instanceFrequency : 0;
+        Object.defineProperty(this, "attributeSchema", {
+            "value": attributeSchema,
+            "writable": false
+        });
+
+        Object.defineProperty(this, "vertexUsage", {
+            "value": vertexUsage !== undefined ? vertexUsage : VertexUsage.STATIC,
+            "writable": false
+        });
+
+        Object.defineProperty(this, "instanceFrequency", {
+            "value": instanceFrequency !== undefined ? instanceFrequency : 0,
+            "writable": false
+        });
 
         this.data = new Float32Array(this.length);
         this.buffer = WebGL.allocateVertexBuffer(graphics.gl, this.data.byteLength, this.vertexUsage);

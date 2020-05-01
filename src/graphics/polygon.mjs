@@ -60,10 +60,17 @@ const proxySetTrap = {
 };
 
 export default class Polygon {
-    geometry;
-    attributeSchema;
-    transformBuffer;
+    // public:
+    geometry; // readonly
+    attributeSchema; // readonly
+    transformBuffer; // readonly
+    position;
+    scale;
+    rotationOffset;
+    rotation;
+    color;
 
+    // private:
     _position;
     _scale;
     _rotationOffset;
@@ -74,7 +81,8 @@ export default class Polygon {
 
     constructor(graphics, geometry) {
         Object.defineProperty(this, "geometry", {
-            "value": geometry
+            "value": geometry,
+            "writable": false
         });
 
         Object.defineProperty(this, "attributeSchema", {
@@ -84,7 +92,8 @@ export default class Polygon {
                 new AttributeElement("a_rotationOffset", 3, AttributeType.FLOAT),
                 new AttributeElement("a_rotation", 1, AttributeType.FLOAT),
                 new AttributeElement("a_color", 4, AttributeType.FLOAT)
-            ])
+            ]),
+            "writable": false
         });
 
         Object.defineProperty(this, "position", {
@@ -163,7 +172,11 @@ export default class Polygon {
         this._rotation = 0;
         this._color = new Color(0xFFFFFF);
 
-        this.transformBuffer = new VertexBuffer(graphics, this.attributeSchema, this.attributeSchema.size * 1, VertexUsage.DYNAMIC, 1);
+        Object.defineProperty(this, "transformBuffer", {
+            "value": new VertexBuffer(graphics, this.attributeSchema, this.attributeSchema.size * 1, VertexUsage.DYNAMIC, 1),
+            "writable": false
+        });
+
         this._updateBuffer();
         this._transformChanged = false;
 

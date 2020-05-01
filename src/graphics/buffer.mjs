@@ -2,12 +2,14 @@ import * as WebGL from "./webGL.mjs";
 import BufferType from "./bufferType.mjs";
 
 export default class Buffer {
-    length;
-    type;
+    // public:
+    length; // readonly
+    type; // readonly
     data;
     buffer;
 
-    _graphics;
+    // private:
+    _graphics; // readonly
 
     constructor(graphics, length, type) {
         Object.defineProperty(this, "_graphics", {
@@ -15,11 +17,13 @@ export default class Buffer {
         });
 
         Object.defineProperty(this, "length", {
-            "value": length
+            "value": length,
+            "writable": false
         });
 
         Object.defineProperty(this, "type", {
-            "value": type
+            "value": type,
+            "writable": false
         });
 
         this.data = null;

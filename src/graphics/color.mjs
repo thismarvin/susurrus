@@ -1,6 +1,13 @@
 import * as ProxyHelper from "../utilities/proxyHelper.mjs";
 
 class Color {
+    // public:
+    r;
+    g;
+    b;
+    a;
+
+    // private:
     _r;
     _g;
     _b;

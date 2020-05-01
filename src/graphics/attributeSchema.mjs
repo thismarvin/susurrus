@@ -33,11 +33,27 @@ function processAttributeElements(elements) {
 }
 
 export default class AttributeSchema {
+    // public:
+    elements; // readonly
+    size; // readonly
+    stride; // readonly
+
     constructor(elements) {
-        this.elements = elements;
+        Object.defineProperty(this, "elements", {
+            "value": elements,
+            "writable": false
+        });
 
         const result = processAttributeElements(this.elements);
-        this.size = result.size;
-        this.stride = result.stride;
+
+        Object.defineProperty(this, "size", {
+            "value": result.size,
+            "writable": false
+        });
+
+        Object.defineProperty(this, "stride", {
+            "value": result.stride,
+            "writable": false
+        });
     }
 }
