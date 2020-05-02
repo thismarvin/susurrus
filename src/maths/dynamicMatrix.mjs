@@ -2,22 +2,30 @@ import * as PropertyAssent from "../utilities/propertyAssent.mjs";
 
 export default class DynamicMatrix {
     // public:
-    rows; // readonly;
-    columns; // readonly;
+    rows;
+    columns;
     data;
 
     // private:
+    _rows;
+    _columns;
     _data;
 
     constructor(rows, columns, data) {
+        this._rows = rows;
+        this._columns = columns;
+        this._data = new Array(this._rows * this._columns).fill(0);
+
         Object.defineProperty(this, "rows", {
-            "value": rows,
-            "writable": false
+            get() {
+                return this._rows;
+            }
         });
 
         Object.defineProperty(this, "columns", {
-            "value": columns,
-            "writable": false
+            get() {
+                return this._columns;
+            }
         });
 
         Object.defineProperty(this, "data", {
@@ -26,15 +34,13 @@ export default class DynamicMatrix {
             }
         });
 
-        this._data = new Array(this.rows * this.columns).fill(0);
-
         if (data !== undefined) {
             this.setData(data);
         }
     }
 
     get(x, y) {
-        return this._data[this.columns * y + x];
+        return this.data[this.columns * y + x];
     }
 
     /**
@@ -48,7 +54,7 @@ export default class DynamicMatrix {
             throw new TypeError("The data does not match the dimensions of the matrix.");
         }
 
-        this._data = data;
+        this._data = data.slice(0);
     }
 
     set(x, y, value) {
@@ -57,11 +63,87 @@ export default class DynamicMatrix {
         this._data[this.columns * y + x] = value;
     }
 
-    multiply(a) {
+    transpose() {
+        const transposed = new Array(this.rows * this.columns).fill(0);
+        const newRows = this.columns;
+        const newColumns = this.rows;
+
+        for (let y = 0; y < newRows; y++) {
+            for (let x = 0; x < newColumns; x++) {
+                transposed[newColumns * y + x] = this.data[this.columns * x + y];
+            }
+        }
+
+        this._data = transposed;
+        this._rows = newRows;
+        this._columns = newColumns;
+    }
+
+    add(a) {
+        // First check if 'a' is just a number.
+        if (PropertyAssent.expectType(a, "number", {
+                "throwError": false
+            })) {
+            for (let i = 0; i < this.rows * this.columns; i++) {
+                this._data[i] += a;
+            }
+            return;
+        }
+
+        // Otherwise, 'a' must be a matrix.
         PropertyAssent.expectInstance(a, DynamicMatrix);
 
+        // Make sure we can even add the matrices.
+        if (this.rows !== a.rows || this.columns !== a.columns) {
+            throw new TypeError("Both matrices are not the same size; cannot perform operation.")
+        }
+
+        for (let i = 0; i < this.rows * this.columns; i++) {
+            this._data[i] += a.data[i];
+        }
+    }
+
+    subtract(a) {
+        // First check if 'a' is just a number.
+        if (PropertyAssent.expectType(a, "number", {
+                "throwError": false
+            })) {
+            for (let i = 0; i < this.rows * this.columns; i++) {
+                this._data[i] -= a;
+            }
+            return;
+        }
+
+        // Otherwise, 'a' must be a matrix.
+        PropertyAssent.expectInstance(a, DynamicMatrix);
+
+        // Make sure we can even subtract the matrices.
+        if (this.rows !== a.rows || this.columns !== a.columns) {
+            throw new TypeError("Both matrices are not the same size; cannot perform operation.")
+        }
+
+        for (let i = 0; i < this.rows * this.columns; i++) {
+            this._data[i] -= a.data[i];
+        }
+    }
+
+    multiply(a) {
+        // First check if 'a' is just a number.
+        if (PropertyAssent.expectType(a, "number", {
+                "throwError": false
+            })) {
+            for (let i = 0; i < this.rows * this.columns; i++) {
+                this._data[i] *= a;
+            }
+            return;
+        }
+
+        // Otherwise, 'a' must be a matrix.
+        PropertyAssent.expectInstance(a, DynamicMatrix);
+
+        // Make sure we can even multiply the matrices.
         if (this.columns !== a.rows) {
-            throw new TypeError("Cannot multiply matrices.");
+            throw new TypeError(`The matrix provided must have ${this.columns} rows; cannot multiply matrices.`);
         }
 
         const result = new DynamicMatrix(this.rows, a.columns);
@@ -75,6 +157,15 @@ export default class DynamicMatrix {
         }
 
         this._data = result.data;
+    }
+
+    divide(a) {
+        PropertyAssent.expectType(a, "number");
+
+        const inverse = 1 / a;
+        for (let i = 0; i < this.rows * this.columns; i++) {
+            this._data[i] *= inverse;
+        }
     }
 
     toString() {
