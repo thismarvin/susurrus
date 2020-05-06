@@ -1,10 +1,13 @@
 export default class AttributeElement {
+    //#region Class Properties
     // public:
-    name; // readonly
-    size; // readonly
-    type; // readonly
-    stride;
-    offset;
+    // =======================
+    // name; // readonly
+    // size; // readonly
+    // type; // readonly
+    // stride;
+    // offset;
+    //#endregion
 
     constructor(name, size, type) {
         Object.defineProperty(this, "name", {

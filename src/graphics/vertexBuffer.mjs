@@ -4,10 +4,13 @@ import BufferType from "./bufferType.mjs";
 import VertexUsage from "./vertexUsage.mjs";
 
 export default class VertexBuffer extends Buffer {
+    //#region Class Properties
     // public:
-    attributeSchema; // readonly
-    vertexUsage; // readonly
-    instanceFrequency; // readonly
+    // =======================
+    // attributeSchema; // readonly
+    // vertexUsage; // readonly
+    // instanceFrequency; // readonly
+    //#endregion
 
     constructor(graphics, attributeSchema, length, vertexUsage, instanceFrequency) {
         super(graphics, length, BufferType.VERTEX);

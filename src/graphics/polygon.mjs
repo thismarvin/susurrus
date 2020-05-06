@@ -60,24 +60,28 @@ const proxySetTrap = {
 };
 
 export default class Polygon {
+    //#region Class Properties
     // public:
-    geometry; // readonly
-    attributeSchema; // readonly
-    transformBuffer; // readonly
-    position;
-    scale;
-    rotationOffset;
-    rotation;
-    color;
+    // =======================
+    // geometry; // readonly
+    // attributeSchema; // readonly
+    // transformBuffer; // readonly
+    // position;
+    // scale;
+    // rotationOffset;
+    // rotation;
+    // color;
 
     // private:
-    _position;
-    _scale;
-    _rotationOffset;
-    _rotation;
-    _color;
+    // =======================
+    // _position;
+    // _scale;
+    // _rotationOffset;
+    // _rotation;
+    // _color;
 
-    _transformChanged;
+    // _transformChanged;
+    //#endregion
 
     constructor(graphics, geometry) {
         Object.defineProperty(this, "geometry", {

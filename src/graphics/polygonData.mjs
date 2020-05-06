@@ -10,11 +10,14 @@ const attributeSchema = new AttributeSchema([
 ]);
 
 export default class PolygonData {
+    //#region Class Properties
     // public:
-    vertexBuffer; // readonly
-    indexBuffer; // readonly
-    totalVertices; // readonly
-    totalTriangles; // readonly
+    // =======================
+    // vertexBuffer; // readonly
+    // indexBuffer; // readonly
+    // totalVertices; // readonly
+    // totalTriangles; // readonly
+    //#endregion
 
     constructor(graphics, vertices, indices) {
         Object.defineProperty(this, "vertexBuffer", {

@@ -1,8 +1,11 @@
 import * as WebGL from "./webGL.mjs";
 
 export default class Effect {
+    //#region Class Properties
     // public:
-    program; // readonly
+    // =======================
+    // program; // readonly
+    //#endregion
 
     constructor(graphics, vertexShaderSource, fragmentShaderSource) {
         Object.defineProperty(this, "program", {

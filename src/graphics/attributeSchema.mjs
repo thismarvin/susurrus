@@ -33,10 +33,13 @@ function processAttributeElements(elements) {
 }
 
 export default class AttributeSchema {
+    //#region Class Properties
     // public:
-    elements; // readonly
-    size; // readonly
-    stride; // readonly
+    // =======================
+    // elements; // readonly
+    // size; // readonly
+    // stride; // readonly
+    //#endregion
 
     constructor(elements) {
         Object.defineProperty(this, "elements", {

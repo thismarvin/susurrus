@@ -1,15 +1,19 @@
 import * as PropertyAssent from "../utilities/propertyAssent.mjs";
 
 export default class DynamicMatrix {
+    //#region Class Properties
     // public:
-    rows;
-    columns;
-    data;
+    // =======================
+    // rows;
+    // columns;
+    // data;
 
     // private:
-    _rows;
-    _columns;
-    _data;
+    // =======================
+    // _rows;
+    // _columns;
+    // _data;
+    //#endregion
 
     constructor(rows, columns, data) {
         this._rows = rows;

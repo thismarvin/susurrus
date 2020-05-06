@@ -2,14 +2,18 @@ import * as WebGL from "./webGL.mjs";
 import BufferType from "./bufferType.mjs";
 
 export default class Buffer {
+    //#region Class Properties
     // public:
-    length; // readonly
-    type; // readonly
-    data;
-    buffer;
+    // =======================
+    // length; // readonly
+    // type; // readonly
+    // data;
+    // buffer;
 
-    // private:
-    _graphics; // readonly
+    // // private:
+    // =======================
+    // _graphics; // readonly
+    //#endregion
 
     constructor(graphics, length, type) {
         Object.defineProperty(this, "_graphics", {

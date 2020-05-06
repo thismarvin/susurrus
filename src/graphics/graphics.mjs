@@ -1,12 +1,16 @@
 import * as WebGL from "./webGL.mjs";
 
 export default class Graphics {
+    //#region Class Properties
     // public:
-    gl; // readonly
-    extensions; // readonly
+    // =======================
+    // gl; // readonly
+    // extensions; // readonly
 
     // private:
-    _currentProgram;
+    // =======================
+    // _currentProgram;
+    //#endregion
 
     /**
      * 

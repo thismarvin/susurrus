@@ -1,17 +1,21 @@
 import * as PropertyAssent from "../utilities/propertyAssent.mjs";
 
 class Color {
+    //#region Class Properties
     // public:
-    r;
-    g;
-    b;
-    a;
+    // =======================
+    // r;
+    // g;
+    // b;
+    // a;
 
     // private:
-    _r;
-    _g;
-    _b;
-    _a;
+    // =======================
+    // _r;
+    // _g;
+    // _b;
+    // _a;
+    //#endregion
 
     constructor(r, g, b, a) {
         this._r = r;
