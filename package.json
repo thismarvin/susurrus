@@ -1,0 +1,27 @@
+{
+  "name": "susurrus",
+  "version": "0.1.0",
+  "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
+  "main": "./dist/susurrus.js",
+  "module": "./dist/susurrus.module.js",
+  "scripts": {
+    "build": "rollup -c ./dist/rollup.config.js && google-closure-compiler --js=./dist/susurrus.js --js_output_file=./dist/susurrus.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thismarvin/susurrus.git"
+  },
+  "keywords": [
+    "WebGL"
+  ],
+  "author": "Marvin Valenzuela",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thismarvin/susurrus/issues"
+  },
+  "homepage": "https://github.com/thismarvin/susurrus#readme",
+  "devDependencies": {
+    "google-closure-compiler": "^20200426.0.0",
+    "rollup": "^2.7.6"
+  }
+}
