@@ -1,4 +1,4 @@
-import Color from "./color.mjs";
+import Color from "./color.js";
 
 const colors = {
 	Black: new Color(0x000000),

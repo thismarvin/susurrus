@@ -1,57 +1,35 @@
-import * as PropertyAssent from "../utilities/propertyAssent.mjs";
+import * as PropertyAssent from "../utilities/propertyAssent.js";
 
 export default class DynamicMatrix {
-	//#region Class Properties
-	// public:
-	// =======================
-	// rows;
-	// columns;
-	// data;
+	get rows(): number {
+		return this.#rows;
+	}
+	get columns(): number {
+		return this.#columns;
+	}
+	get data(): number[] {
+		return this.#data;
+	}
 
-	// private:
-	// =======================
-	// _rows;
-	// _columns;
-	// _data;
-	//#endregion
+	#rows: number;
+	#columns: number;
+	#data: number[];
 
-	constructor(rows, columns, data) {
-		this._rows = rows;
-		this._columns = columns;
-		this._data = new Array(this._rows * this._columns).fill(0);
-
-		Object.defineProperty(this, "rows", {
-			get() {
-				return this._rows;
-			},
-		});
-
-		Object.defineProperty(this, "columns", {
-			get() {
-				return this._columns;
-			},
-		});
-
-		Object.defineProperty(this, "data", {
-			get() {
-				return this._data;
-			},
-		});
+	constructor(rows: number, columns: number, data?: number[]) {
+		this.#rows = rows;
+		this.#columns = columns;
+		this.#data = new Array(this.#rows * this.#columns).fill(0);
 
 		if (data !== undefined) {
 			this.setData(data);
 		}
 	}
 
-	get(x, y) {
+	get(x: number, y: number) {
 		return this.data[this.columns * y + x];
 	}
 
-	/**
-	 *
-	 * @param {Array} data
-	 */
-	setData(data) {
+	setData(data: number[]) {
 		PropertyAssent.expectType(data, "array");
 
 		if (data.length !== this.rows * this.columns) {
@@ -60,13 +38,13 @@ export default class DynamicMatrix {
 			);
 		}
 
-		this._data = data.slice(0);
+		this.#data = data.slice(0);
 	}
 
-	set(x, y, value) {
+	set(x: number, y: number, value: number) {
 		PropertyAssent.expectType(value, "number");
 
-		this._data[this.columns * y + x] = value;
+		this.#data[this.columns * y + x] = value;
 	}
 
 	transpose() {
@@ -80,128 +58,144 @@ export default class DynamicMatrix {
 			}
 		}
 
-		this._data = transposed;
-		this._rows = newRows;
-		this._columns = newColumns;
+		this.#data = transposed;
+		this.#rows = newRows;
+		this.#columns = newColumns;
 	}
 
-	add(a) {
+	add(a: number | DynamicMatrix): DynamicMatrix {
 		// First check if 'a' is just a number.
 		if (
 			PropertyAssent.expectType(a, "number", {
 				throwError: false,
 			})
 		) {
+			const aNumber = a as number;
 			for (let i = 0; i < this.rows * this.columns; i++) {
-				this._data[i] += a;
+				this.#data[i] += aNumber;
 			}
-			return;
+			return this;
 		}
 
 		// Otherwise, 'a' must be a matrix.
 		PropertyAssent.expectInstance(a, DynamicMatrix);
+
+		const aMatrix = a as DynamicMatrix;
 
 		// Make sure we can even add the matrices.
-		if (this.rows !== a.rows || this.columns !== a.columns) {
+		if (this.rows !== aMatrix.rows || this.columns !== aMatrix.columns) {
 			throw new TypeError(
 				"Both matrices are not the same size; cannot perform operation."
 			);
 		}
 
 		for (let i = 0; i < this.rows * this.columns; i++) {
-			this._data[i] += a.data[i];
+			this.#data[i] += aMatrix.data[i];
 		}
+
+		return this;
 	}
 
-	subtract(a) {
+	subtract(a: number | DynamicMatrix): DynamicMatrix {
 		// First check if 'a' is just a number.
 		if (
 			PropertyAssent.expectType(a, "number", {
 				throwError: false,
 			})
 		) {
+			const aNumber = a as number;
 			for (let i = 0; i < this.rows * this.columns; i++) {
-				this._data[i] -= a;
+				this.#data[i] -= aNumber;
 			}
-			return;
+			return this;
 		}
 
 		// Otherwise, 'a' must be a matrix.
 		PropertyAssent.expectInstance(a, DynamicMatrix);
+
+		const aMatrix = a as DynamicMatrix;
 
 		// Make sure we can even subtract the matrices.
-		if (this.rows !== a.rows || this.columns !== a.columns) {
+		if (this.rows !== aMatrix.rows || this.columns !== aMatrix.columns) {
 			throw new TypeError(
 				"Both matrices are not the same size; cannot perform operation."
 			);
 		}
 
 		for (let i = 0; i < this.rows * this.columns; i++) {
-			this._data[i] -= a.data[i];
+			this.#data[i] -= aMatrix.data[i];
 		}
+
+		return this;
 	}
 
-	multiply(a) {
+	multiply(a: number | DynamicMatrix): DynamicMatrix {
 		// First check if 'a' is just a number.
 		if (
 			PropertyAssent.expectType(a, "number", {
 				throwError: false,
 			})
 		) {
+			const aNumber = a as number;
 			for (let i = 0; i < this.rows * this.columns; i++) {
-				this._data[i] *= a;
+				this.#data[i] *= aNumber;
 			}
-			return;
+			return this;
 		}
 
 		// Otherwise, 'a' must be a matrix.
 		PropertyAssent.expectInstance(a, DynamicMatrix);
 
+		const aMatrix = a as DynamicMatrix;
+
 		// Make sure we can even multiply the matrices.
-		if (this.columns !== a.rows) {
+		if (this.columns !== aMatrix.rows) {
 			throw new TypeError(
 				`The matrix provided must have ${this.columns} rows; cannot multiply matrices.`
 			);
 		}
 
-		const result = new DynamicMatrix(this.rows, a.columns);
+		const result = new DynamicMatrix(this.rows, aMatrix.columns);
 
 		for (let aY = 0; aY < this.rows; aY++) {
 			for (let aX = 0; aX < this.columns; aX++) {
-				for (let bX = 0; bX < a.columns; bX++) {
+				for (let bX = 0; bX < aMatrix.columns; bX++) {
 					result.set(
 						bX,
 						aY,
-						result.get(bX, aY) + this.get(aX, aY) * a.get(bX, aX)
+						result.get(bX, aY) + this.get(aX, aY) * aMatrix.get(bX, aX)
 					);
 				}
 			}
 		}
 
-		this._data = result.data;
+		this.#data = result.data;
+
+		return this;
 	}
 
-	divide(a) {
+	divide(a: number): DynamicMatrix {
 		PropertyAssent.expectType(a, "number");
 
 		const inverse = 1 / a;
 		for (let i = 0; i < this.rows * this.columns; i++) {
-			this._data[i] *= inverse;
+			this.#data[i] *= inverse;
 		}
+		return this;
 	}
 
 	toString() {
 		let string = "";
 
-		for (let i = 0; i < this._data.length; i += this.columns) {
-			string += `( ${this._data[i]}`;
+		for (let i = 0; i < this.#data.length; i += this.columns) {
+			string += `( ${this.#data[i]}`;
 			for (let j = 1; j < this.columns; j++) {
-				string += ` ${this._data[i + j]}`;
+				string += ` ${this.#data[i + j]}`;
 			}
 
 			string += " )";
 
-			if (i !== this._data.length - this.columns) {
+			if (i !== this.#data.length - this.columns) {
 				string += " ";
 			}
 		}

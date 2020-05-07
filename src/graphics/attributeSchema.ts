@@ -1,7 +1,9 @@
-import AttributType from "./attributeType.mjs";
-import AttributeSize from "./attributeSize.mjs";
+import AttributType from "./attributeType.js";
+import AttributeSize from "./attributeSize.js";
+// eslint-disable-next-line no-unused-vars
+import AttributeElement from "./attributeElement.js";
 
-function processAttributeElements(elements) {
+function processAttributeElements(elements: AttributeElement[]) {
 	let size = 0;
 	let stride = 0;
 
@@ -33,30 +35,15 @@ function processAttributeElements(elements) {
 }
 
 export default class AttributeSchema {
-	//#region Class Properties
-	// public:
-	// =======================
-	// elements; // readonly
-	// size; // readonly
-	// stride; // readonly
-	//#endregion
+	public readonly elements: AttributeElement[];
+	public readonly size: number;
+	public readonly stride: number;
 
-	constructor(elements) {
-		Object.defineProperty(this, "elements", {
-			value: elements,
-			writable: false,
-		});
+	constructor(elements: AttributeElement[]) {
+		this.elements = elements;
 
 		const result = processAttributeElements(this.elements);
-
-		Object.defineProperty(this, "size", {
-			value: result.size,
-			writable: false,
-		});
-
-		Object.defineProperty(this, "stride", {
-			value: result.stride,
-			writable: false,
-		});
+		this.size = result.size;
+		this.stride = result.stride;
 	}
 }

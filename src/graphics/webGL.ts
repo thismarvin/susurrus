@@ -1,11 +1,5 @@
 //#region Public
-/**
- *
- * @param {String} id
- * @returns {WebGLRenderingContext}
- */
-export function getWebGLContext(id) {
-	const canvas = document.getElementById(id);
+export function getWebGLContext(canvas: HTMLCanvasElement) {
 	const gl = canvas.getContext("webgl");
 
 	if (gl === null) {
@@ -15,13 +9,11 @@ export function getWebGLContext(id) {
 	return gl;
 }
 
-/**
- * @param {WebGLRenderingContext} gl
- * @param {String} vertexShaderSource
- * @param {String} fragmentShaderSource
- * @returns {WebGLProgram}
- */
-export function createProgram(gl, vertexShaderSource, fragmentShaderSource) {
+export function createProgram(
+	gl: WebGLRenderingContext,
+	vertexShaderSource: string,
+	fragmentShaderSource: string
+) {
 	const vertexShader = _createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 	const fragmentShader = _createShader(
 		gl,
@@ -32,14 +24,11 @@ export function createProgram(gl, vertexShaderSource, fragmentShaderSource) {
 	return _createProgram(gl, vertexShader, fragmentShader);
 }
 
-//#region Buffers
-/**
- *
- * @param {WebGLRenderingContext} gl
- * @param {Number} size
- * @param {Number} usage
- */
-export function allocateVertexBuffer(gl, size, usage) {
+export function allocateVertexBuffer(
+	gl: WebGLRenderingContext,
+	size: number,
+	usage: number
+) {
 	/**
 	 * I am not sure if I am going to keep this.
 	 * For some reason I cannot use DYNAMIC DRAW unless the allocated
@@ -58,62 +47,83 @@ export function allocateVertexBuffer(gl, size, usage) {
 	return _allocateBuffer(gl, gl.ARRAY_BUFFER, adjustedSize, usage);
 }
 
-/**
- *
- * @param {WebGLRenderingContext} gl
- * @param {WebGLBuffer} buffer
- * @param {BufferSource} data
- */
-export function setVertexBufferData(gl, buffer, data) {
+export function setVertexBufferData(
+	gl: WebGLRenderingContext,
+	buffer: WebGLBuffer,
+	data: BufferSource
+) {
 	_setBufferData(gl, gl.ARRAY_BUFFER, buffer, data);
 }
 
-/**
- *
- * @param {WebGLRenderingContext} gl
- * @param {Number} size
- */
-export function allocateIndexBuffer(gl, size) {
+export function allocateIndexBuffer(gl: WebGLRenderingContext, size: number) {
 	return _allocateBuffer(gl, gl.ELEMENT_ARRAY_BUFFER, size, gl.STATIC_DRAW);
 }
 
-/**
- *
- * @param {WebGLRenderingContext} gl
- * @param {WebGLBuffer} buffer
- * @param {BufferSource} data
- */
-export function setIndexBufferData(gl, buffer, data) {
+export function setIndexBufferData(
+	gl: WebGLRenderingContext,
+	buffer: WebGLBuffer,
+	data: BufferSource
+) {
 	_setBufferData(gl, gl.ELEMENT_ARRAY_BUFFER, buffer, data);
 }
-//#endregion
-export function enablePremultipliedAlpha(gl) {
+
+export function enablePremultipliedAlpha(gl: WebGLRenderingContext) {
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 }
 
-export function clear(gl, r, g, b, a) {
+export function clear(
+	gl: WebGLRenderingContext,
+	r: number,
+	g: number,
+	b: number,
+	a: number
+) {
 	gl.clearColor(r, g, b, a);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 //#endregion
 
 //#region Private
-function _allocateBuffer(gl, target, size, usage) {
+function _allocateBuffer(
+	gl: WebGLRenderingContext,
+	target: number,
+	size: number,
+	usage: number
+) {
 	const buffer = gl.createBuffer();
+
+	if (buffer === null) {
+		throw new Error("Something went wrong; could not create WebGLBuffer.");
+	}
+
 	gl.bindBuffer(target, buffer);
 	gl.bufferData(target, size, usage);
 
 	return buffer;
 }
 
-function _setBufferData(gl, target, buffer, data) {
+function _setBufferData(
+	gl: WebGLRenderingContext,
+	target: number,
+	buffer: WebGLBuffer,
+	data: BufferSource
+) {
 	gl.bindBuffer(target, buffer);
 	gl.bufferSubData(target, 0, data);
 }
 
-function _createShader(gl, type, source) {
+function _createShader(
+	gl: WebGLRenderingContext,
+	type: number,
+	source: string
+) {
 	const shader = gl.createShader(type);
+
+	if (shader === null) {
+		throw new TypeError(`'${type}' is not a valid WebGL shader type.`);
+	}
+
 	gl.shaderSource(shader, source);
 	gl.compileShader(shader);
 
@@ -130,8 +140,17 @@ function _createShader(gl, type, source) {
 	return shader;
 }
 
-function _createProgram(gl, vertexShader, fragmentShader) {
+function _createProgram(
+	gl: WebGLRenderingContext,
+	vertexShader: WebGLShader,
+	fragmentShader: WebGLShader
+) {
 	const program = gl.createProgram();
+
+	if (program === null) {
+		throw new Error("Something went wrong; could not create WebGLProgram.");
+	}
+
 	gl.attachShader(program, vertexShader);
 	gl.attachShader(program, fragmentShader);
 	gl.linkProgram(program);

@@ -2,10 +2,10 @@
 /**
  * Validates whether a given value is of a given type. Throws a TypeError otherwise.
  * @param value The value that is being tested against.
- * @param {String} type The type the property is expecting.
+ * @param {string} type The type the property is expecting.
  * @param options Optional options to apply if validation fails.
  */
-export function expectType(value, type, options) {
+export function expectType(value: any, type: string, options?: any) {
 	let valid = true;
 
 	switch (type.toLowerCase()) {
@@ -26,7 +26,7 @@ export function expectType(value, type, options) {
  * @param instance The class instance the property is expecting.
  * @param options Optional options to apply if validation fails.
  */
-export function expectInstance(value, instance, options) {
+export function expectInstance(value: any, instance: any, options?: any) {
 	let valid = value instanceof instance;
 
 	return validateAssent(
@@ -38,13 +38,11 @@ export function expectInstance(value, instance, options) {
 //#endregion
 
 //#region Private
-/**
- *
- * @param {Boolean} valid
- * @param options
- * @param {String} defaultErrorMessage
- */
-function validateAssent(valid, options, defaultErrorMessage) {
+function validateAssent(
+	valid: boolean,
+	options: any,
+	defaultErrorMessage: string
+) {
 	const throwDefaultErrorMessage = () => {
 		throw new TypeError(defaultErrorMessage);
 	};
