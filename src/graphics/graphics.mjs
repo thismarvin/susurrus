@@ -1,109 +1,140 @@
 import * as WebGL from "./webGL.mjs";
 
 export default class Graphics {
-    //#region Class Properties
-    // public:
-    // =======================
-    // gl; // readonly
-    // extensions; // readonly
+	//#region Class Properties
+	// public:
+	// =======================
+	// gl; // readonly
+	// extensions; // readonly
 
-    // private:
-    // =======================
-    // _currentProgram;
-    //#endregion
+	// private:
+	// =======================
+	// _currentProgram;
+	//#endregion
 
-    /**
-     * 
-     * @param {WebGLRenderingContext} gl 
-     */
-    constructor(gl) {
-        Object.defineProperty(this, "gl", {
-            "value": gl,
-            "writable": false
-        });
+	/**
+	 *
+	 * @param {WebGLRenderingContext} gl
+	 */
+	constructor(gl) {
+		Object.defineProperty(this, "gl", {
+			value: gl,
+			writable: false,
+		});
 
-        Object.defineProperty(this, "extensions", {
-            "value": {
-                "ANGLE_instanced_arrays": this.gl.getExtension("ANGLE_instanced_arrays")
-            },
-            "writable": false
-        });
+		Object.defineProperty(this, "extensions", {
+			value: {
+				ANGLE_instanced_arrays: this.gl.getExtension("ANGLE_instanced_arrays"),
+			},
+			writable: false,
+		});
 
-        this._currentProgram = null;
+		this._currentProgram = null;
 
-        WebGL.enablePremultipliedAlpha(this.gl);
-    }
+		WebGL.enablePremultipliedAlpha(this.gl);
+	}
 
-    clear(color) {
-        WebGL.clear(this.gl, color.r, color.g, color.b, color.a);
-    }
+	clear(color) {
+		WebGL.clear(this.gl, color.r, color.g, color.b, color.a);
+	}
 
-    begin(effect) {
-        this._currentProgram = effect.program;
-        this.gl.useProgram(this._currentProgram);
-    }
+	begin(effect) {
+		this._currentProgram = effect.program;
+		this.gl.useProgram(this._currentProgram);
+	}
 
-    setVertexBuffer(buffer) {
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.buffer);
+	setVertexBuffer(buffer) {
+		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.buffer);
 
-        for (let element of buffer.attributeSchema.elements) {
-            const index = this.gl.getAttribLocation(this._currentProgram, element.name);
+		for (let element of buffer.attributeSchema.elements) {
+			const index = this.gl.getAttribLocation(
+				this._currentProgram,
+				element.name
+			);
 
-            if (index < 0) {
-                throw new Error(`The current program does not have a(n) '${element.name}' attribute.`);
-            }
+			if (index < 0) {
+				throw new Error(
+					`The current program does not have a(n) '${element.name}' attribute.`
+				);
+			}
 
-            this.gl.enableVertexAttribArray(index);
-            this.gl.vertexAttribPointer(index, element.size, element.type, false, element.stride, element.offset);
+			this.gl.enableVertexAttribArray(index);
+			this.gl.vertexAttribPointer(
+				index,
+				element.size,
+				element.type,
+				false,
+				element.stride,
+				element.offset
+			);
 
-            if (buffer.instanceFrequency > 0) {
-                this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(index, buffer.instanceFrequency);
-            }
-        }
-    }
+			if (buffer.instanceFrequency > 0) {
+				this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(
+					index,
+					buffer.instanceFrequency
+				);
+			}
+		}
+	}
 
-    setVertexBuffers(buffers) {
-        for (let buffer of buffers) {
-            this.setVertexBuffer(buffer);
-        }
-    }
+	setVertexBuffers(buffers) {
+		for (let buffer of buffers) {
+			this.setVertexBuffer(buffer);
+		}
+	}
 
-    setIndexBuffer(buffer) {
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer.buffer);
-    }
+	setIndexBuffer(buffer) {
+		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer.buffer);
+	}
 
-    setUniform(uniform, value) {
-        const location = this.gl.getUniformLocation(this._currentProgram, uniform);
-        this.gl.uniformMatrix4fv(location, false, value);
-    }
+	setUniform(uniform, value) {
+		const location = this.gl.getUniformLocation(this._currentProgram, uniform);
+		this.gl.uniformMatrix4fv(location, false, value);
+	}
 
-    drawArrays(mode, offset, primitiveCount) {
-        this.gl.drawArrays(mode, offset, primitiveCount);
-    }
+	drawArrays(mode, offset, primitiveCount) {
+		this.gl.drawArrays(mode, offset, primitiveCount);
+	}
 
-    drawElements(mode, totalTriangles, offset) {
-        this.gl.drawElements(mode, totalTriangles * 3, this.gl.UNSIGNED_SHORT, offset);
-    }
+	drawElements(mode, totalTriangles, offset) {
+		this.gl.drawElements(
+			mode,
+			totalTriangles * 3,
+			this.gl.UNSIGNED_SHORT,
+			offset
+		);
+	}
 
-    drawInstancedElements(mode, totalTriangles, offset, primitiveCount) {
-        this.extensions["ANGLE_instanced_arrays"].drawElementsInstancedANGLE(mode, totalTriangles * 3, this.gl.UNSIGNED_SHORT, offset, primitiveCount);
-    }
+	drawInstancedElements(mode, totalTriangles, offset, primitiveCount) {
+		this.extensions["ANGLE_instanced_arrays"].drawElementsInstancedANGLE(
+			mode,
+			totalTriangles * 3,
+			this.gl.UNSIGNED_SHORT,
+			offset,
+			primitiveCount
+		);
+	}
 
-    deleteBuffer(buffer) {
-        for (let element of buffer.attributeSchema.elements) {
-            const index = this.gl.getAttribLocation(this._currentProgram, element.name);
+	deleteBuffer(buffer) {
+		for (let element of buffer.attributeSchema.elements) {
+			const index = this.gl.getAttribLocation(
+				this._currentProgram,
+				element.name
+			);
 
-            if (index < 0) {
-                throw new Error(`The current program does not have a(n) '${element.name}' attribute.`);
-            }
+			if (index < 0) {
+				throw new Error(
+					`The current program does not have a(n) '${element.name}' attribute.`
+				);
+			}
 
-            this.gl.disableVertexAttribArray(index);
-        }
+			this.gl.disableVertexAttribArray(index);
+		}
 
-        this.gl.deleteBuffer(buffer.buffer);
-    }
+		this.gl.deleteBuffer(buffer.buffer);
+	}
 
-    end() {
-        this._currentProgram = null;
-    }
+	end() {
+		this._currentProgram = null;
+	}
 }

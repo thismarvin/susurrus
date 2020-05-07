@@ -1,5 +1,5 @@
 const shaders = {
-    "vertex": `
+	vertex: `
         uniform mat4 worldViewProjection;
 
         attribute vec3 a_position;
@@ -19,7 +19,7 @@ const shaders = {
                 translation.x, translation.y, translation.z, 1
             );
         }
-        
+
         mat4 createScale(vec3 scale) {
             return mat4(
                 scale.x, 0, 0, 0,
@@ -42,18 +42,15 @@ const shaders = {
             mat4 transform = createTranslation(a_rotationOffset) * createRotationZ(a_rotation) * createTranslation(-a_rotationOffset + a_translation) * createScale(a_scale);
             gl_Position = transform * vec4(a_position, 1) * worldViewProjection;
             v_color = a_color;
-        }   
+        }
     `,
-    "fragment": `
+	fragment: `
         varying lowp vec4 v_color;
 
         void main() {
             gl_FragColor = v_color;
         }
-    `
+    `,
 };
 
-export {
-    shaders as
-    default
-};
+export { shaders as default };

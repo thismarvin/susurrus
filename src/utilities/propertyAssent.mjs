@@ -6,18 +6,18 @@
  * @param options Optional options to apply if validation fails.
  */
 export function expectType(value, type, options) {
-    let valid = true;
+	let valid = true;
 
-    switch (type.toLowerCase()) {
-        case "array":
-            valid = Array.isArray(value);
-            break;
-        default:
-            valid = typeof value === type;
-            break;
-    }
+	switch (type.toLowerCase()) {
+		case "array":
+			valid = Array.isArray(value);
+			break;
+		default:
+			valid = typeof value === type;
+			break;
+	}
 
-    return validateAssent(valid, options, `Expected value to be a(n) '${type}'.`);
+	return validateAssent(valid, options, `Expected value to be a(n) '${type}'.`);
 }
 
 /**
@@ -27,69 +27,76 @@ export function expectType(value, type, options) {
  * @param options Optional options to apply if validation fails.
  */
 export function expectInstance(value, instance, options) {
-    let valid = value instanceof instance;
+	let valid = value instanceof instance;
 
-    return validateAssent(valid, options, `Expected value to be an instance of '${instance.name}'.`);
+	return validateAssent(
+		valid,
+		options,
+		`Expected value to be an instance of '${instance.name}'.`
+	);
 }
 //#endregion
 
 //#region Private
 /**
- * 
- * @param {Boolean} valid 
- * @param options 
+ *
+ * @param {Boolean} valid
+ * @param options
  * @param {String} defaultErrorMessage
  */
 function validateAssent(valid, options, defaultErrorMessage) {
-    const throwDefaultErrorMessage = () => {
-        throw new TypeError(defaultErrorMessage);
-    };
+	const throwDefaultErrorMessage = () => {
+		throw new TypeError(defaultErrorMessage);
+	};
 
-    // When there are no options, throw an error if 'valid' is false or return nothing if 'valid' is true.
-    if (options === undefined) {
-        if (!valid) {
-            throwDefaultErrorMessage();
-        }
-        return;
-    }
+	// When there are no options, throw an error if 'valid' is false or return nothing if 'valid' is true.
+	if (options === undefined) {
+		if (!valid) {
+			throwDefaultErrorMessage();
+		}
+		return;
+	}
 
-    // Alright so we have some sort of options. We need to process them.
+	// Alright so we have some sort of options. We need to process them.
 
-    // Make sure options is even an object. If not, then just return nothing.
-    if (typeof options !== "object") {
-        return;
-    }
+	// Make sure options is even an object. If not, then just return nothing.
+	if (typeof options !== "object") {
+		return;
+	}
 
-    // Options is valid. Continue processing them.
+	// Options is valid. Continue processing them.
 
-    // If options contains a 'throwError' property and it is a boolean, instead of throwing errors or nothing at all, just return valid.
-    if (options.throwError !== undefined) {
-        if (typeof options.throwError === "boolean" && !options.throwError) {
-            return valid;
-        }
-    }
+	// If options contains a 'throwError' property and it is a boolean, instead of throwing errors or nothing at all, just return valid.
+	if (options.throwError !== undefined) {
+		if (typeof options.throwError === "boolean" && !options.throwError) {
+			return valid;
+		}
+	}
 
-    // At this point there is no reason to continue if valid is true.
-    if (valid) {
-        return;
-    }
+	// At this point there is no reason to continue if valid is true.
+	if (valid) {
+		return;
+	}
 
-    // If options contains a 'errorMessage' property and it is a string, throw a TypeError with that error message.
-    if (options.errorMessage !== undefined) {
-        if (typeof options.errorMessage === "string" && options.errorMessage.length > 0) {
-            throw new TypeError(options.errorMessage);
-        }
+	// If options contains a 'errorMessage' property and it is a string, throw a TypeError with that error message.
+	if (options.errorMessage !== undefined) {
+		if (
+			typeof options.errorMessage === "string" &&
+			options.errorMessage.length > 0
+		) {
+			throw new TypeError(options.errorMessage);
+		}
 
-        throwDefaultErrorMessage();
-    }
+		throwDefaultErrorMessage();
+	}
 
-    // If options contains a 'addendum' property and it is a string, throw a TypeError with the original error message and the addendum.
-    if (options.addendum !== undefined) {
-        if (typeof options.addendum === "string" && options.addendum.length > 0) {
-            throw new TypeError(`${defaultErrorMessage} ${options.addendum}`);
-        }
+	// If options contains a 'addendum' property and it is a string, throw a TypeError with the original error message and the addendum.
+	if (options.addendum !== undefined) {
+		if (typeof options.addendum === "string" && options.addendum.length > 0) {
+			throw new TypeError(`${defaultErrorMessage} ${options.addendum}`);
+		}
 
-        throwDefaultErrorMessage();
-    }
+		throwDefaultErrorMessage();
+	}
 }
 //#endregion

@@ -1,11 +1,8 @@
 const bufferTypes = {
-    "VERTEX": 0,
-    "INDEX": 1
+	VERTEX: 0,
+	INDEX: 1,
 };
 
 Object.freeze(bufferTypes);
 
-export {
-    bufferTypes as
-    default
-};
+export { bufferTypes as default };

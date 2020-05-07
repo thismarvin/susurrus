@@ -1,80 +1,82 @@
 import * as PropertyAssent from "../utilities/propertyAssent.mjs";
 
 class Color {
-    //#region Class Properties
-    // public:
-    // =======================
-    // r;
-    // g;
-    // b;
-    // a;
+	//#region Class Properties
+	// public:
+	// =======================
+	// r;
+	// g;
+	// b;
+	// a;
 
-    // private:
-    // =======================
-    // _r;
-    // _g;
-    // _b;
-    // _a;
-    //#endregion
+	// private:
+	// =======================
+	// _r;
+	// _g;
+	// _b;
+	// _a;
+	//#endregion
 
-    constructor(r, g, b, a) {
-        this._r = r;
-        this._g = g;
-        this._b = b;
-        this._a = a;
+	constructor(r, g, b, a) {
+		this._r = r;
+		this._g = g;
+		this._b = b;
+		this._a = a;
 
-        Object.defineProperty(this, "r", {
-            get() {
-                return this._r * this._a;
-            },
-            set(value) {
-                this._r = value;
-            }
-        });
-        Object.defineProperty(this, "g", {
-            get() {
-                return this._g * this._a;
-            },
-            set(value) {
-                this._g = value;
-            }
-        });
-        Object.defineProperty(this, "b", {
-            get() {
-                return this._b * this._a;
-            },
-            set(value) {
-                this._b = value;
-            }
-        });
-        Object.defineProperty(this, "a", {
-            get() {
-                return this._a;
-            },
-            set(value) {
-                this._a = value;
-            }
-        });
+		Object.defineProperty(this, "r", {
+			get() {
+				return this._r * this._a;
+			},
+			set(value) {
+				this._r = value;
+			},
+		});
+		Object.defineProperty(this, "g", {
+			get() {
+				return this._g * this._a;
+			},
+			set(value) {
+				this._g = value;
+			},
+		});
+		Object.defineProperty(this, "b", {
+			get() {
+				return this._b * this._a;
+			},
+			set(value) {
+				this._b = value;
+			},
+		});
+		Object.defineProperty(this, "a", {
+			get() {
+				return this._a;
+			},
+			set(value) {
+				this._a = value;
+			},
+		});
 
-        return new Proxy(this, proxySetTrap);
-    }
+		return new Proxy(this, proxySetTrap);
+	}
 
-    toArray() {
-        return [this.r, this.g, this.b, this.a];
-    }
+	toArray() {
+		return [this.r, this.g, this.b, this.a];
+	}
 
-    toString() {
-        return `( ${parseInt(this.r * 255)} ${parseInt(this.g * 255)} ${parseInt(this.b * 255)} ${parseInt(this.a * 255)} )`;
-    }
+	toString() {
+		return `( ${parseInt(this.r * 255)} ${parseInt(this.g * 255)} ${parseInt(
+			this.b * 255
+		)} ${parseInt(this.a * 255)} )`;
+	}
 }
 
 class ColorFromHex {
-    constructor(hex, a) {
-        const r = ((hex & 0xFF0000) >> 16) / 255;
-        const g = ((hex & 0xFF00) >> 8) / 255;
-        const b = (hex & 0xFF) / 255;
-        return new Color(r, g, b, a);
-    }
+	constructor(hex, a) {
+		const r = ((hex & 0xff0000) >> 16) / 255;
+		const g = ((hex & 0xff00) >> 8) / 255;
+		const b = (hex & 0xff) / 255;
+		return new Color(r, g, b, a);
+	}
 }
 
 const lowpLowerBounds = 0.00390625;
@@ -85,56 +87,58 @@ const lowpLowerBounds = 0.00390625;
  * @param {number} value The number to be mapped.
  */
 function mapColorValue(value) {
-    // Don't store a number with more precision than lowp even has.
-    if (value <= lowpLowerBounds) {
-        return 0;
-    }
+	// Don't store a number with more precision than lowp even has.
+	if (value <= lowpLowerBounds) {
+		return 0;
+	}
 
-    // If the value is less than one, we can assume the color has already been mapped.
-    if (value <= 1) {
-        return value;
-    }
+	// If the value is less than one, we can assume the color has already been mapped.
+	if (value <= 1) {
+		return value;
+	}
 
-    // The value has not been mapped, so let us map the color and check both bounds.
-    let result = parseInt(value) / 255;
-    result = Math.max(0, result);
-    result = Math.min(1, result);
+	// The value has not been mapped, so let us map the color and check both bounds.
+	let result = parseInt(value) / 255;
+	result = Math.max(0, result);
+	result = Math.min(1, result);
 
-    return result;
-};
+	return result;
+}
 
 /**
  * This trap is specifically for Color's constructor. Essentially this trap handles overloading,
  * but in a hacky JavaScript kinda way.
  */
 const proxyConstructTrap = {
-    construct(_, args) {
-        // Make sure all arguments are numbers.
-        for (let argument of args) {
-            PropertyAssent.expectType(argument, "number");
-        }
+	construct(_, args) {
+		// Make sure all arguments are numbers.
+		for (let argument of args) {
+			PropertyAssent.expectType(argument, "number");
+		}
 
-        // Map all arguments to valid values.
-        const processedArguments = args.map(i => mapColorValue(i));
+		// Map all arguments to valid values.
+		const processedArguments = args.map((i) => mapColorValue(i));
 
-        switch (args.length) {
-            case 0:
-                return new Color(0, 0, 0, 1);
-            case 1:
-                return new ColorFromHex(args[0], 1);
-            case 2:
-                return new ColorFromHex(args[0], processedArguments[1]);
-            case 3:
-                return new Color(...processedArguments, 1);
-            case 4:
-                return new Color(...processedArguments);
-            default:
-                throw new TypeError(`'Color' does not have a constructor with ${args.length} arguments.`);
-        }
-    }
-}
+		switch (args.length) {
+			case 0:
+				return new Color(0, 0, 0, 1);
+			case 1:
+				return new ColorFromHex(args[0], 1);
+			case 2:
+				return new ColorFromHex(args[0], processedArguments[1]);
+			case 3:
+				return new Color(...processedArguments, 1);
+			case 4:
+				return new Color(...processedArguments);
+			default:
+				throw new TypeError(
+					`'Color' does not have a constructor with ${args.length} arguments.`
+				);
+		}
+	},
+};
 
-/** 
+/**
  * I'll admit, this is sort of unnecessary.
  * However, without this, users can create properties that should not exist. 😯
  * It might be a hassle to maintain, but I think it is worth it.
@@ -147,19 +151,21 @@ const colorProperties = new Set(["r", "g", "b", "a", "_r", "_g", "_b", "_a"]);
  * returns? 😵
  */
 const proxySetTrap = {
-    set(target, property, value) {
-        // Again, this isn't really necessary. Although I do not want new properties being added! 😡
-        if (!colorProperties.has(property)) {
-            throw new TypeError(`Color does not have a(n) '${property}' property; cannot set value.`);
-        }
+	set(target, property, value) {
+		// Again, this isn't really necessary. Although I do not want new properties being added! 😡
+		if (!colorProperties.has(property)) {
+			throw new TypeError(
+				`Color does not have a(n) '${property}' property; cannot set value.`
+			);
+		}
 
-        // Make sure the value is a number.
-        PropertyAssent.expectType(value, "number");
+		// Make sure the value is a number.
+		PropertyAssent.expectType(value, "number");
 
-        const mappedValue = mapColorValue(value);
+		const mappedValue = mapColorValue(value);
 
-        return Reflect.set(target, property, mappedValue);
-    }
+		return Reflect.set(target, property, mappedValue);
+	},
 };
 
 /**
@@ -171,7 +177,4 @@ const proxySetTrap = {
  */
 const colorProxy = new Proxy(Color, proxyConstructTrap);
 
-export {
-    colorProxy as
-    default
-};
+export { colorProxy as default };
