@@ -5,7 +5,8 @@
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.module.js",
   "scripts": {
-    "dev": "tsc -p ./configs/dev/tsconfig.json",
+    "predevbuild": "rimraf ./dev",
+    "devbuild": "tsc -p ./configs/dev/tsconfig.json",
     "pretty": "prettier --use-tabs true --write src/**/*.ts",
     "lint": "eslint ./src/** --ext .ts",
     "prebuild": "rimraf ./build",
