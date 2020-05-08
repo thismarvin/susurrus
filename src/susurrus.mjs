@@ -1,9 +1,0 @@
-export { default as Color } from "./color.mjs";
-export { default as Sketch } from "./sketch.mjs";
-export { default as Polygon } from "./polygon.mjs";
-export { default as PolygonData } from "./polygonData.mjs";
-export { default as Effect } from "./effect.mjs";
-export { default as BasicEffect } from "./basicEffect.mjs";
-export { default as Camera } from "./camera.mjs";
-export { default as Matrix } from "./matrix.mjs";
-export { default as Vector3 } from "./vector3.mjs";

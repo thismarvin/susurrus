@@ -1,0 +1,38 @@
+{
+  "name": "susurrus",
+  "version": "0.1.0",
+  "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
+  "main": "./dist/susurrus.js",
+  "module": "./dist/susurrus.module.js",
+  "scripts": {
+    "pretty": "prettier --use-tabs true --write src/**/*.ts",
+    "lint": "eslint ./src/** --ext .ts",
+    "prebuild": "rimraf ./build",
+    "build": "tsc",
+    "predist": "rimraf ./dist",
+    "dist": "rollup -c ./rollup.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thismarvin/susurrus.git"
+  },
+  "keywords": [
+    "WebGL"
+  ],
+  "author": "Marvin Valenzuela",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thismarvin/susurrus/issues"
+  },
+  "homepage": "https://github.com/thismarvin/susurrus#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
+    "eslint": "^6.8.0",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.7.6",
+    "rollup-plugin-terser": "^5.3.0",
+    "typescript": "^3.8.3"
+  }
+}
