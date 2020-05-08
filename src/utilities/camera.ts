@@ -16,6 +16,8 @@ export default class Camera {
 		);
 		this.projection = Matrix.createOrthographic(4, 4, 0, 16);
 
-		this.worldViewProjection = this.view.multiply(this.world).multiply(this.projection);
+		this.worldViewProjection = this.view
+			.multiply(this.world)
+			.multiply(this.projection);
 	}
 }

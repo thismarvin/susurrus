@@ -5,7 +5,8 @@
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.module.js",
   "scripts": {
-    "lint": "eslint ./src/** --ext .js,.ts",
+    "pretty": "prettier --write src/**/*.ts",
+    "lint": "eslint ./src/** --ext .ts",
     "prebuild": "rimraf ./build",
     "build": "tsc",
     "predist": "rimraf ./dist",
