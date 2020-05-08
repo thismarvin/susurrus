@@ -30,5 +30,15 @@ export default class VertexBuffer extends Buffer {
 			this.data.byteLength,
 			this.vertexUsage
 		);
+
+		Object.defineProperty(this, "attributeSchema", {
+			writable: false,
+		});
+		Object.defineProperty(this, "vertexUsage", {
+			writable: false,
+		});
+		Object.defineProperty(this, "instanceFrequency", {
+			writable: false,
+		});
 	}
 }

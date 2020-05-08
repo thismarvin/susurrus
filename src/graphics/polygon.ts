@@ -1,4 +1,3 @@
-import * as PropertyAssent from "../utilities/propertyAssent.js";
 import AttributeType from "./attributeType.js";
 import AttributeSchema from "./attributeSchema.js";
 import AttributeElement from "./attributeElement.js";
@@ -16,51 +15,6 @@ import Effect from "./effect.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../utilities/camera.js";
 
-const polygonProperties = new Set([
-	"position",
-	"scale",
-	"rotationOffset",
-	"rotation",
-	"color",
-]);
-
-const proxySetTrap = {
-	set(target: object, property: string, value: any) {
-		// Again, this isn't really necessary. Although I do not want new properties being added! 😡
-		if (!polygonProperties.has(property)) {
-			throw new TypeError(
-				`Polygon does not have a(n) '${property}' property; cannot set value.`
-			);
-		}
-
-		const addendum = `Cannot set '${property}' property.`;
-
-		// Validate values before setting them.
-		switch (property) {
-			case "position":
-			case "scale":
-			case "rotationOffset":
-				PropertyAssent.expectInstance(value, Vector3, {
-					addendum: addendum,
-				});
-				break;
-			case "color":
-				PropertyAssent.expectInstance(value, Color, {
-					addendum: addendum,
-				});
-				break;
-			case "rotation":
-				PropertyAssent.expectType(value, "number", {
-					addendum: addendum,
-				});
-				break;
-		}
-
-		// Passed validation; set the value now.
-		return Reflect.set(target, property, value);
-	},
-};
-
 const attributeSchema = new AttributeSchema([
 	new AttributeElement("a_translation", 3, AttributeType.FLOAT),
 	new AttributeElement("a_scale", 3, AttributeType.FLOAT),
@@ -70,29 +24,6 @@ const attributeSchema = new AttributeSchema([
 ]);
 
 export default class Polygon {
-	//#region Class Properties
-	// public:
-	// =======================
-	// geometry; // readonly
-	// attributeSchema; // readonly
-	// transformBuffer; // readonly
-	// position;
-	// scale;
-	// rotationOffset;
-	// rotation;
-	// color;
-
-	// private:
-	// =======================
-	// _position;
-	// _scale;
-	// _rotationOffset;
-	// _rotation;
-	// _color;
-
-	// _transformChanged;
-	//#endregion
-
 	public readonly geometry: PolygonData;
 	public readonly attributeSchema: AttributeSchema;
 	public readonly transformBuffer: VertexBuffer;
@@ -161,7 +92,7 @@ export default class Polygon {
 	#scale: Vector3;
 	#rotationOffset: Vector3;
 	#rotation: number;
-	#color: any; // TODO this needs to be Color eventually.
+	#color: Color;
 	#transformChanged: boolean;
 
 	constructor(graphics: Graphics, geometry: PolygonData) {
@@ -185,19 +116,27 @@ export default class Polygon {
 		this.updateBuffer();
 		this.#transformChanged = false;
 
-		return new Proxy<Polygon>(this, proxySetTrap);
+		Object.defineProperty(this, "geometry", {
+			writable: false,
+		});
+		Object.defineProperty(this, "attributeSchema", {
+			writable: false,
+		});
+		Object.defineProperty(this, "transformBuffer", {
+			writable: false,
+		});
 	}
 
-	applyChanges() {
-		if (!this.#transformChanged) {
-			return;
-		}
+	public applyChanges() {
+		// if (!this.#transformChanged) {
+		// 	return;
+		// }
 
 		this.#transformChanged = false;
 		this.updateBuffer();
 	}
 
-	draw(graphics: Graphics, effect: Effect, camera: Camera) {
+	public draw(graphics: Graphics, effect: Effect, camera: Camera) {
 		// Ideally this would always be false, but I'll just keep this here in case the user ever forgets to applyChanges themselves.
 		if (this.#transformChanged) {
 			this.applyChanges();
@@ -219,12 +158,12 @@ export default class Polygon {
 	}
 
 	private updateBuffer() {
-		const bufferData: number[] = [];
-		bufferData.concat(this.#position.toArray());
-		bufferData.concat(this.#scale.toArray());
-		bufferData.concat(this.#rotationOffset.toArray());
-		bufferData.concat(this.#rotation);
-		bufferData.concat(this.#color.toArray());
+		let bufferData: number[] = [];
+		bufferData = bufferData.concat(this.#position.toArray());
+		bufferData = bufferData.concat(this.#scale.toArray());
+		bufferData = bufferData.concat(this.#rotationOffset.toArray());
+		bufferData = bufferData.concat(this.#rotation);
+		bufferData = bufferData.concat(this.#color.toArray());
 
 		this.transformBuffer.setData(bufferData);
 	}

@@ -9,30 +9,30 @@ export default class Vector3 {
 		this.z = z;
 	}
 
-	multiply(value: number) {
+	public multiply(value: number) {
 		this.x *= value;
 		this.y *= value;
 		this.z *= value;
 	}
 
-	divide(value: number) {
+	public divide(value: number) {
 		this.x /= value;
 		this.y /= value;
 		this.z /= value;
 	}
 
-	length() {
+	public length() {
 		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
 	}
 
-	normalize() {
+	public normalize() {
 		const magnitude = this.length();
 		if (magnitude > 0) {
 			this.divide(magnitude);
 		}
 	}
 
-	toArray() {
+	public toArray() {
 		return [this.x, this.y, this.z];
 	}
 

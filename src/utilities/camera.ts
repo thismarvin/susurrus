@@ -2,10 +2,10 @@ import Matrix from "../maths/matrix.js";
 import Vector3 from "../maths/vector3.js";
 
 export default class Camera {
-	public readonly world: Matrix;
-	public readonly view: Matrix;
-	public readonly projection: Matrix;
-	public readonly worldViewProjection: Matrix;
+	public world: Matrix;
+	public view: Matrix;
+	public projection: Matrix;
+	public worldViewProjection: Matrix;
 
 	constructor() {
 		this.world = Matrix.createTranslation(0, 0, 0);

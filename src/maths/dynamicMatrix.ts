@@ -25,11 +25,11 @@ export default class DynamicMatrix {
 		}
 	}
 
-	get(x: number, y: number) {
+	public get(x: number, y: number) {
 		return this.data[this.columns * y + x];
 	}
 
-	setData(data: number[]) {
+	public setData(data: number[]) {
 		PropertyAssent.expectType(data, "array");
 
 		if (data.length !== this.rows * this.columns) {
@@ -41,13 +41,13 @@ export default class DynamicMatrix {
 		this.#data = data.slice(0);
 	}
 
-	set(x: number, y: number, value: number) {
+	public set(x: number, y: number, value: number) {
 		PropertyAssent.expectType(value, "number");
 
 		this.#data[this.columns * y + x] = value;
 	}
 
-	transpose() {
+	public transpose() {
 		const transposed = new Array(this.rows * this.columns).fill(0);
 		const newRows = this.columns;
 		const newColumns = this.rows;
@@ -63,7 +63,7 @@ export default class DynamicMatrix {
 		this.#columns = newColumns;
 	}
 
-	add(a: number | DynamicMatrix): DynamicMatrix {
+	public add(a: number | DynamicMatrix): DynamicMatrix {
 		// First check if 'a' is just a number.
 		if (
 			PropertyAssent.expectType(a, "number", {
@@ -96,7 +96,7 @@ export default class DynamicMatrix {
 		return this;
 	}
 
-	subtract(a: number | DynamicMatrix): DynamicMatrix {
+	public subtract(a: number | DynamicMatrix): DynamicMatrix {
 		// First check if 'a' is just a number.
 		if (
 			PropertyAssent.expectType(a, "number", {
@@ -129,7 +129,7 @@ export default class DynamicMatrix {
 		return this;
 	}
 
-	multiply(a: number | DynamicMatrix): DynamicMatrix {
+	public multiply(a: number | DynamicMatrix): DynamicMatrix {
 		// First check if 'a' is just a number.
 		if (
 			PropertyAssent.expectType(a, "number", {
@@ -174,7 +174,7 @@ export default class DynamicMatrix {
 		return this;
 	}
 
-	divide(a: number): DynamicMatrix {
+	public divide(a: number): DynamicMatrix {
 		PropertyAssent.expectType(a, "number");
 
 		const inverse = 1 / a;
@@ -184,7 +184,7 @@ export default class DynamicMatrix {
 		return this;
 	}
 
-	toString() {
+	public toString() {
 		let string = "";
 
 		for (let i = 0; i < this.#data.length; i += this.columns) {

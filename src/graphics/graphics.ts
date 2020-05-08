@@ -25,20 +25,27 @@ export default class Graphics {
 		this.#currentProgram = null;
 
 		WebGL.enablePremultipliedAlpha(this.gl);
+
+		Object.defineProperty(this, "gl", {
+			writable: false,
+		});
+		Object.defineProperty(this, "extensions", {
+			writable: false,
+		});
 	}
 
-	clear(color: any) {
+	public clear(color: any) {
 		PropertyAssent.expectInstance(color, Color);
 
 		WebGL.clear(this.gl, color.r, color.g, color.b, color.a);
 	}
 
-	begin(effect: Effect) {
+	public begin(effect: Effect) {
 		this.#currentProgram = effect.program;
 		this.gl.useProgram(this.#currentProgram);
 	}
 
-	setVertexBuffer(buffer: VertexBuffer) {
+	public setVertexBuffer(buffer: VertexBuffer) {
 		if (this.#currentProgram === null) {
 			throw new Error(
 				"'begin(effect)' must be called before setting a VertexBuffer."
@@ -78,19 +85,19 @@ export default class Graphics {
 		}
 	}
 
-	setVertexBuffers(buffers: VertexBuffer[]) {
+	public setVertexBuffers(buffers: VertexBuffer[]) {
 		for (let buffer of buffers) {
 			this.setVertexBuffer(buffer);
 		}
 	}
 
-	setIndexBuffer(buffer: IndexBuffer) {
+	public setIndexBuffer(buffer: IndexBuffer) {
 		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer.buffer);
 	}
 
 	// ! This literally only works for setting the wvp matrix... 😞
 	// TODO: implement like a giant switch for all possible uniforms???
-	setUniform(uniform: string, value: any) {
+	public setUniform(uniform: string, value: any) {
 		if (this.#currentProgram === null) {
 			throw new Error(
 				"'begin(effect)' must be called before setting a uniform."
@@ -101,11 +108,11 @@ export default class Graphics {
 		this.gl.uniformMatrix4fv(location, false, value);
 	}
 
-	drawArrays(mode: number, offset: number, primitiveCount: number) {
+	public drawArrays(mode: number, offset: number, primitiveCount: number) {
 		this.gl.drawArrays(mode, offset, primitiveCount);
 	}
 
-	drawElements(mode: number, totalTriangles: number, offset: number) {
+	public drawElements(mode: number, totalTriangles: number, offset: number) {
 		this.gl.drawElements(
 			mode,
 			totalTriangles * 3,
@@ -114,7 +121,7 @@ export default class Graphics {
 		);
 	}
 
-	drawInstancedElements(
+	public drawInstancedElements(
 		mode: number,
 		totalTriangles: number,
 		offset: number,
@@ -129,7 +136,7 @@ export default class Graphics {
 		);
 	}
 
-	deleteBuffer(buffer: Buffer) {
+	public deleteBuffer(buffer: Buffer) {
 		if (this.#currentProgram === null) {
 			throw new Error(
 				"'begin(effect)' must be called before deleting a Buffer."
@@ -162,7 +169,7 @@ export default class Graphics {
 		this.gl.deleteBuffer(buffer.buffer);
 	}
 
-	end() {
+	public end() {
 		this.#currentProgram = null;
 	}
 }

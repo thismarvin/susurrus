@@ -5,9 +5,9 @@ export default class Sketch {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
-	public running: boolean;
+	public loop: boolean;
 
-	private initialized: boolean;
+	#initialized: boolean;
 
 	constructor(id: string) {
 		const element = document.getElementById(id);
@@ -25,27 +25,37 @@ export default class Sketch {
 
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
 
-		this.initialized = false;
-		this.running = true;
+		this.#initialized = false;
+		this.loop = true;
+
+		Object.defineProperty(this, "parent", {
+			writable: false,
+		});
+		Object.defineProperty(this, "canvas", {
+			writable: false,
+		});
+		Object.defineProperty(this, "graphics", {
+			writable: false,
+		});
 	}
 
-	run() {
-		if (!this.initialized) {
+	public run() {
+		if (!this.#initialized) {
 			this.initialize();
-			this.initialized = true;
+			this.#initialized = true;
 		}
 
 		this.update();
 		this.draw();
 
-		if (this.running) {
+		if (this.loop) {
 			window.requestAnimationFrame(this.run.bind(this));
 		}
 	}
 
-	initialize() {}
+	public initialize() {}
 
-	update() {}
+	public update() {}
 
-	draw() {}
+	public draw() {}
 }

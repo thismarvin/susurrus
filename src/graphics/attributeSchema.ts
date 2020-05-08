@@ -45,5 +45,15 @@ export default class AttributeSchema {
 		const result = processAttributeElements(this.elements);
 		this.size = result.size;
 		this.stride = result.stride;
+
+		Object.defineProperty(this, "elements", {
+			writable: false,
+		});
+		Object.defineProperty(this, "size", {
+			writable: false,
+		});
+		Object.defineProperty(this, "stride", {
+			writable: false,
+		});
 	}
 }

@@ -7,7 +7,7 @@ export default class Vector2 {
 		this.y = y;
 	}
 
-	toArray() {
+	public toArray() {
 		return [this.x, this.y];
 	}
 }

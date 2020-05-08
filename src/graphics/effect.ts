@@ -15,5 +15,9 @@ export default class Effect {
 			vertexShaderSource,
 			fragmentShaderSource
 		);
+
+		Object.defineProperty(this, "program", {
+			writable: false,
+		});
 	}
 }

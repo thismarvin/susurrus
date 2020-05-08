@@ -7,7 +7,7 @@ export default class Buffer {
 	public readonly length: number;
 	public readonly type: number;
 	public buffer: WebGLBuffer | null;
-	
+
 	protected data: Float32Array | Int16Array | null;
 
 	readonly #graphics: Graphics;
@@ -20,9 +20,16 @@ export default class Buffer {
 
 		this.data = null;
 		this.buffer = null;
+
+		Object.defineProperty(this, "length", {
+			writable: false,
+		});
+		Object.defineProperty(this, "type", {
+			writable: false,
+		});
 	}
 
-	setData(data: number[]) {
+	public setData(data: number[]) {
 		if (this.data === null || this.buffer == null) {
 			throw new Error();
 		}
@@ -36,14 +43,17 @@ export default class Buffer {
 		this.data.set(data);
 
 		switch (this.type) {
-			case BufferType.VERTEX:
+			case BufferType.VERTEX: {
 				WebGL.setVertexBufferData(this.#graphics.gl, this.buffer, this.data);
 				break;
-			case BufferType.INDEX:
+			}
+			case BufferType.INDEX: {
 				WebGL.setIndexBufferData(this.#graphics.gl, this.buffer, this.data);
 				break;
-			default:
+			}
+			default: {
 				throw new TypeError(`'${this.type}' is an invalid BufferType.`);
+			}
 		}
 	}
 }
