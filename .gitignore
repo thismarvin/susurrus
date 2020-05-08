@@ -1,7 +1,5 @@
 node_modules
 node_modules.nosync
-build
-dist
 .DS_Store
 
 index.html
