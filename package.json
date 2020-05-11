@@ -5,17 +5,12 @@
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.module.js",
   "scripts": {
-    "predevbuild": "rimraf ./dev",
-    "devbuild": "tsc -p ./configs/dev/tsconfig.json",
-    "pretty": "prettier --use-tabs true --write src/**/*.ts",
+    "pretty": "prettier --use-tabs --write src/**/*.ts",
     "lint": "eslint ./src/** --ext .ts",
-    "prebuild": "rimraf ./build",
-    "build": "tsc -p ./configs/build/tsconfig.json",
-    "predist": "rimraf ./dist",
-    "dist": "rollup -c ./rollup.config.js",
-    "preoncommit": "lint-staged",
-    "oncommit" : "npm run build",
-    "postoncommit": "npm run dist"
+    "devbuild": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
+    "build": "rimraf ./build && tsc -p ./configs/build/tsconfig.json",
+    "dist": "rimraf ./dist && rollup -c ./rollup.config.js",
+    "release": "npm run build && npm run dist"
   },
   "repository": {
     "type": "git",
@@ -44,11 +39,11 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run oncommit"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
-    "*.{ts,js}": "prettier --write"
+    "*.{ts,js}": "prettier --use-tabs --write"
   }
 }
