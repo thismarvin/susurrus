@@ -16,8 +16,22 @@ export default [
 				plugins: [terser()],
 			},
 			{
-				format: "esm",
-				file: "dist/susurrus.mjs",
+				format: "cjs",
+				file: "dist/susurrus.common.js",
+			},
+			{
+				format: "cjs",
+				file: "dist/susurrus.common.min.js",
+				plugins: [terser()],
+			},
+			{
+				format: "es",
+				file: "dist/susurrus.esm.js",
+			},
+			{
+				format: "es",
+				file: "dist/susurrus.esm.min.js",
+				plugins: [terser()],
 			},
 		],
 	},
