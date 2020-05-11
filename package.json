@@ -8,7 +8,7 @@
     "pretty": "prettier --use-tabs --write src/**/*.ts",
     "lint": "eslint ./src/** --ext .ts",
     "devbuild": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
-    "build": "rimraf ./build && tsc -p ./configs/build/tsconfig.json",
+    "build": "rimraf ./build && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.{js,ts}",
     "dist": "rimraf ./dist && rollup -c ./rollup.config.js",
     "release": "npm run build && npm run dist"
   },
