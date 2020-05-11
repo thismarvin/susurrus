@@ -1,6 +1,7 @@
 node_modules
 node_modules.nosync
 .DS_Store
+.eslintcache
 /dev
 
 index.html

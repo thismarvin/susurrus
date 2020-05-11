@@ -12,7 +12,10 @@
     "prebuild": "rimraf ./build",
     "build": "tsc -p ./configs/build/tsconfig.json",
     "predist": "rimraf ./dist",
-    "dist": "rollup -c ./rollup.config.js"
+    "dist": "rollup -c ./rollup.config.js",
+    "preoncommit": "lint-staged",
+    "oncommit" : "npm run build",
+    "postoncommit": "npm run dist"
   },
   "repository": {
     "type": "git",
@@ -41,7 +44,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run oncommit"
     }
   },
   "lint-staged": {
