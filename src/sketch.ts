@@ -3,23 +3,24 @@ import Graphics from "./graphics/graphics.js";
 
 export default class Sketch {
 	public readonly parent: HTMLElement;
-	public readonly canvas: HTMLCanvasElement;
+	public readonly            canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
 	public loop: boolean;
 
 	#initialized: boolean;
 
 	constructor(id: string) {
-		const element = document.getElementById(id);
+		const element =               document.getElementById(id);
 
 		if (element === null) {
 			throw new TypeError(`Could not find an element with an id of '${id}'.`);
 		}
 
 		this.parent = element;
-		this.canvas = document.createElement("canvas");
+		this.canvas = document
+		.createElement("canvas");
 		this.parent.appendChild(this.canvas);
-		this.canvas.id = `${id}-canvas`;
+				this.canvas.id = `${id}-canvas`;
 		this.canvas.width = 400;
 		this.canvas.height = 400;
 
@@ -28,19 +29,19 @@ export default class Sketch {
 		this.#initialized = false;
 		this.loop = true;
 
-		Object.defineProperty(this, "parent", {
+						Object.defineProperty(this, "parent", {
 			writable: false,
 		});
 		Object.defineProperty(this, "canvas", {
 			writable: false,
 		});
 		Object.defineProperty(this, "graphics", {
-			writable: false,
+						writable: false,
 		});
 	}
 
 	public run() {
-		if (!this.#initialized) {
+						if (!this.#initialized) {
 			this.initialize();
 			this.#initialized = true;
 		}
@@ -53,9 +54,9 @@ export default class Sketch {
 		}
 	}
 
-	public initialize() {}
+							public initialize() {}
 
-	public update() {}
+							public update() {}
 
-	public draw() {}
+							public draw() {}
 }
