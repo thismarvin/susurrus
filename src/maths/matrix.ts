@@ -1,90 +1,200 @@
-import DynamicMatrix from "./dynamicMatrix.js";
-import Vector3 from "./vector3.js";
+import * as PropertyAssent from "../utilities/propertyAssent.js";
 
-export default class Matrix extends DynamicMatrix {
-	constructor(data: number[]) {
-		super(4, 4, data);
+export default class Matrix {
+	get rows(): number {
+		return this.#rows;
+	}
+	get columns(): number {
+		return this.#columns;
+	}
+	get data(): number[] {
+		return this.#data;
 	}
 
-	static identity() {
-		return new Matrix([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
+	#rows: number;
+	#columns: number;
+	#data: number[];
+
+	constructor(rows: number, columns: number, data?: number[]) {
+		this.#rows = rows;
+		this.#columns = columns;
+		this.#data = new Array(this.#rows * this.#columns).fill(0);
+
+		if (data !== undefined) {
+			this.setData(data);
+		}
 	}
 
-	static createRotationZ(angle: number) {
-		const matrix = Matrix.identity();
-
-		matrix.set(0, 0, Math.cos(angle));
-		matrix.set(1, 0, Math.sin(angle));
-		matrix.set(0, 1, -Math.sin(angle));
-		matrix.set(1, 1, Math.cos(angle));
-
-		return matrix;
+	public get(x: number, y: number) {
+		return this.data[this.columns * y + x];
 	}
 
-	static createTranslation(x: number, y: number, z: number) {
-		const matrix = Matrix.identity();
+	public setData(data: number[]) {
+		PropertyAssent.expectType(data, "array");
 
-		if (x) matrix.set(0, 3, x);
-		if (y) matrix.set(1, 3, y);
-		if (z) matrix.set(2, 3, z);
+		if (data.length !== this.rows * this.columns) {
+			throw new TypeError(
+				"The given data does not match the dimensions of the matrix."
+			);
+		}
 
-		return matrix;
+		this.#data = data.slice(0);
 	}
 
-	static createOrthographic(
-		width: number,
-		height: number,
-		near: number,
-		far: number
-	) {
-		const matrix = Matrix.identity();
+	public set(x: number, y: number, value: number) {
+		PropertyAssent.expectType(value, "number");
 
-		// matrix.set(0, 0, 2 / width);
-		// matrix.set(1, 1, 2 / height);
-		// matrix.set(2, 2, -2 / (far - near));
-		// matrix.set(0, 3, -1);
-		// matrix.set(1, 3, -1);
-		// matrix.set(2, 3, -(far + near) / (far - near));
-
-		matrix.set(0, 0, 2 / width);
-		matrix.set(1, 1, 2 / height);
-		matrix.set(2, 2, 1 / (near - far));
-		matrix.set(2, 3, near / (near - far));
-
-		return matrix;
+		this.#data[this.columns * y + x] = value;
 	}
 
-	static createLookAt(
-		cameraPosition: Vector3,
-		cameraTarget: Vector3,
-		cameraUp: Vector3
-	) {
-		const a = Vector3.subtract(cameraPosition, cameraTarget);
-		a.normalize();
+	public toString() {
+		let string = "";
 
-		const b = Vector3.cross(cameraUp, a);
-		b.normalize();
+		for (let i = 0; i < this.#data.length; i += this.columns) {
+			string += `( ${this.#data[i]}`;
+			for (let j = 1; j < this.columns; j++) {
+				string += ` ${this.#data[i + j]}`;
+			}
 
-		const c = Vector3.cross(a, b);
+			string += " )";
 
-		const matrix = Matrix.identity();
+			if (i !== this.#data.length - this.columns) {
+				string += " ";
+			}
+		}
 
-		matrix.set(0, 0, b.x);
-		matrix.set(1, 0, c.x);
-		matrix.set(2, 0, a.x);
-
-		matrix.set(0, 1, b.y);
-		matrix.set(1, 1, c.y);
-		matrix.set(2, 1, a.y);
-
-		matrix.set(0, 2, b.z);
-		matrix.set(1, 2, c.z);
-		matrix.set(2, 2, a.z);
-
-		matrix.set(0, 3, -Vector3.dot(b, cameraPosition));
-		matrix.set(1, 3, -Vector3.dot(c, cameraPosition));
-		matrix.set(2, 3, -Vector3.dot(a, cameraPosition));
-
-		return matrix;
+		return string;
 	}
+
+	//#region Static Functions
+	public static add(a: Matrix, b: Matrix) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectInstance(b, Matrix);
+
+		// Make sure we can even add the matrices.
+		if (a.rows !== b.rows || a.columns !== b.columns) {
+			throw new TypeError(
+				"Both matrices are not the same size; cannot perform operation."
+			);
+		}
+
+		const data = a.data.slice(0);
+		for (let i = 0; i < a.rows * a.columns; i++) {
+			data[i] += b.data[i];
+		}
+
+		return new Matrix(a.rows, b.rows, data);
+	}
+
+	public static addScalar(a: Matrix, scalar: number) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectType(scalar, "number");
+
+		const data = a.data.slice(0);
+		for (let i = 0; i < a.rows * a.columns; i++) {
+			data[i] += scalar;
+		}
+
+		return new Matrix(a.rows, a.columns, data);
+	}
+
+	public static sub(a: Matrix, b: Matrix) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectInstance(b, Matrix);
+
+		// Make sure we can even add the matrices.
+		if (a.rows !== b.rows || a.columns !== b.columns) {
+			throw new TypeError(
+				"Both matrices are not the same size; cannot perform operation."
+			);
+		}
+
+		const data = a.data.slice(0);
+		for (let i = 0; i < a.rows * a.columns; i++) {
+			data[i] -= b.data[i];
+		}
+
+		return new Matrix(a.rows, b.rows, data);
+	}
+
+	public static subScalar(a: Matrix, scalar: number) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectType(scalar, "number");
+
+		const data = a.data.slice(0);
+		for (let i = 0; i < a.rows * a.columns; i++) {
+			data[i] -= scalar;
+		}
+
+		return new Matrix(a.rows, a.columns, data);
+	}
+
+	public static mult(a: Matrix, b: Matrix) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectInstance(b, Matrix);
+
+		// Make sure we can even multiply the matrices.
+		if (a.columns !== b.rows) {
+			throw new TypeError(
+				`Matrix b must have ${a.columns} rows; cannot multiply matrices.`
+			);
+		}
+
+		const result = new Matrix(a.rows, b.columns);
+
+		for (let aY = 0; aY < a.rows; aY++) {
+			for (let aX = 0; aX < a.columns; aX++) {
+				for (let bX = 0; bX < b.columns; bX++) {
+					result.set(
+						bX,
+						aY,
+						result.get(bX, aY) + a.get(aX, aY) * b.get(bX, aX)
+					);
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public static multScalar(a: Matrix, scalar: number) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectType(scalar, "number");
+
+		const data = a.data.slice(0);
+		for (let i = 0; i < a.rows * a.columns; i++) {
+			data[i] *= scalar;
+		}
+
+		return new Matrix(a.rows, a.columns, data);
+	}
+
+	public static divideScalar(a: Matrix, scalar: number) {
+		PropertyAssent.expectInstance(a, Matrix);
+		PropertyAssent.expectType(scalar, "number");
+
+		const data = a.data.slice(0);
+		for (let i = 0; i < a.rows * a.columns; i++) {
+			data[i] /= scalar;
+		}
+
+		return new Matrix(a.rows, a.columns, data);
+	}
+
+	public static transpose(a: Matrix) {
+		PropertyAssent.expectInstance(a, Matrix);
+
+		const transposed = new Array(a.rows * a.columns).fill(0);
+		const newRows = a.columns;
+		const newColumns = a.rows;
+
+		for (let y = 0; y < newRows; y++) {
+			for (let x = 0; x < newColumns; x++) {
+				transposed[newColumns * y + x] = a.data[a.columns * x + y];
+			}
+		}
+
+		return new Matrix(newRows, newColumns, transposed);
+	}
+	//#endregion
 }
