@@ -20,8 +20,6 @@ export default class Sketch {
 		this.canvas = document.createElement("canvas");
 		this.parent.appendChild(this.canvas);
 		this.canvas.id = `${id}-canvas`;
-		this.canvas.width = 400;
-		this.canvas.height = 400;
 
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
 

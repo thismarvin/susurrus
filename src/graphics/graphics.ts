@@ -13,7 +13,27 @@ export default class Graphics {
 	public readonly gl: WebGLRenderingContext;
 	public readonly extensions: any;
 
+	public get drawWidth() {
+		return this.#drawWidth;
+	}
+
+	public get drawHeight() {
+		return this.#drawHeight;
+	}
+
+	public get scale() {
+		return this.#scale;
+	}
+
+	private get isLandscape() {
+		return this.#drawWidth >= this.#drawHeight;
+	}
+
 	#currentProgram: WebGLProgram | null;
+
+	#drawWidth: number;
+	#drawHeight: number;
+	#scale: number;
 
 	constructor(gl: WebGLRenderingContext) {
 		this.gl = gl;
@@ -24,6 +44,10 @@ export default class Graphics {
 
 		this.#currentProgram = null;
 
+		this.#drawWidth = -1;
+		this.#drawHeight = -1;
+		this.#scale = -1;
+
 		WebGL.enablePremultipliedAlpha(this.gl);
 
 		Object.defineProperty(this, "gl", {
@@ -32,6 +56,43 @@ export default class Graphics {
 		Object.defineProperty(this, "extensions", {
 			writable: false,
 		});
+	}
+
+	public setCanvasDimensions(width: number, height: number) {
+		PropertyAssent.expectType(width, "number");
+		PropertyAssent.expectType(height, "number");
+
+		this.gl.canvas.width = width;
+		this.gl.canvas.height = height;
+		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+
+		// I do not trust that people will read the README, so if the resolution has not been set
+		// yet then just set the resolution to the canvas' dimensions.
+		if (this.#drawWidth < 0) {
+			this.setResolution(width, height);
+		}
+	}
+
+	public setResolution(width: number, height: number) {
+		PropertyAssent.expectType(width, "number");
+		PropertyAssent.expectType(height, "number");
+
+		this.#drawWidth = Math.max(0, width);
+		this.#drawHeight = Math.max(0, height);
+
+		if (this.isLandscape) {
+			this.#scale = this.gl.canvas.height / this.#drawHeight;
+			// Check if pillar boxing is required.
+			if (this.#drawWidth * this.#scale > this.gl.canvas.width) {
+				this.#scale = this.gl.canvas.width / this.#drawWidth;
+			}
+		} else {
+			this.#scale = this.gl.canvas.width / this.#drawWidth;
+			// Check if letter boxing is required.
+			if (this.#drawHeight * this.#scale > this.gl.canvas.height) {
+				this.#scale = this.gl.canvas.width / this.#drawWidth;
+			}
+		}
 	}
 
 	public clear(color: any) {
