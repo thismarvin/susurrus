@@ -7,7 +7,12 @@ export default class Sketch {
 	public readonly graphics: Graphics;
 	public loop: boolean;
 
+	public get totalElapsedTime() {
+		return this.#totalElapsedTime;
+	}
+
 	#initialized: boolean;
+	#totalElapsedTime: number;
 
 	constructor(id: string) {
 		const element = document.getElementById(id);
@@ -23,8 +28,9 @@ export default class Sketch {
 
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
 
-		this.#initialized = false;
 		this.loop = true;
+		this.#initialized = false;
+		this.#totalElapsedTime = 0;
 
 		Object.defineProperty(this, "parent", {
 			writable: false,
@@ -43,17 +49,29 @@ export default class Sketch {
 			this.#initialized = true;
 		}
 
-		this.update();
-		this.draw();
-
-		if (this.loop) {
-			window.requestAnimationFrame(this.run.bind(this));
-		}
+		this.main(0);
 	}
 
 	public initialize() {}
 
-	public update() {}
+	// eslint-disable-next-line no-unused-vars
+	public update(deltaTime: number) {}
 
-	public draw() {}
+	// eslint-disable-next-line no-unused-vars
+	public draw(deltaTime: number) {}
+
+	private main(timeStamp: number) {
+		let deltaTime = (timeStamp - this.#totalElapsedTime) / 1000;
+		if (Number.isNaN(deltaTime)) {
+			deltaTime = 0;
+		}
+		this.#totalElapsedTime = timeStamp;
+
+		this.update(deltaTime);
+		this.draw(deltaTime);
+
+		if (this.loop) {
+			window.requestAnimationFrame(this.main.bind(this));
+		}
+	}
 }
