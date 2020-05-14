@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
-  "module": "./dist/susurrus.module.js",
+  "module": "./dist/susurrus.esm.js",
+  "files": [
+    "build/**/*",
+    "dist/*.js"
+  ],
   "scripts": {
     "pretty": "prettier --use-tabs --write src/**/*.ts",
     "lint": "eslint ./src/** --ext .ts",
