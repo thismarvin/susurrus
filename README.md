@@ -13,33 +13,46 @@ In reality, Susurrus is essentially a blank slate that will be etched as I learn
 // TODO: write a paragraph or something too
 
 ```javascript
-import * as Susurrus from "./dist/susurrus.min.js";
+import * as Susurrus from "./dist/susurrus.esm.min.js";
 
 class Sketch extends Susurrus.Sketch {
-    constructor() {
-        super("//TODO: replace with a valid id");
-    }
+  constructor() {
+    super("//TODO: replace with a valid id");
+  }
 
-    initialize() {
-        this.camera = new Susurrus.Camera();
-        this.basicEffect = new Susurrus.BasicEffect(this.graphics);
+  initialize() {
+    this.graphics.setCanvasDimensions(400, 400);
+    this.graphics.setSketchResolution(4, 4);
 
-        this.squareData = new Susurrus.PolygonData(
-            this.graphics,
-            [0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0],
-            [0, 1, 2, 0, 2, 3]
-        );
+    this.camera = new Susurrus.Camera(
+      this.canvas.width / this.graphics.scale,
+      this.canvas.height / this.graphics.scale
+    );
 
-        this.square = new Susurrus.Polygon(this.graphics, this.squareData);
-    }
+    this.basicEffect = new Susurrus.BasicEffect(this.graphics);
 
-    update() {}
+    this.triangleData = new Susurrus.PolygonData(
+      this.graphics,
+      [0, 0, 0, 0, 1, 0, 1, 1, 0],
+      [0, 1, 2]
+    );
 
-    draw() {
-        this.graphics.clear(Susurrus.Colors.SkyBlue);
+    this.triangle = new Susurrus.Polygon(this.graphics, this.triangleData);
+    this.triangle.color = new Susurrus.Color(0xffffff);
+    this.triangle.scale = new Susurrus.Vector3(1, 1, 1);
+    this.triangle.applyChanges();
+  }
 
-        this.square.draw(this.graphics, this.basicEffect, this.camera);
-    }
+  update(deltaTime) {
+    this.triangle.rotation += 0.5 * deltaTime;
+    this.triangle.applyChanges();
+  }
+
+  draw() {
+    this.graphics.clear(Susurrus.Colors.SkyBlue);
+
+    this.triangle.draw(this.graphics, this.basicEffect, this.camera);
+  }
 }
 
 const sketch = new Sketch();
