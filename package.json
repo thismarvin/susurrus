@@ -5,8 +5,8 @@
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.esm.js",
   "files": [
-    "build/**/*",
-    "dist/*.js"
+    "build",
+    "dist"
   ],
   "scripts": {
     "pretty": "prettier --use-tabs --write src/**/*.ts",
