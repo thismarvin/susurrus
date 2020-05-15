@@ -1,5 +1,7 @@
 export { default as Sketch } from "./sketch.js";
 
+export { default as Scene } from "./ecs/scene.js";
+
 export { default as AttributeElement } from "./graphics/attributeElement.js";
 export { default as AttributeSchema } from "./graphics/attributeSchema.js";
 export { default as AttributeType } from "./graphics/attributeType.js";
@@ -16,6 +18,7 @@ export { default as VertexUsage } from "./graphics/vertexUsage.js";
 
 export { default as Matrix } from "./maths/matrix.js";
 export { default as MatrixTransform } from "./maths/matrixTransform.js";
+export { default as Rectangle } from "./maths/rectangle.js";
 export { default as Vector2 } from "./maths/vector3.js";
 export { default as Vector3 } from "./maths/vector3.js";
 export { default as Vector4 } from "./maths/vector3.js";
