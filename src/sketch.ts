@@ -1,10 +1,14 @@
 import * as WebGL from "./graphics/webGL.js";
 import Graphics from "./graphics/graphics.js";
+import SceneManager from "./ecs/sceneManager.js";
 
 export default class Sketch {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
+
+	public readonly sceneManager: SceneManager;
+
 	public loop: boolean;
 
 	public get totalElapsedTime() {
@@ -27,6 +31,8 @@ export default class Sketch {
 		this.canvas.id = `${id}-canvas`;
 
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
+
+		this.sceneManager = new SceneManager();
 
 		this.loop = true;
 		this.#initialized = false;
@@ -54,11 +60,13 @@ export default class Sketch {
 
 	public initialize() {}
 
-	// eslint-disable-next-line no-unused-vars
-	public update(deltaTime: number) {}
+	public update(deltaTime: number) {
+		this.sceneManager.update(deltaTime);
+	}
 
-	// eslint-disable-next-line no-unused-vars
-	public draw(deltaTime: number) {}
+	public draw(deltaTime: number) {
+		this.sceneManager.draw(this.graphics, deltaTime);
+	}
 
 	private main(timeStamp: number) {
 		let deltaTime = (timeStamp - this.#totalElapsedTime) / 1000;
