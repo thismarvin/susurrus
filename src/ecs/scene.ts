@@ -1,17 +1,17 @@
 // eslint-disable-next-line no-unused-vars
 import Graphics from "../graphics/graphics.js";
 // eslint-disable-next-line no-unused-vars
-import Sketch from "../sketch.js";
+import Theater from "../theater.js";
 import Camera from "../utilities/camera.js";
 import Rectangle from "../maths/rectangle.js";
 
 export default abstract class Scene {
 	public readonly name: string;
-	public readonly theater: Sketch;
+	public readonly theater: Theater;
 	public camera: Camera;
 	public bounds: Rectangle;
 
-	constructor(name: string, sketch: Sketch) {
+	constructor(name: string, sketch: Theater) {
 		this.name = name;
 		this.theater = sketch;
 

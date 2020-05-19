@@ -1,4 +1,4 @@
-export { default as Sketch } from "./sketch.js";
+export { default as Theater } from "./theater.js";
 
 export { default as Scene } from "./ecs/scene.js";
 

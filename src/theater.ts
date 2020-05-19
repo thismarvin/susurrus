@@ -2,7 +2,7 @@ import * as WebGL from "./graphics/webGL.js";
 import Graphics from "./graphics/graphics.js";
 import SceneManager from "./ecs/sceneManager.js";
 
-export default class Sketch {
+export default class Theater {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
