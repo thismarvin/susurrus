@@ -1,20 +1,22 @@
 // eslint-disable-next-line no-unused-vars
 import Graphics from "../graphics/graphics.js";
 // eslint-disable-next-line no-unused-vars
-import SceneManager from "./sceneManager.js";
+import Sketch from "../sketch.js";
 import Camera from "../utilities/camera.js";
 import Rectangle from "../maths/rectangle.js";
 
 export default abstract class Scene {
 	public readonly name: string;
-	public readonly sceneManager: SceneManager;
+	public readonly theater: Sketch;
 	public camera: Camera;
 	public bounds: Rectangle;
 
-	constructor(name: string, graphics: Graphics, sceneManager: SceneManager) {
+	constructor(name: string, sketch: Sketch) {
 		this.name = name;
-		this.sceneManager = sceneManager;
+		this.theater = sketch;
 
+		// TODO This camera and bounds stuff is kinda jank. So it's officially temporary for now.
+		const graphics = this.theater.graphics;
 		this.camera = new Camera(
 			graphics.gl.canvas.width / graphics.scale,
 			graphics.gl.canvas.height / graphics.scale
@@ -30,7 +32,7 @@ export default abstract class Scene {
 		Object.defineProperty(this, "name", {
 			writable: false,
 		});
-		Object.defineProperty(this, "sceneManager", {
+		Object.defineProperty(this, "theater", {
 			writable: false,
 		});
 	}
