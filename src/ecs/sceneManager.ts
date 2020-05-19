@@ -58,7 +58,10 @@ export default class SceneManager {
 			return;
 		}
 
-		// * This is temporary for now since transitions do not exist 😉
+		// * Below is all temporary for now since transitions do not exist 😉
+		this.#currentScene?.onExit();
+		this.#nextScene?.onEnter();
+
 		this.#currentScene = this.#nextScene;
 		this.#transitionInProgress = false;
 	}
