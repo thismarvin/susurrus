@@ -6,7 +6,6 @@ export default class Sketch {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
-
 	public readonly sceneManager: SceneManager;
 
 	public loop: boolean;
@@ -45,6 +44,9 @@ export default class Sketch {
 			writable: false,
 		});
 		Object.defineProperty(this, "graphics", {
+			writable: false,
+		});
+		Object.defineProperty(this, "sceneManager", {
 			writable: false,
 		});
 	}
