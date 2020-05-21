@@ -1,4 +1,4 @@
-const shaders = {
+const polygonShaders = {
 	vertex: `
         uniform mat4 worldViewProjection;
 
@@ -53,4 +53,6 @@ const shaders = {
     `,
 };
 
-export { shaders as default };
+Object.freeze(polygonShaders);
+
+export { polygonShaders as default };

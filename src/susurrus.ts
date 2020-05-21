@@ -1,6 +1,6 @@
 export { default as Theater } from "./theater.js";
 
-export { default as Scene } from "./ecs/scene.js";
+export { default as Scene } from "./scene.js";
 
 export { default as AttributeElement } from "./graphics/attributeElement.js";
 export { default as AttributeSchema } from "./graphics/attributeSchema.js";
@@ -11,10 +11,11 @@ export { default as Colors } from "./graphics/colors.js";
 export { default as DrawMode } from "./graphics/drawMode.js";
 export { default as Effect } from "./graphics/effect.js";
 export { default as IndexBuffer } from "./graphics/indexBuffer.js";
-export { default as Polygon } from "./graphics/polygon.js";
-export { default as PolygonData } from "./graphics/polygonData.js";
 export { default as VertexBuffer } from "./graphics/vertexBuffer.js";
 export { default as VertexUsage } from "./graphics/vertexUsage.js";
+
+export { default as Polygon } from "./graphics/geometry/polygon.js";
+export { default as PolygonData } from "./graphics/geometry/polygonData.js";
 
 export { default as Matrix } from "./maths/matrix.js";
 export { default as MatrixTransform } from "./maths/matrixTransform.js";
@@ -23,4 +24,4 @@ export { default as Vector2 } from "./maths/vector3.js";
 export { default as Vector3 } from "./maths/vector3.js";
 export { default as Vector4 } from "./maths/vector3.js";
 
-export { default as Camera } from "./utilities/camera.js";
+export { default as Camera } from "./camera.js";

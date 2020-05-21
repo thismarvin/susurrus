@@ -1,6 +1,6 @@
-import MatrixTransform from "../maths/matrixTransform.js";
-import Vector3 from "../maths/vector3.js";
-import Matrix from "../maths/matrix.js";
+import MatrixTransform from "./maths/matrixTransform.js";
+import Vector3 from "./maths/vector3.js";
+import Matrix from "./maths/matrix.js";
 
 export default class Camera {
 	public world: MatrixTransform;

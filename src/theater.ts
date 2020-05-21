@@ -1,6 +1,6 @@
 import * as WebGL from "./graphics/webGL.js";
-import Graphics from "./graphics/graphics.js";
-import SceneManager from "./ecs/sceneManager.js";
+import Graphics from "./graphics/graphicsManager.js";
+import SceneManager from "./sceneManager.js";
 
 export default class Theater {
 	public readonly parent: HTMLElement;

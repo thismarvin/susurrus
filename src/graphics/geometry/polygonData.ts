@@ -1,11 +1,11 @@
-import AttributeType from "./attributeType.js";
-import AttributeSchema from "./attributeSchema.js";
-import AttributeElement from "./attributeElement.js";
-import VertexUsage from "./vertexUsage.js";
-import VertexBuffer from "./vertexBuffer.js";
-import IndexBuffer from "./indexBuffer.js";
+import AttributeType from "../attributeType.js";
+import AttributeSchema from "../attributeSchema.js";
+import AttributeElement from "../attributeElement.js";
+import VertexUsage from "../vertexUsage.js";
+import VertexBuffer from "../vertexBuffer.js";
+import IndexBuffer from "../indexBuffer.js";
 // eslint-disable-next-line no-unused-vars
-import Graphics from "./graphics.js";
+import Graphics from "../graphicsManager.js";
 
 const attributeSchema = new AttributeSchema([
 	new AttributeElement("a_position", 3, AttributeType.FLOAT),
