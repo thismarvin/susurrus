@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-import Graphics from "../graphics/graphics.js";
+import Graphics from "./graphics/graphicsManager.js";
 // eslint-disable-next-line no-unused-vars
-import Theater from "../theater.js";
-import Camera from "../utilities/camera.js";
-import Rectangle from "../maths/rectangle.js";
+import Theater from "./theater.js";
+import Camera from "./camera.js";
+import Rectangle from "./maths/rectangle.js";
 
 export default abstract class Scene {
 	public readonly name: string;

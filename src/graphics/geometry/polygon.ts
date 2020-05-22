@@ -1,19 +1,19 @@
-import AttributeType from "./attributeType.js";
-import AttributeSchema from "./attributeSchema.js";
-import AttributeElement from "./attributeElement.js";
-import DrawMode from "./drawMode.js";
-import VertexUsage from "./vertexUsage.js";
-import VertexBuffer from "./vertexBuffer.js";
-import Vector3 from "../maths/vector3.js";
-import Color from "./color.js";
+import AttributeType from "../attributeType.js";
+import AttributeSchema from "../attributeSchema.js";
+import AttributeElement from "../attributeElement.js";
+import DrawMode from "../drawMode.js";
+import VertexUsage from "../vertexUsage.js";
+import VertexBuffer from "../vertexBuffer.js";
+import Vector3 from "../../maths/vector3.js";
+import Color from "../color.js";
 // eslint-disable-next-line no-unused-vars
 import PolygonData from "./polygonData.js";
 // eslint-disable-next-line no-unused-vars
-import Graphics from "./graphics.js";
+import Graphics from "../graphicsManager.js";
 // eslint-disable-next-line no-unused-vars
-import Effect from "./effect.js";
+import Effect from "../effect.js";
 // eslint-disable-next-line no-unused-vars
-import Camera from "../utilities/camera.js";
+import Camera from "../../camera.js";
 
 const attributeSchema = new AttributeSchema([
 	new AttributeElement("a_translation", 3, AttributeType.FLOAT),

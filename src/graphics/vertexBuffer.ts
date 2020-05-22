@@ -2,7 +2,7 @@ import * as WebGL from "./webGL.js";
 import Buffer from "./buffer.js";
 import BufferType from "./bufferType.js";
 // eslint-disable-next-line no-unused-vars
-import Graphics from "./graphics.js";
+import Graphics from "./graphicsManager.js";
 // eslint-disable-next-line no-unused-vars
 import AttributeSchema from "./attributeSchema.js";
 

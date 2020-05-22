@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import Scene from "./scene.js";
 // eslint-disable-next-line no-unused-vars
-import Graphics from "../graphics/graphics.js";
+import Graphics from "./graphics/graphicsManager.js";
 
 export default class SceneManager {
 	public readonly scenes: Map<string, Scene>;

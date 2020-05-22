@@ -69,11 +69,11 @@ export default class Graphics {
 		// I do not trust that people will read the README, so if the resolution has not been set
 		// yet then just set the resolution to the canvas' dimensions.
 		if (this.#drawWidth < 0) {
-			this.setSketchResolution(width, height);
+			this.setTheaterResolution(width, height);
 		}
 	}
 
-	public setSketchResolution(width: number, height: number) {
+	public setTheaterResolution(width: number, height: number) {
 		PropertyAssent.expectType(width, "number");
 		PropertyAssent.expectType(height, "number");
 
