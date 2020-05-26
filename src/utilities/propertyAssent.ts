@@ -17,7 +17,11 @@ export function expectType(value: any, type: string, options?: any) {
 			break;
 	}
 
-	return validateAssent(valid, options, `Expected value to be a(n) '${type}'.`);
+	return _validateAssent(
+		valid,
+		options,
+		`Expected value to be a(n) '${type}'.`
+	);
 }
 
 /**
@@ -29,7 +33,7 @@ export function expectType(value: any, type: string, options?: any) {
 export function expectInstance(value: any, instance: any, options?: any) {
 	let valid = value instanceof instance;
 
-	return validateAssent(
+	return _validateAssent(
 		valid,
 		options,
 		`Expected value to be an instance of '${instance.name}'.`
@@ -38,7 +42,7 @@ export function expectInstance(value: any, instance: any, options?: any) {
 //#endregion
 
 //#region Private
-function validateAssent(
+function _validateAssent(
 	valid: boolean,
 	options: any,
 	defaultErrorMessage: string

@@ -5,7 +5,7 @@ import Graphics from "../graphicsManager.js";
 import GeometryData from "./geometryData.js";
 import * as Meshes from "./meshes.js";
 
-let cachedGeometryData: GeometryData | null = null;
+let _cachedGeometryData: GeometryData | null = null;
 
 export default class Quad extends Polygon {
 	constructor(
@@ -15,10 +15,10 @@ export default class Quad extends Polygon {
 		width: number,
 		height: number
 	) {
-		if (cachedGeometryData === null) {
-			cachedGeometryData = new GeometryData(graphics, Meshes.QUAD);
+		if (_cachedGeometryData === null) {
+			_cachedGeometryData = new GeometryData(graphics, Meshes.QUAD);
 		}
 
-		super(graphics, cachedGeometryData, x, y, width, height);
+		super(graphics, _cachedGeometryData, x, y, width, height);
 	}
 }

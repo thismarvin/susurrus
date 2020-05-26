@@ -1,9 +1,9 @@
-const vertexUsage = {
+const VERTEX_USAGE = {
 	STREAM: 35040,
 	STATIC: 35044,
 	DYNAMIC: 35048,
 };
 
-Object.freeze(vertexUsage);
+Object.freeze(VERTEX_USAGE);
 
-export { vertexUsage as default };
+export { VERTEX_USAGE as default };

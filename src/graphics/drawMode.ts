@@ -1,4 +1,4 @@
-const drawModes = {
+const DRAW_MODES = {
 	POINTS: 0,
 	LINES: 1,
 	LINE_LOOP: 2,
@@ -8,6 +8,6 @@ const drawModes = {
 	TRIANGLE_FAN: 6,
 };
 
-Object.freeze(drawModes);
+Object.freeze(DRAW_MODES);
 
-export { drawModes as default };
+export { DRAW_MODES as default };

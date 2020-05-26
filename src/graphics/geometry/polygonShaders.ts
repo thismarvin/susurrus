@@ -1,5 +1,5 @@
-const polygonShaders = {
-	vertex: `
+const POLYGON_SHADERS = {
+	VERTEX: `
         uniform mat4 worldViewProjection;
 
         attribute vec3 a_position;
@@ -44,7 +44,7 @@ const polygonShaders = {
             v_color = a_color;
         }
     `,
-	fragment: `
+	FRAGMENT: `
         varying lowp vec4 v_color;
 
         void main() {
@@ -53,6 +53,6 @@ const polygonShaders = {
     `,
 };
 
-Object.freeze(polygonShaders);
+Object.freeze(POLYGON_SHADERS);
 
-export { polygonShaders as default };
+export { POLYGON_SHADERS as default };

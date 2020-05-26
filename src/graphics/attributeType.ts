@@ -1,4 +1,4 @@
-const attributeTypes = {
+const ATTRIBUTE_TYPES = {
 	BYTE: 5120,
 	SHORT: 5122,
 	UNSIGNED_BYTE: 5121,
@@ -7,6 +7,6 @@ const attributeTypes = {
 	FLOAT: 5126,
 };
 
-Object.freeze(attributeTypes);
+Object.freeze(ATTRIBUTE_TYPES);
 
-export { attributeTypes as default };
+export { ATTRIBUTE_TYPES as default };

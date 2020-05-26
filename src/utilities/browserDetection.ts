@@ -1,11 +1,16 @@
 // @ts-nocheck
 
+const _browserData = _getBrowserData();
+
+export const BROWSER_NAME = _browserData.browserName;
+export const IS_BLINK = _browserData.isBlink;
+
 /**
  * An imperfect means of getting the current browser.
  * Code taken directly from this Stack Overflow post: https://stackoverflow.com/a/9851769
  * (and slightly modified by me <3).
  */
-function getBrowserData() {
+function _getBrowserData() {
 	// Opera 8.0+
 	const isOpera =
 		(!!window.opr && !!opr.addons) ||
@@ -58,8 +63,3 @@ function getBrowserData() {
 		isBlink: isBlink,
 	};
 }
-
-const browserData = getBrowserData();
-
-export const BROWSER_NAME = browserData.browserName;
-export const IS_BLINK = browserData.isBlink;

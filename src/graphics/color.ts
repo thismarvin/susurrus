@@ -1,6 +1,7 @@
-const RGBStep = 1 / 255;
+const _rgbStep = 1 / 255;
 
 export default class Color {
+	//#region Getters and Setters
 	get r() {
 		return this.#r;
 	}
@@ -28,6 +29,7 @@ export default class Color {
 	set a(value) {
 		this.#a = this.validateValue(value);
 	}
+	//#endregion
 
 	#r: number;
 	#g: number;
@@ -109,7 +111,7 @@ export default class Color {
 	}
 
 	private validateValue(value: number) {
-		if (value < RGBStep) {
+		if (value < _rgbStep) {
 			return 0;
 		}
 
@@ -117,6 +119,6 @@ export default class Color {
 			return 1;
 		}
 
-		return Math.floor(value / RGBStep) * RGBStep;
+		return Math.floor(value / _rgbStep) * _rgbStep;
 	}
 }

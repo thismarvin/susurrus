@@ -81,7 +81,7 @@ export default class MatrixTransform extends Matrix {
 		return matrix;
 	}
 
-	static createLookAt(
+	public static createLookAt(
 		cameraPosition: Vector3,
 		cameraTarget: Vector3,
 		cameraUp: Vector3

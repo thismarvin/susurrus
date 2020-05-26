@@ -1,4 +1,4 @@
-const attributeSizes = {
+const ATTRIBUTE_SIZES = {
 	BYTE: 1, // ???
 	SHORT: 2, // ???
 	UNSIGNED_BYTE: 1, // ???
@@ -7,6 +7,6 @@ const attributeSizes = {
 	FLOAT: 4,
 };
 
-Object.freeze(attributeSizes);
+Object.freeze(ATTRIBUTE_SIZES);
 
-export { attributeSizes as default };
+export { ATTRIBUTE_SIZES as default };

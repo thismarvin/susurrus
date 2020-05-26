@@ -3,7 +3,7 @@ import AttributeSize from "./attributeSize.js";
 // eslint-disable-next-line no-unused-vars
 import AttributeElement from "./attributeElement.js";
 
-function processAttributeElements(elements: AttributeElement[]) {
+function _processAttributeElements(elements: AttributeElement[]) {
 	let size = 0;
 	let stride = 0;
 
@@ -42,7 +42,7 @@ export default class AttributeSchema {
 	constructor(elements: AttributeElement[]) {
 		this.elements = elements;
 
-		const result = processAttributeElements(this.elements);
+		const result = _processAttributeElements(this.elements);
 		this.size = result.size;
 		this.stride = result.stride;
 

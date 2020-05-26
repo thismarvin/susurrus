@@ -1,8 +1,8 @@
-const bufferTypes = {
+const BUFFER_TYPES = {
 	VERTEX: 0,
 	INDEX: 1,
 };
 
-Object.freeze(bufferTypes);
+Object.freeze(BUFFER_TYPES);
 
-export { bufferTypes as default };
+export { BUFFER_TYPES as default };
