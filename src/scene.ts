@@ -8,6 +8,7 @@ import Rectangle from "./maths/rectangle.js";
 export default abstract class Scene {
 	public readonly name: string;
 	public readonly theater: Theater;
+
 	public camera: Camera;
 	public bounds: Rectangle;
 

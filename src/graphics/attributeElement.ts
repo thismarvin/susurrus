@@ -2,6 +2,7 @@ export default class AttributeElement {
 	public readonly name: string;
 	public readonly size: number;
 	public readonly type: number;
+
 	public stride: number;
 	public offset: number;
 
