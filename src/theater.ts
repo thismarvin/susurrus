@@ -1,12 +1,16 @@
 import * as WebGL from "./graphics/webGL.js";
 import Graphics from "./graphics/graphicsManager.js";
+import Props from "./props.js";
 import SceneManager from "./sceneManager.js";
+import GeometryManager from "./graphics/geometry/geometryManager.js";
 
 export default class Theater {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
+	public readonly props: Props;
 	public readonly sceneManager: SceneManager;
+	public readonly geometryManager: GeometryManager;
 
 	public loop: boolean;
 
@@ -32,6 +36,9 @@ export default class Theater {
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
 
 		this.sceneManager = new SceneManager();
+		this.geometryManager = new GeometryManager(this.graphics); // * not 100% sure about this!
+
+		this.props = new Props(this.graphics);
 
 		this.loop = true;
 		this.#initialized = false;
@@ -46,7 +53,13 @@ export default class Theater {
 		Object.defineProperty(this, "graphics", {
 			writable: false,
 		});
+		Object.defineProperty(this, "props", {
+			writable: false,
+		});
 		Object.defineProperty(this, "sceneManager", {
+			writable: false,
+		});
+		Object.defineProperty(this, "geometryManager", {
 			writable: false,
 		});
 	}
