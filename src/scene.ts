@@ -37,8 +37,9 @@ export default abstract class Scene {
 		});
 	}
 
-	public abstract onEnter(): void;
-	public abstract onExit(): void;
+	public onEnter() {}
+	public onExit() {}
+
 	public abstract update(deltaTime: number): void;
 	public abstract draw(graphics: Graphics, deltaTime: number): void;
 }
