@@ -29,22 +29,7 @@ export function allocateVertexBuffer(
 	size: number,
 	usage: number
 ) {
-	/**
-	 * I am not sure if I am going to keep this.
-	 * For some reason I cannot use DYNAMIC DRAW unless the allocated
-	 * size is three times the initial size???
-	 * STATIC_DRAW works perfectly fine with the initial size.
-	 * I am not even sure if DYNAMIC_DRAW is even better than STATIC_DRAW in the
-	 * first place.
-	 */
-	let adjustedSize = size;
-	switch (usage) {
-		case gl.DYNAMIC_DRAW:
-			adjustedSize = size * 4;
-			break;
-	}
-
-	return _allocateBuffer(gl, gl.ARRAY_BUFFER, adjustedSize, usage);
+	return _allocateBuffer(gl, gl.ARRAY_BUFFER, size, usage);
 }
 
 export function setVertexBufferData(
