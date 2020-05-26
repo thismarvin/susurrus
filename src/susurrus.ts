@@ -5,7 +5,7 @@ export { default as Scene } from "./scene.js";
 export { default as AttributeElement } from "./graphics/attributeElement.js";
 export { default as AttributeSchema } from "./graphics/attributeSchema.js";
 export { default as AttributeType } from "./graphics/attributeType.js";
-export { default as BasicEffect } from "./graphics/basicEffect.js";
+export { default as BasicEffect } from "./graphics/geometry/basicEffect.js";
 export { default as Color } from "./graphics/color.js";
 export { default as Colors } from "./graphics/colors.js";
 export { default as DrawMode } from "./graphics/drawMode.js";
