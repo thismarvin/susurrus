@@ -3,7 +3,7 @@ import * as WebGL from "./webGL.js";
 import Graphics from "./graphicsManager.js";
 import BufferType from "./bufferType.js";
 
-export default class Buffer {
+export default abstract class Buffer {
 	public readonly length: number;
 	public readonly type: number;
 	public buffer: WebGLBuffer | null;
@@ -30,13 +30,20 @@ export default class Buffer {
 	}
 
 	public setData(data: number[]) {
-		if (this.data === null || this.buffer == null) {
-			throw new Error();
+		if (this.data === null || this.buffer === null) {
+			throw new Error(
+				"This buffer was not initialized correctly. Make sure the 'data' and 'buffer' properties are set.."
+			);
 		}
 
-		if (data.length != this.length) {
+		// Do not bother doing anything if the data parameter doesn't exist.
+		if (data === undefined || data === null) {
+			return;
+		}
+
+		if (data.length > this.length) {
 			throw new TypeError(
-				`Expected an array with ${this.length} element(s). Received an array with ${data.length} element(s) instead.`
+				`Expected an array with ${this.length} element(s) or less.`
 			);
 		}
 
