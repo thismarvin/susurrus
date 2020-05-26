@@ -61,5 +61,5 @@ function getBrowserData() {
 
 const browserData = getBrowserData();
 
-export const browserName = browserData.browserName;
-export const isBlink = browserData.isBlink;
+export const BROWSER_NAME = browserData.browserName;
+export const IS_BLINK = browserData.isBlink;

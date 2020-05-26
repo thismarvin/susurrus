@@ -174,7 +174,7 @@ export default abstract class Polygon {
 		// I hate this but for some reason Blink doesnt bode well with VertexUsage.DYNAMIC.
 		// Refer to this issue for more info: https://github.com/thismarvin/susurrus/issues/5
 		let modelLength = ATTRIBUTE_SCHEMA.size;
-		if (BrowserHelper.isBlink) {
+		if (BrowserHelper.IS_BLINK) {
 			modelLength *= this.#geometry.totalVertices;
 		}
 
