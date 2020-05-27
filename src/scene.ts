@@ -12,9 +12,9 @@ export default abstract class Scene {
 	public camera: Camera;
 	public bounds: Rectangle;
 
-	constructor(name: string, sketch: Theater) {
+	constructor(name: string, theater: Theater) {
 		this.name = name;
-		this.theater = sketch;
+		this.theater = theater;
 
 		// TODO This camera and bounds stuff is kinda jank. So it's officially temporary for now.
 		const graphics = this.theater.graphics;
