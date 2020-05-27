@@ -1,5 +1,6 @@
 import * as WebGL from "./graphics/webGL.js";
 import Graphics from "./graphics/graphicsManager.js";
+import Keyboard from "./input/keyboard.js";
 import Props from "./props.js";
 import SceneManager from "./sceneManager.js";
 import GeometryManager from "./graphics/geometry/geometryManager.js";
@@ -8,17 +9,23 @@ export default class Theater {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
+	public readonly keyboard: Keyboard;
 	public readonly props: Props;
 	public readonly sceneManager: SceneManager;
 	public readonly geometryManager: GeometryManager;
 
 	public loop: boolean;
 
+	public get inFocus() {
+		return this.#focus;
+	}
+
 	public get totalElapsedTime() {
 		return this.#totalElapsedTime;
 	}
 
 	#initialized: boolean;
+	#focus: boolean;
 	#totalElapsedTime: number;
 
 	constructor(id: string) {
@@ -34,6 +41,7 @@ export default class Theater {
 		this.canvas.id = `${id}-canvas`;
 
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
+		this.keyboard = new Keyboard(this);
 
 		this.sceneManager = new SceneManager();
 		this.geometryManager = new GeometryManager(this.graphics); // * not 100% sure about this!
@@ -42,7 +50,12 @@ export default class Theater {
 
 		this.loop = true;
 		this.#initialized = false;
+		this.#focus = false;
 		this.#totalElapsedTime = 0;
+
+		window.addEventListener("mousedown", (event) => {
+			this.#focus = event.target === this.canvas;
+		});
 
 		Object.defineProperty(this, "parent", {
 			writable: false,
@@ -51,6 +64,9 @@ export default class Theater {
 			writable: false,
 		});
 		Object.defineProperty(this, "graphics", {
+			writable: false,
+		});
+		Object.defineProperty(this, "keyboard", {
 			writable: false,
 		});
 		Object.defineProperty(this, "props", {
