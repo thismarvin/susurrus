@@ -1,12 +1,12 @@
 export default class KeyboardState {
-	#keyboardEvent: Set<string>;
+	#keysPressed: Set<string>;
 
-	constructor(keyboardEvent: Set<string>) {
-		this.#keyboardEvent = keyboardEvent;
+	constructor(keysPressed: Set<string>) {
+		this.#keysPressed = new Set<string>(keysPressed);
 	}
 
 	public isKeyDown(key: string) {
-		return this.#keyboardEvent.has(key);
+		return this.#keysPressed.has(key);
 	}
 
 	public isKeyUp(key: string) {
