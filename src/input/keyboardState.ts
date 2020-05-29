@@ -6,7 +6,14 @@ export default class KeyboardState {
 	}
 
 	public isKeyDown(key: string) {
-		return this.#keysPressed.has(key);
+		const seperatedKeys = key.toLocaleLowerCase().split(",");
+		for (let i = 0; i < seperatedKeys.length; i++) {
+			if (this.#keysPressed.has(seperatedKeys[i].trim())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public isKeyUp(key: string) {
