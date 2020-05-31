@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import Theater from "../theater.js";
+import MouseState from "./mouseState.js";
 
 export default class Mouse {
 	public get xCanvas() {
@@ -21,6 +22,7 @@ export default class Mouse {
 	#yCanvas: number;
 	#xScene: number;
 	#yScene: number;
+	#buttonsPressed: number;
 
 	constructor(theater: Theater) {
 		this.#theater = theater;
@@ -28,6 +30,7 @@ export default class Mouse {
 		this.#yCanvas = 0;
 		this.#xScene = 0;
 		this.#yScene = 0;
+		this.#buttonsPressed = 0;
 
 		window.addEventListener("mousemove", (event) => {
 			this.#xCanvas = event.clientX - this.#theater.canvas.offsetLeft;
@@ -40,5 +43,20 @@ export default class Mouse {
 				this.#yCanvas / this.#theater.graphics.scale -
 				this.#theater.graphics.drawHeight / 2;
 		});
+
+		window.addEventListener("mousedown", (event) => {
+			this.#buttonsPressed = event.buttons;
+		});
+		window.addEventListener("mouseup", (event) => {
+			this.#buttonsPressed = event.buttons;
+			console.log(this.#buttonsPressed);
+		});
+		window.addEventListener("blur", () => {
+			this.#buttonsPressed = 0;
+		});
+	}
+
+	public getState() {
+		return new MouseState(this.#buttonsPressed);
 	}
 }
