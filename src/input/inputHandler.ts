@@ -1,4 +1,6 @@
 // eslint-disable-next-line no-unused-vars
+import Theater from "../theater.js";
+// eslint-disable-next-line no-unused-vars
 import SmartKeyboard from "./smartKeyboard.js";
 // eslint-disable-next-line no-unused-vars
 import InputProfile from "./inputProfile.js";
@@ -7,8 +9,8 @@ export default class InputHandler {
 	#smartKeyboard: SmartKeyboard;
 	#inputProfile: InputProfile | null;
 
-	constructor(smartKeyboard: SmartKeyboard) {
-		this.#smartKeyboard = smartKeyboard;
+	constructor(theater: Theater) {
+		this.#smartKeyboard = theater.smartKeyboard;
 		this.#inputProfile = null;
 	}
 
@@ -47,6 +49,6 @@ export default class InputHandler {
 	}
 
 	public update() {
-		this.#smartKeyboard.update();
+		// TODO: Update might be needed for Gamepad support?
 	}
 }
