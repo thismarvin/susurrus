@@ -140,6 +140,7 @@ export default class Theater {
 	 */
 	// eslint-disable-next-line no-unused-vars
 	private managedUpdate(deltaTime: number) {
+		this.smartKeyboard.update();
 		this.smartMouse.update();
 	}
 
