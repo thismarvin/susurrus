@@ -45,9 +45,17 @@ export default class Mouse {
 		});
 
 		window.addEventListener("mousedown", (event) => {
+			if (!this.#theater.inFocus) {
+				return;
+			}
+
 			this.#buttonsPressed = event.buttons;
 		});
 		window.addEventListener("mouseup", (event) => {
+			if (!this.#theater.inFocus) {
+				return;
+			}
+
 			this.#buttonsPressed = event.buttons;
 		});
 		window.addEventListener("blur", () => {
