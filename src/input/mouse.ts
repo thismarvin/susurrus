@@ -49,7 +49,6 @@ export default class Mouse {
 		});
 		window.addEventListener("mouseup", (event) => {
 			this.#buttonsPressed = event.buttons;
-			console.log(this.#buttonsPressed);
 		});
 		window.addEventListener("blur", () => {
 			this.#buttonsPressed = 0;
