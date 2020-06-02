@@ -4,14 +4,19 @@ import Theater from "../theater.js";
 import SmartKeyboard from "./smartKeyboard.js";
 // eslint-disable-next-line no-unused-vars
 import InputProfile from "./inputProfile.js";
+import SmartGamepad from "./smartGamepad.js";
 
 export default class InputHandler {
+	#playerIndex: number;
 	#smartKeyboard: SmartKeyboard;
+	#gamepad: SmartGamepad;
 	#inputProfile: InputProfile | null;
 
-	constructor(theater: Theater) {
+	constructor(theater: Theater, playerIndex: number) {
+		this.#playerIndex = playerIndex;
 		this.#smartKeyboard = theater.smartKeyboard;
 		this.#inputProfile = null;
+		this.#gamepad = new SmartGamepad(playerIndex);
 	}
 
 	public loadProfile(profile: InputProfile) {
@@ -49,6 +54,6 @@ export default class InputHandler {
 	}
 
 	public update() {
-		// TODO: Update might be needed for Gamepad support?
+		this.#gamepad.update();
 	}
 }
