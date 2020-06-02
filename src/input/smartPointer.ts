@@ -1,4 +1,4 @@
-import Pointer from "./pointer.js";
+import * as Pointer from "./pointerManager.js";
 // eslint-disable-next-line no-unused-vars
 import PointerState from "./pointerState.js";
 
@@ -11,43 +11,50 @@ export default class SmartPointer {
 	}
 
 	#element: HTMLElement;
-	#pointer: Pointer;
-	#previousMouseState: PointerState | null;
-	#currentMouseState: PointerState | null;
+	#previousPointerState: PointerState | null;
+	#currentPointerState: PointerState | null;
 	#x: number;
 	#y: number;
 
 	constructor(element: HTMLElement) {
 		this.#element = element;
-		this.#pointer = new Pointer();
-		this.#previousMouseState = null;
-		this.#currentMouseState = null;
+		this.#previousPointerState = null;
+		this.#currentPointerState = null;
 		this.#x = 0;
 		this.#y = 0;
 	}
 
 	public pressed(button: string) {
 		if (
-			!this.#previousMouseState?.isButtonDown(button) &&
-			this.#currentMouseState?.isButtonDown(button)
+			this.#previousPointerState === null ||
+			this.#currentPointerState === null
 		) {
-			return true;
+			return false;
 		}
 
-		return false;
+		return (
+			!Pointer.isButtonDown(button, this.#previousPointerState) &&
+			Pointer.isButtonDown(button, this.#currentPointerState)
+		);
 	}
 
 	public pressing(button: string) {
-		return this.#currentMouseState?.isButtonDown(button);
+		if (this.#currentPointerState === null) {
+			return false;
+		}
+
+		return Pointer.isButtonDown(button, this.#currentPointerState);
 	}
 
 	public update() {
-		this.#previousMouseState = this.#currentMouseState;
-		this.#currentMouseState = this.#pointer.getState();
+		this.#previousPointerState = this.#currentPointerState;
+		this.#currentPointerState = Pointer.getState();
 
-		if (this.#pointer.lastEvent !== null) {
-			this.#x = this.#pointer.lastEvent.clientX - this.#element.offsetLeft;
-			this.#y = this.#pointer.lastEvent.clientY - this.#element.offsetTop;
+		if (this.#currentPointerState !== null) {
+			this.#x =
+				this.#currentPointerState.event.clientX - this.#element.offsetLeft;
+			this.#y =
+				this.#currentPointerState.event.clientY - this.#element.offsetTop;
 		}
 	}
 }

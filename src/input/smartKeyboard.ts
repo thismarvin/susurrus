@@ -1,36 +1,37 @@
-// eslint-disable-next-line no-unused-vars
-import Keyboard from "./keyboard.js";
+import * as KeyboadManager from "./keyboardManager.js";
 // eslint-disable-next-line no-unused-vars
 import KeyboardState from "./keyboardState.js";
 
 export default class SmartKeyboard {
-	#keyboard: Keyboard;
 	#previousKeyState: KeyboardState | null;
 	#currentKeyState: KeyboardState | null;
 
-	constructor(keyboard: Keyboard) {
-		this.#keyboard = keyboard;
+	constructor() {
 		this.#previousKeyState = null;
 		this.#currentKeyState = null;
 	}
 
 	public pressed(key: string) {
-		if (
-			!this.#previousKeyState?.isKeyDown(key) &&
-			this.#currentKeyState?.isKeyDown(key)
-		) {
-			return true;
+		if (this.#previousKeyState === null || this.#currentKeyState === null) {
+			return false;
 		}
 
-		return false;
+		return (
+			!KeyboadManager.isKeyDown(key, this.#previousKeyState) &&
+			KeyboadManager.isKeyDown(key, this.#currentKeyState)
+		);
 	}
 
 	public pressing(key: string) {
-		return this.#currentKeyState?.isKeyDown(key);
+		if (this.#currentKeyState === null) {
+			return false;
+		}
+
+		return KeyboadManager.isKeyDown(key, this.#currentKeyState);
 	}
 
 	public update() {
 		this.#previousKeyState = this.#currentKeyState;
-		this.#currentKeyState = this.#keyboard.getState();
+		this.#currentKeyState = KeyboadManager.getState();
 	}
 }

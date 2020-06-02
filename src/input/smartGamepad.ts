@@ -1,45 +1,90 @@
 import * as GamepadManager from "./gamepadManager.js";
+// eslint-disable-next-line no-unused-vars
+import GamepadState from "./gamepadState.js";
 
 export default class SmartGamepad {
 	public get connected() {
-		return this.#gamepad !== null;
+		return this.#currentGamepadState !== null;
 	}
 
 	public get description() {
-		if (this.#gamepad === null) {
+		if (this.#currentGamepadState === null) {
 			return "";
 		}
 
-		return this.#gamepad.id;
+		return this.#currentGamepadState.gamepad.id;
+	}
+
+	public get leftStickAxes() {
+		if (this.#currentGamepadState === null) {
+			return {
+				x: 0,
+				y: 0,
+			};
+		}
+
+		return {
+			x: this.#currentGamepadState.gamepad.axes[0],
+			y: -this.#currentGamepadState.gamepad.axes[1],
+		};
+	}
+
+	public get rightStickAxes() {
+		if (this.#currentGamepadState === null) {
+			return {
+				x: 0,
+				y: 0,
+			};
+		}
+
+		return {
+			x: this.#currentGamepadState.gamepad.axes[2],
+			y: -this.#currentGamepadState.gamepad.axes[3],
+		};
 	}
 
 	public get buttons() {
-		if (this.#gamepad === null) {
+		if (this.#currentGamepadState === null) {
 			return [] as GamepadButton[];
 		}
 
-		return this.#gamepad.buttons;
+		return this.#currentGamepadState.gamepad.axes;
 	}
 
 	#playerIndex: number;
-	#gamepad: Gamepad | null;
+	#previousGamepadState: GamepadState | null;
+	#currentGamepadState: GamepadState | null;
 
 	constructor(playerIndex: number) {
 		this.#playerIndex = playerIndex;
-		this.#gamepad = null;
+		this.#previousGamepadState = null;
+		this.#currentGamepadState = null;
 	}
 
-	// TODO: this should probably be a string like the others :3
-	public pressing(button: number) {
-		if (this.#gamepad === null) {
+	public pressed(button: string) {
+		if (
+			this.#previousGamepadState === null ||
+			this.#currentGamepadState === null
+		) {
 			return false;
 		}
 
-		return this.#gamepad.buttons[button].pressed;
+		return (
+			!GamepadManager.isButtonDown(button, this.#previousGamepadState) &&
+			GamepadManager.isButtonDown(button, this.#currentGamepadState)
+		);
+	}
+
+	public pressing(button: string) {
+		if (this.#currentGamepadState === null) {
+			return false;
+		}
+
+		return GamepadManager.isButtonDown(button, this.#currentGamepadState);
 	}
 
 	public update() {
-		// @ts-ignore
-		this.#gamepad = GamepadManager.getGamepad(this.#playerIndex);
+		this.#previousGamepadState = this.#currentGamepadState;
+		this.#currentGamepadState = GamepadManager.getState(this.#playerIndex);
 	}
 }

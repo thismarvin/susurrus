@@ -1,6 +1,5 @@
 import * as WebGL from "./graphics/webGL.js";
 import Graphics from "./graphics/graphicsManager.js";
-import Keyboard from "./input/keyboard.js";
 import SmartKeyboard from "./input/smartKeyboard.js";
 import SmartPointer from "./input/smartPointer.js";
 import Props from "./props.js";
@@ -12,7 +11,6 @@ export default class Theater {
 	public readonly canvas: HTMLCanvasElement;
 	public readonly graphics: Graphics;
 
-	public readonly keyboard: Keyboard;
 	public readonly smartKeyboard: SmartKeyboard;
 	public readonly smartPointer: SmartPointer;
 
@@ -48,8 +46,7 @@ export default class Theater {
 
 		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
 
-		this.keyboard = new Keyboard(this);
-		this.smartKeyboard = new SmartKeyboard(this.keyboard);
+		this.smartKeyboard = new SmartKeyboard();
 		this.smartPointer = new SmartPointer(this.canvas);
 
 		this.sceneManager = new SceneManager();
@@ -73,9 +70,6 @@ export default class Theater {
 			writable: false,
 		});
 		Object.defineProperty(this, "graphics", {
-			writable: false,
-		});
-		Object.defineProperty(this, "keyboard", {
 			writable: false,
 		});
 		Object.defineProperty(this, "smartKeyboard", {
