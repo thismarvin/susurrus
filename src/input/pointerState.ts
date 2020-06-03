@@ -1,11 +1,11 @@
 export default class PointerState {
-	public get event() {
-		return this.#event;
-	}
-
-	#event: PointerEvent;
+	public readonly event: PointerEvent;
 
 	constructor(event: PointerEvent) {
-		this.#event = event;
+		this.event = event;
+
+		Object.defineProperty(this, "event", {
+			writable: false,
+		});
 	}
 }

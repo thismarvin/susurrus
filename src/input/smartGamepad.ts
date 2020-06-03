@@ -3,6 +3,8 @@ import * as GamepadManager from "./gamepadManager.js";
 import GamepadState from "./gamepadState.js";
 
 export default class SmartGamepad {
+	public readonly playerIndex: number;
+
 	public get connected() {
 		return this.#currentGamepadState !== null;
 	}
@@ -51,14 +53,17 @@ export default class SmartGamepad {
 		return this.#currentGamepadState.gamepad.axes;
 	}
 
-	#playerIndex: number;
 	#previousGamepadState: GamepadState | null;
 	#currentGamepadState: GamepadState | null;
 
 	constructor(playerIndex: number) {
-		this.#playerIndex = playerIndex;
+		this.playerIndex = playerIndex;
 		this.#previousGamepadState = null;
 		this.#currentGamepadState = null;
+
+		Object.defineProperty(this, "playerIndex", {
+			writable: false,
+		});
 	}
 
 	public pressed(button: string) {
@@ -85,6 +90,6 @@ export default class SmartGamepad {
 
 	public update() {
 		this.#previousGamepadState = this.#currentGamepadState;
-		this.#currentGamepadState = GamepadManager.getState(this.#playerIndex);
+		this.#currentGamepadState = GamepadManager.getState(this.playerIndex);
 	}
 }

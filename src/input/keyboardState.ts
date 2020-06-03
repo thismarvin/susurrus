@@ -1,17 +1,16 @@
 export default class KeyboardState {
-	public get event() {
-		return this.#event;
-	}
-
-	public get keysPressed() {
-		return this.#keysPressed;
-	}
-
-	#event: KeyboardEvent;
-	#keysPressed: Set<string>;
+	public readonly event: KeyboardEvent;
+	public readonly keysPressed: Set<string>;
 
 	constructor(event: KeyboardEvent, keysPressed: Set<string>) {
-		this.#event = event;
-		this.#keysPressed = new Set<string>(keysPressed);
+		this.event = event;
+		this.keysPressed = new Set<string>(keysPressed);
+
+		Object.defineProperty(this, "event", {
+			writable: false,
+		});
+		Object.defineProperty(this, "keysPressed", {
+			writable: false,
+		});
 	}
 }

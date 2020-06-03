@@ -1,11 +1,11 @@
 export default class GamepadState {
-	public get gamepad() {
-		return this.#gamepad;
-	}
-
-	#gamepad: Gamepad;
+	public readonly gamepad: Gamepad;
 
 	constructor(gamepad: Gamepad) {
-		this.#gamepad = gamepad;
+		this.gamepad = gamepad;
+
+		Object.defineProperty(this, "gamepad", {
+			writable: false,
+		});
 	}
 }
