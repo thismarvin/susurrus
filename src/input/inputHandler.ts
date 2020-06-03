@@ -7,10 +7,15 @@ import InputProfile from "./inputProfile.js";
 export default class InputHandler {
 	public readonly playerIndex: number;
 
+	public get lastInputType() {
+		return this.#inputMode;
+	}
+
 	#smartKeyboard: SmartKeyboard;
 	#smartPointer: SmartPointer;
 	#smartGamepad: SmartGamepad;
 	#inputProfile: InputProfile | null;
+	#inputMode: string;
 
 	constructor(element: HTMLElement, playerIndex: number) {
 		this.playerIndex = playerIndex;
@@ -18,6 +23,7 @@ export default class InputHandler {
 		this.#smartPointer = new SmartPointer(element);
 		this.#smartGamepad = new SmartGamepad(playerIndex);
 		this.#inputProfile = null;
+		this.#inputMode = "keyboard";
 
 		Object.defineProperty(this, "playerIndex", {
 			writable: false,
@@ -44,12 +50,14 @@ export default class InputHandler {
 				this.#smartKeyboard.pressed(inputMapping.keys) ||
 				this.#smartPointer.pressed(inputMapping.mouseButtons)
 			) {
+				this.#inputMode = "keyboard";
 				return true;
 			}
 		}
 
 		if (this.#smartGamepad.connected) {
 			if (this.#smartGamepad.pressed(inputMapping.gamepadButtons)) {
+				this.#inputMode = "gamepad";
 				return true;
 			}
 		}
@@ -73,12 +81,14 @@ export default class InputHandler {
 				this.#smartKeyboard.pressing(inputMapping.keys) ||
 				this.#smartPointer.pressing(inputMapping.mouseButtons)
 			) {
+				this.#inputMode = "keyboard";
 				return true;
 			}
 		}
 
 		if (this.#smartGamepad.connected) {
 			if (this.#smartGamepad.pressing(inputMapping.gamepadButtons)) {
+				this.#inputMode = "gamepad";
 				return true;
 			}
 		}
