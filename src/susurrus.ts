@@ -21,6 +21,9 @@ export { default as GeometryManager } from "./graphics/geometry/geometryManager.
 export { default as Polygon } from "./graphics/geometry/polygon.js";
 export { default as Quad } from "./graphics/geometry/quad.js";
 
+export { default as InputHandler } from "./input/inputHandler.js";
+export { default as InputProfile } from "./input/inputProfile.js";
+
 export { default as Matrix } from "./maths/matrix.js";
 export { default as MatrixTransform } from "./maths/matrixTransform.js";
 export { default as Rectangle } from "./maths/rectangle.js";
