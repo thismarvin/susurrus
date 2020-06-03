@@ -1,22 +1,27 @@
-// eslint-disable-next-line no-unused-vars
-import Theater from "../theater.js";
-// eslint-disable-next-line no-unused-vars
 import SmartKeyboard from "./smartKeyboard.js";
+import SmartGamepad from "./smartGamepad.js";
+import SmartPointer from "./smartPointer.js";
 // eslint-disable-next-line no-unused-vars
 import InputProfile from "./inputProfile.js";
-import SmartGamepad from "./smartGamepad.js";
 
 export default class InputHandler {
-	#playerIndex: number;
+	public readonly playerIndex: number;
+
 	#smartKeyboard: SmartKeyboard;
-	#gamepad: SmartGamepad;
+	#smartPointer: SmartPointer;
+	#smartGamepad: SmartGamepad;
 	#inputProfile: InputProfile | null;
 
-	constructor(theater: Theater, playerIndex: number) {
-		this.#playerIndex = playerIndex;
-		this.#smartKeyboard = theater.smartKeyboard;
+	constructor(element: HTMLElement, playerIndex: number) {
+		this.playerIndex = playerIndex;
+		this.#smartKeyboard = new SmartKeyboard();
+		this.#smartPointer = new SmartPointer(element);
+		this.#smartGamepad = new SmartGamepad(playerIndex);
 		this.#inputProfile = null;
-		this.#gamepad = new SmartGamepad(playerIndex);
+
+		Object.defineProperty(this, "playerIndex", {
+			writable: false,
+		});
 	}
 
 	public loadProfile(profile: InputProfile) {
@@ -30,9 +35,23 @@ export default class InputHandler {
 
 		const inputMapping = this.#inputProfile.getMapping(name);
 
-		//@ts-ignore
-		if (this.#smartKeyboard.pressed(inputMapping.keys)) {
-			return true;
+		if (inputMapping === undefined) {
+			return false;
+		}
+
+		if (this.playerIndex === 0) {
+			if (
+				this.#smartKeyboard.pressed(inputMapping.keys) ||
+				this.#smartPointer.pressed(inputMapping.mouseButtons)
+			) {
+				return true;
+			}
+		}
+
+		if (this.#smartGamepad.connected) {
+			if (this.#smartGamepad.pressed(inputMapping.gamepadButtons)) {
+				return true;
+			}
 		}
 
 		return false;
@@ -45,15 +64,31 @@ export default class InputHandler {
 
 		const inputMapping = this.#inputProfile.getMapping(name);
 
-		//@ts-ignore
-		if (this.#smartKeyboard.pressing(inputMapping.keys)) {
-			return true;
+		if (inputMapping === undefined) {
+			return false;
+		}
+
+		if (this.playerIndex === 0) {
+			if (
+				this.#smartKeyboard.pressing(inputMapping.keys) ||
+				this.#smartPointer.pressing(inputMapping.mouseButtons)
+			) {
+				return true;
+			}
+		}
+
+		if (this.#smartGamepad.connected) {
+			if (this.#smartGamepad.pressing(inputMapping.gamepadButtons)) {
+				return true;
+			}
 		}
 
 		return false;
 	}
 
 	public update() {
-		this.#gamepad.update();
+		this.#smartKeyboard.update();
+		this.#smartPointer.update();
+		this.#smartGamepad.update();
 	}
 }

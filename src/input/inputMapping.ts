@@ -1,13 +1,52 @@
 export default class InputMapping {
-	public name: string;
-	public keys: string;
+	public readonly name: string;
 
-	constructor(name: string, keys: string) {
-		this.name = name;
-		this.keys = keys;
+	public get keys() {
+		return this.#keys;
 	}
 
-	public remap(keys: string) {
-		this.keys = keys;
+	public get gamepadButtons() {
+		return this.#gamepadButtons;
+	}
+
+	public get mouseButtons() {
+		return this.#mouseButtons;
+	}
+
+	#keys: string;
+	#gamepadButtons: string;
+	#mouseButtons: string;
+
+	constructor(
+		name: string,
+		keys: string,
+		gamepadButtons?: string,
+		mouseButtons?: string
+	) {
+		this.name = name;
+		this.#keys = keys;
+		this.#gamepadButtons = "";
+		this.#mouseButtons = "";
+
+		if (gamepadButtons !== undefined) {
+			this.#gamepadButtons = gamepadButtons;
+		}
+		if (mouseButtons !== undefined) {
+			this.#mouseButtons = mouseButtons;
+		}
+
+		Object.defineProperty(this, "name", {
+			writable: false,
+		});
+	}
+
+	public remapKeys(keys: string) {
+		this.#keys = keys;
+	}
+	public remapGamepadButtons(buttons: string) {
+		this.#gamepadButtons = buttons;
+	}
+	public remapMouseButtons(buttons: string) {
+		this.#mouseButtons = buttons;
 	}
 }

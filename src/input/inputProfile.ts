@@ -11,8 +11,18 @@ export default class InputProfile {
 		this.#inputMappings = new ResourceHandler<InputMapping>();
 	}
 
-	public createMapping(name: string, keys: string) {
-		const inputMapping = new InputMapping(name, keys);
+	public createMapping(
+		name: string,
+		keys: string,
+		gamepadButtons?: string,
+		mouseButtons?: string
+	) {
+		const inputMapping = new InputMapping(
+			name,
+			keys,
+			gamepadButtons,
+			mouseButtons
+		);
 		this.#inputMappings.register(inputMapping.name, inputMapping);
 	}
 
@@ -20,8 +30,16 @@ export default class InputProfile {
 		return this.#inputMappings.get(name);
 	}
 
-	public remap(name: string, keys: string) {
-		this.getMapping(name)?.remap(keys);
+	public remapKeys(name: string, keys: string) {
+		this.getMapping(name)?.remapKeys(keys);
+	}
+
+	public remapGamepadButtons(name: string, buttons: string) {
+		this.getMapping(name)?.remapGamepadButtons(buttons);
+	}
+
+	public remapMouseButtons(name: string, buttons: string) {
+		this.getMapping(name)?.remapMouseButtons(buttons);
 	}
 
 	public removeMapping(name: string) {
