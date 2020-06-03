@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
-import Scene from "./scene.js";
+import * as Graphics from "../lib/graphics.js";
 // eslint-disable-next-line no-unused-vars
-import Graphics from "./graphics/graphicsManager.js";
+import Scene from "./scene.js";
 
 export default class SceneManager {
 	public readonly scenes: Map<string, Scene>;
@@ -49,7 +49,7 @@ export default class SceneManager {
 		this.#currentScene?.update(deltaTime);
 	}
 
-	public draw(graphics: Graphics, deltaTime: number) {
+	public draw(graphics: Graphics.GraphicsManager, deltaTime: number) {
 		this.#currentScene?.draw(graphics, deltaTime);
 	}
 

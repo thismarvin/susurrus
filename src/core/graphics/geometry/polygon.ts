@@ -1,27 +1,25 @@
-// eslint-disable-next-line no-unused-vars
-import Graphics from "../graphicsManager.js";
+import * as Graphics from "../../../lib/graphics.js";
+import * as Maths from "../../../lib/maths.js";
+import * as Utilities from "../../../lib/utilities.js";
 // eslint-disable-next-line no-unused-vars
 import GeometryData from "./geometryData.js";
-import Color from "../color.js";
-import VertexBuffer from "../vertexBuffer.js";
-import AttributeType from "../attributeType.js";
-import AttributeSchema from "../attributeSchema.js";
-import AttributeElement from "../attributeElement.js";
-import DrawMode from "../drawMode.js";
-import VertexUsage from "../vertexUsage.js";
-// eslint-disable-next-line no-unused-vars
-import Effect from "../effect.js";
-import Vector3 from "../../maths/vector3.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../../camera.js";
-import * as BrowserHelper from "../../utilities/browserDetection.js";
 
-const ATTRIBUTE_SCHEMA = new AttributeSchema([
-	new AttributeElement("a_translation", 3, AttributeType.FLOAT),
-	new AttributeElement("a_scale", 3, AttributeType.FLOAT),
-	new AttributeElement("a_rotationOffset", 3, AttributeType.FLOAT),
-	new AttributeElement("a_rotation", 1, AttributeType.FLOAT),
-	new AttributeElement("a_color", 4, AttributeType.FLOAT),
+const ATTRIBUTE_SCHEMA = new Graphics.AttributeSchema([
+	new Graphics.AttributeElement(
+		"a_translation",
+		3,
+		Graphics.AttributeType.FLOAT
+	),
+	new Graphics.AttributeElement("a_scale", 3, Graphics.AttributeType.FLOAT),
+	new Graphics.AttributeElement(
+		"a_rotationOffset",
+		3,
+		Graphics.AttributeType.FLOAT
+	),
+	new Graphics.AttributeElement("a_rotation", 1, Graphics.AttributeType.FLOAT),
+	new Graphics.AttributeElement("a_color", 4, Graphics.AttributeType.FLOAT),
 ]);
 
 export default abstract class Polygon {
@@ -140,18 +138,18 @@ export default abstract class Polygon {
 	#width: number;
 	#height: number;
 
-	#translation: Vector3;
-	#scale: Vector3;
-	#rotationOffset: Vector3;
+	#translation: Maths.Vector3;
+	#scale: Maths.Vector3;
+	#rotationOffset: Maths.Vector3;
 	#rotation: number;
-	#color: Color;
+	#color: Graphics.Color;
 
 	#geometry: GeometryData;
-	#model: VertexBuffer;
+	#model: Graphics.VertexBuffer;
 	#transformChanged: boolean;
 
 	constructor(
-		graphics: Graphics,
+		graphics: Graphics.GraphicsManager,
 		geometry: GeometryData,
 		x: number,
 		y: number,
@@ -165,24 +163,24 @@ export default abstract class Polygon {
 		this.#height = height;
 
 		// ? Do we really need a sperate translation? It is basically just position...
-		this.#translation = new Vector3(0, 0, 0);
-		this.#scale = new Vector3(1, 1, 1);
-		this.#rotationOffset = new Vector3(0, 0, 0);
+		this.#translation = new Maths.Vector3(0, 0, 0);
+		this.#scale = new Maths.Vector3(1, 1, 1);
+		this.#rotationOffset = new Maths.Vector3(0, 0, 0);
 		this.#rotation = 0;
-		this.#color = new Color(0xffffff);
+		this.#color = new Graphics.Color(0xffffff);
 
 		// I hate this but for some reason Blink doesnt bode well with VertexUsage.DYNAMIC.
 		// Refer to this issue for more info: https://github.com/thismarvin/susurrus/issues/5
 		let modelLength = ATTRIBUTE_SCHEMA.size;
-		if (BrowserHelper.IS_BLINK) {
+		if (Utilities.BrowserDetection.IS_BLINK) {
 			modelLength *= this.#geometry.totalVertices;
 		}
 
-		this.#model = new VertexBuffer(
+		this.#model = new Graphics.VertexBuffer(
 			graphics,
 			ATTRIBUTE_SCHEMA,
 			modelLength,
-			VertexUsage.DYNAMIC,
+			Graphics.VertexUsage.DYNAMIC,
 			1
 		);
 
@@ -195,7 +193,11 @@ export default abstract class Polygon {
 		this.updateBuffer();
 	}
 
-	public draw(graphics: Graphics, effect: Effect, camera: Camera) {
+	public draw(
+		graphics: Graphics.GraphicsManager,
+		effect: Graphics.Effect,
+		camera: Camera
+	) {
 		// Ideally this would always be false, but I'll just keep this here in case the user ever forgets to applyChanges themselves.
 		if (this.#transformChanged) {
 			this.applyChanges();
@@ -208,7 +210,11 @@ export default abstract class Polygon {
 
 		graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
 
-		graphics.drawElements(DrawMode.TRIANGLES, this.#geometry.totalTriangles, 0);
+		graphics.drawElements(
+			Graphics.DrawMode.TRIANGLES,
+			this.#geometry.totalTriangles,
+			0
+		);
 
 		graphics.end();
 	}
@@ -216,14 +222,14 @@ export default abstract class Polygon {
 	private updateBuffer() {
 		let bufferData: number[] = [];
 		bufferData = bufferData.concat(
-			new Vector3(
+			new Maths.Vector3(
 				this.#x + this.translation.x,
 				this.#y + this.translation.y,
 				this.#x + this.translation.z
 			).toArray()
 		);
 		bufferData = bufferData.concat(
-			new Vector3(
+			new Maths.Vector3(
 				this.#width * this.#scale.x,
 				this.#height * this.#scale.y,
 				this.#scale.z

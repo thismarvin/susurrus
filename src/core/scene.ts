@@ -1,16 +1,17 @@
 // eslint-disable-next-line no-unused-vars
-import Graphics from "./graphics/graphicsManager.js";
+import * as Graphics from "../lib/graphics.js";
+// eslint-disable-next-line no-unused-vars
+import * as Maths from "../lib/maths.js";
 // eslint-disable-next-line no-unused-vars
 import Theater from "./theater.js";
 import Camera from "./camera.js";
-import Rectangle from "./maths/rectangle.js";
 
 export default abstract class Scene {
 	public readonly name: string;
 	public readonly theater: Theater;
 
 	public camera: Camera;
-	public bounds: Rectangle;
+	public bounds: Maths.Rectangle;
 
 	constructor(name: string, theater: Theater) {
 		this.name = name;
@@ -23,7 +24,7 @@ export default abstract class Scene {
 			graphics.gl.canvas.height / graphics.scale
 		);
 
-		this.bounds = new Rectangle(
+		this.bounds = new Maths.Rectangle(
 			0,
 			0,
 			graphics.gl.canvas.width / graphics.scale,
@@ -42,5 +43,8 @@ export default abstract class Scene {
 	public onExit() {}
 
 	public abstract update(deltaTime: number): void;
-	public abstract draw(graphics: Graphics, deltaTime: number): void;
+	public abstract draw(
+		graphics: Graphics.GraphicsManager,
+		deltaTime: number
+	): void;
 }
