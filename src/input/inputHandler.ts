@@ -11,6 +11,13 @@ export default class InputHandler {
 		return this.#inputMode;
 	}
 
+	public get pointerPosition() {
+		return {
+			x: this.#smartPointer.x,
+			y: this.#smartPointer.y,
+		};
+	}
+
 	#smartKeyboard: SmartKeyboard;
 	#smartPointer: SmartPointer;
 	#smartGamepad: SmartGamepad;
