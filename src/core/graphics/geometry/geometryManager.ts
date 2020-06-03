@@ -1,15 +1,13 @@
+// eslint-disable-next-line no-unused-vars
+import * as Graphics from "../../../lib/graphics.js";
 import GeometryData from "./geometryData.js";
-// eslint-disable-next-line no-unused-vars
-import Graphics from "../graphicsManager.js";
-// eslint-disable-next-line no-unused-vars
-import Mesh from "../mesh.js";
 
 export default class GeometryManager {
 	public readonly shapes: Map<string, GeometryData>;
 
-	#graphics: Graphics;
+	#graphics: Graphics.GraphicsManager;
 
-	constructor(graphics: Graphics) {
+	constructor(graphics: Graphics.GraphicsManager) {
 		this.#graphics = graphics;
 		this.shapes = new Map<string, GeometryData>();
 
@@ -18,7 +16,7 @@ export default class GeometryManager {
 		});
 	}
 
-	public createGeometryData(mesh: Mesh) {
+	public createGeometryData(mesh: Graphics.Mesh) {
 		return new GeometryData(this.#graphics, mesh);
 	}
 

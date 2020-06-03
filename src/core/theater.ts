@@ -1,18 +1,16 @@
-import * as WebGL from "./graphics/webGL.js";
-import Graphics from "./graphics/graphicsManager.js";
-import SmartKeyboard from "./input/smartKeyboard.js";
-import SmartPointer from "./input/smartPointer.js";
+import * as Graphics from "../lib/graphics.js";
+import * as Input from "../lib/input.js";
+import GeometryManager from "./graphics/geometry/geometryManager.js";
 import Props from "./props.js";
 import SceneManager from "./sceneManager.js";
-import GeometryManager from "./graphics/geometry/geometryManager.js";
 
 export default class Theater {
 	public readonly parent: HTMLElement;
 	public readonly canvas: HTMLCanvasElement;
-	public readonly graphics: Graphics;
+	public readonly graphics: Graphics.GraphicsManager;
 
-	public readonly smartKeyboard: SmartKeyboard;
-	public readonly smartPointer: SmartPointer;
+	public readonly smartKeyboard: Input.SmartKeyboard;
+	public readonly smartPointer: Input.SmartPointer;
 
 	public readonly props: Props;
 	public readonly sceneManager: SceneManager;
@@ -44,10 +42,12 @@ export default class Theater {
 		this.parent.appendChild(this.canvas);
 		this.canvas.id = `${id}-canvas`;
 
-		this.graphics = new Graphics(WebGL.getWebGLContext(this.canvas));
+		this.graphics = new Graphics.GraphicsManager(
+			Graphics.WebGL.getWebGLContext(this.canvas)
+		);
 
-		this.smartKeyboard = new SmartKeyboard();
-		this.smartPointer = new SmartPointer(this.canvas);
+		this.smartKeyboard = new Input.SmartKeyboard();
+		this.smartPointer = new Input.SmartPointer(this.canvas);
 
 		this.sceneManager = new SceneManager();
 		this.geometryManager = new GeometryManager(this.graphics); // * not 100% sure about this!
