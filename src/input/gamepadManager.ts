@@ -23,7 +23,6 @@ _xinputButtonMap.set("dpadright", 15);
 //@ts-ignore
 window.addEventListener("gamepadconnected", (event: GamepadEvent) => {
 	_gamepads.set(event.gamepad.index, event.gamepad);
-	console.log(event.gamepad.id);
 });
 //@ts-ignore
 window.addEventListener("gamepaddisconnected", (event: GamepadEvent) => {
