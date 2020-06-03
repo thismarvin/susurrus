@@ -19,15 +19,18 @@ export default class InputMapping {
 
 	constructor(
 		name: string,
-		keys: string,
+		keys?: string,
 		gamepadButtons?: string,
 		mouseButtons?: string
 	) {
 		this.name = name;
-		this.#keys = keys;
+		this.#keys = "";
 		this.#gamepadButtons = "";
 		this.#mouseButtons = "";
 
+		if (keys !== undefined) {
+			this.#keys = keys;
+		}
 		if (gamepadButtons !== undefined) {
 			this.#gamepadButtons = gamepadButtons;
 		}
