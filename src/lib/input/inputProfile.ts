@@ -1,14 +1,17 @@
 import InputMapping from "./inputMapping.js";
-import ResourceHandler from "../utilities/resourceHandler.js";
+
+function _formatName(name: string) {
+	return name.toLocaleLowerCase();
+}
 
 export default class InputProfile {
 	public name: string;
 
-	#inputMappings: ResourceHandler<InputMapping>;
+	#inputMappings: Map<string, InputMapping>;
 
 	constructor(name: string) {
 		this.name = name;
-		this.#inputMappings = new ResourceHandler<InputMapping>();
+		this.#inputMappings = new Map<string, InputMapping>();
 	}
 
 	public createMapping(
@@ -17,17 +20,33 @@ export default class InputProfile {
 		gamepadButtons?: string,
 		mouseButtons?: string
 	) {
+		const formattedName = _formatName(name);
+
+		if (this.#inputMappings.has(formattedName)) {
+			throw new TypeError(
+				"An InputMapping with that name already exists; try a different name."
+			);
+		}
+
 		const inputMapping = new InputMapping(
-			name,
+			formattedName,
 			keys,
 			gamepadButtons,
 			mouseButtons
 		);
-		this.#inputMappings.register(inputMapping.name, inputMapping);
+		this.#inputMappings.set(inputMapping.name, inputMapping);
 	}
 
 	public getMapping(name: string) {
-		return this.#inputMappings.get(name);
+		const formattedName = _formatName(name);
+
+		if (!this.#inputMappings.has(formattedName)) {
+			throw new TypeError(
+				"An InputMapping with that name has not been registered."
+			);
+		}
+
+		return this.#inputMappings.get(formattedName);
 	}
 
 	public remapKeys(name: string, keys: string) {
@@ -43,6 +62,14 @@ export default class InputProfile {
 	}
 
 	public removeMapping(name: string) {
-		this.#inputMappings.remove(name);
+		const formattedName = _formatName(name);
+
+		if (!this.#inputMappings.has(formattedName)) {
+			throw new TypeError(
+				"An InputMapping with that name has not been registered."
+			);
+		}
+
+		this.#inputMappings.delete(formattedName);
 	}
 }

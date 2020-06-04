@@ -1,5 +1,5 @@
 import * as WebGL from "./webGL.js";
-import * as PropertyAssent from "../utilities/propertyAssent.js";
+// eslint-disable-next-line no-unused-vars
 import Color from "./color.js";
 // eslint-disable-next-line no-unused-vars
 import Effect from "./effect.js";
@@ -59,9 +59,6 @@ export default class Graphics {
 	}
 
 	public setCanvasDimensions(width: number, height: number) {
-		PropertyAssent.expectType(width, "number");
-		PropertyAssent.expectType(height, "number");
-
 		this.gl.canvas.width = width;
 		this.gl.canvas.height = height;
 		this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -74,9 +71,6 @@ export default class Graphics {
 	}
 
 	public setTheaterResolution(width: number, height: number) {
-		PropertyAssent.expectType(width, "number");
-		PropertyAssent.expectType(height, "number");
-
 		this.#drawWidth = Math.max(0, width);
 		this.#drawHeight = Math.max(0, height);
 
@@ -95,9 +89,7 @@ export default class Graphics {
 		}
 	}
 
-	public clear(color: any) {
-		PropertyAssent.expectInstance(color, Color);
-
+	public clear(color: Color) {
 		WebGL.clear(this.gl, color.r, color.g, color.b, color.a);
 	}
 
@@ -204,11 +196,7 @@ export default class Graphics {
 			);
 		}
 
-		if (
-			PropertyAssent.expectInstance(buffer, VertexBuffer, {
-				throwError: false,
-			})
-		) {
+		if (buffer instanceof VertexBuffer) {
 			const bufferVertexBuffer = buffer as VertexBuffer;
 
 			for (let element of bufferVertexBuffer.attributeSchema.elements) {

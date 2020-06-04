@@ -1,5 +1,3 @@
-import * as PropertyAssent from "../utilities/propertyAssent.js";
-
 export default class Matrix {
 	get rows(): number {
 		return this.#rows;
@@ -30,8 +28,6 @@ export default class Matrix {
 	}
 
 	public setData(data: number[]) {
-		PropertyAssent.expectType(data, "array");
-
 		if (data.length !== this.rows * this.columns) {
 			throw new TypeError(
 				"The given data does not match the dimensions of the matrix."
@@ -42,8 +38,6 @@ export default class Matrix {
 	}
 
 	public set(x: number, y: number, value: number) {
-		PropertyAssent.expectType(value, "number");
-
 		this.#data[this.columns * y + x] = value;
 	}
 
@@ -68,9 +62,6 @@ export default class Matrix {
 
 	//#region Static Functions
 	public static add(a: Matrix, b: Matrix) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectInstance(b, Matrix);
-
 		// Make sure we can even add the matrices.
 		if (a.rows !== b.rows || a.columns !== b.columns) {
 			throw new TypeError(
@@ -87,9 +78,6 @@ export default class Matrix {
 	}
 
 	public static addScalar(a: Matrix, scalar: number) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectType(scalar, "number");
-
 		const data = a.data.slice(0);
 		for (let i = 0; i < a.rows * a.columns; i++) {
 			data[i] += scalar;
@@ -99,9 +87,6 @@ export default class Matrix {
 	}
 
 	public static sub(a: Matrix, b: Matrix) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectInstance(b, Matrix);
-
 		// Make sure we can even add the matrices.
 		if (a.rows !== b.rows || a.columns !== b.columns) {
 			throw new TypeError(
@@ -118,9 +103,6 @@ export default class Matrix {
 	}
 
 	public static subScalar(a: Matrix, scalar: number) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectType(scalar, "number");
-
 		const data = a.data.slice(0);
 		for (let i = 0; i < a.rows * a.columns; i++) {
 			data[i] -= scalar;
@@ -130,9 +112,6 @@ export default class Matrix {
 	}
 
 	public static mult(a: Matrix, b: Matrix) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectInstance(b, Matrix);
-
 		// Make sure we can even multiply the matrices.
 		if (a.columns !== b.rows) {
 			throw new TypeError(
@@ -158,9 +137,6 @@ export default class Matrix {
 	}
 
 	public static multScalar(a: Matrix, scalar: number) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectType(scalar, "number");
-
 		const data = a.data.slice(0);
 		for (let i = 0; i < a.rows * a.columns; i++) {
 			data[i] *= scalar;
@@ -170,9 +146,6 @@ export default class Matrix {
 	}
 
 	public static divideScalar(a: Matrix, scalar: number) {
-		PropertyAssent.expectInstance(a, Matrix);
-		PropertyAssent.expectType(scalar, "number");
-
 		const data = a.data.slice(0);
 		for (let i = 0; i < a.rows * a.columns; i++) {
 			data[i] /= scalar;
@@ -182,8 +155,6 @@ export default class Matrix {
 	}
 
 	public static transpose(a: Matrix) {
-		PropertyAssent.expectInstance(a, Matrix);
-
 		const transposed = new Array(a.rows * a.columns).fill(0);
 		const newRows = a.columns;
 		const newColumns = a.rows;
