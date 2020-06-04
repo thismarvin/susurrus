@@ -1,6 +1,6 @@
 import * as Graphics from "../../../lib/graphics.js";
 
-export const QUAD = _createSquare();
+export const SQUARE = _createSquare();
 export const TRIANGLE = _createTriangle();
 export const CIRCLE = createRegularPolygonMesh(90);
 

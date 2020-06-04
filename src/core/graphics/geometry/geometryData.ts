@@ -18,8 +18,8 @@ export default class GeometryData {
 			Graphics.VertexUsage.STATIC
 		);
 		this.indexBuffer = new Graphics.IndexBuffer(graphics, mesh.indices.length);
-		this.totalVertices = mesh.vertices.length / 3;
-		this.totalTriangles = mesh.indices.length / 3;
+		this.totalVertices = mesh.totalVertices;
+		this.totalTriangles = mesh.totalIndices;
 
 		this.vertexBuffer.setData(mesh.vertices);
 		this.indexBuffer.setData(mesh.indices);

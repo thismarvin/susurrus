@@ -1,8 +1,8 @@
 import * as Graphics from "../lib/graphics.js";
 import * as Input from "../lib/input.js";
-import GeometryManager from "./graphics/geometry/geometryManager.js";
-import Props from "./props.js";
 import SceneManager from "./sceneManager.js";
+import GeometryManager from "./graphics/geometry/geometryManager.js";
+import Factory from "./factory.js";
 
 export default class Theater {
 	public readonly parent: HTMLElement;
@@ -12,9 +12,10 @@ export default class Theater {
 	public readonly smartKeyboard: Input.SmartKeyboard;
 	public readonly smartPointer: Input.SmartPointer;
 
-	public readonly props: Props;
 	public readonly sceneManager: SceneManager;
 	public readonly geometryManager: GeometryManager;
+
+	public readonly factory: Factory;
 
 	public loop: boolean;
 
@@ -50,9 +51,9 @@ export default class Theater {
 		this.smartPointer = new Input.SmartPointer(this.canvas);
 
 		this.sceneManager = new SceneManager();
-		this.geometryManager = new GeometryManager(this.graphics); // * not 100% sure about this!
+		this.geometryManager = new GeometryManager(this.graphics);
 
-		this.props = new Props(this.graphics);
+		this.factory = new Factory(this);
 
 		this.loop = true;
 		this.#initialized = false;
@@ -76,9 +77,6 @@ export default class Theater {
 			writable: false,
 		});
 		Object.defineProperty(this, "smartPointer", {
-			writable: false,
-		});
-		Object.defineProperty(this, "props", {
 			writable: false,
 		});
 		Object.defineProperty(this, "sceneManager", {

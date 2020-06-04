@@ -1,42 +1,44 @@
 // eslint-disable-next-line no-unused-vars
 import * as Graphics from "../../../lib/graphics.js";
+import * as Utilities from "../../../lib/utilities.js";
+import * as Meshes from "./meshes.js";
 import GeometryData from "./geometryData.js";
 
 export default class GeometryManager {
-	public readonly shapes: Map<string, GeometryData>;
-
 	#graphics: Graphics.GraphicsManager;
+	#geometry: Utilities.ResourceHandler<GeometryData>;
 
 	constructor(graphics: Graphics.GraphicsManager) {
 		this.#graphics = graphics;
-		this.shapes = new Map<string, GeometryData>();
+		this.#geometry = new Utilities.ResourceHandler<GeometryData>();
 
-		Object.defineProperty(this, "shapes", {
-			writable: false,
-		});
+		this.createDefaults();
 	}
 
-	public createGeometryData(mesh: Graphics.Mesh) {
-		return new GeometryData(this.#graphics, mesh);
-	}
-
-	public registerGeometry(name: string, geometryData: GeometryData) {
-		if (this.shapes.has(name)) {
-			throw new TypeError(
-				"GeometryData with that name has already been registered."
-			);
-		}
-
-		this.shapes.set(name, geometryData);
+	public registerGeometry(name: string, geometry: GeometryData) {
+		this.#geometry.register(name, geometry);
 	}
 
 	public getGeometry(name: string) {
-		if (!this.shapes.has(name)) {
-			throw new TypeError(
-				"GeometryData with that name has not been registered."
-			);
-		}
+		return this.#geometry.get(name);
+	}
 
-		return this.shapes.get(name);
+	public removeGeometry(name: string) {
+		this.#geometry.remove(name);
+	}
+
+	private createDefaults() {
+		this.registerGeometry(
+			"Susurrus_Circle",
+			new GeometryData(this.#graphics, Meshes.CIRCLE)
+		);
+		this.registerGeometry(
+			"Susurrus_Square",
+			new GeometryData(this.#graphics, Meshes.SQUARE)
+		);
+		this.registerGeometry(
+			"Susurrus_Triangle",
+			new GeometryData(this.#graphics, Meshes.TRIANGLE)
+		);
 	}
 }

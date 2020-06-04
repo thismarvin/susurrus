@@ -6,7 +6,7 @@ import GeometryData from "./geometryData.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../../camera.js";
 
-const ATTRIBUTE_SCHEMA = new Graphics.AttributeSchema([
+const _attributeSchema = new Graphics.AttributeSchema([
 	new Graphics.AttributeElement(
 		"a_translation",
 		3,
@@ -23,6 +23,16 @@ const ATTRIBUTE_SCHEMA = new Graphics.AttributeSchema([
 ]);
 
 export default abstract class Polygon {
+	public geometryData: GeometryData | null;
+
+	public get mesh() {
+		return this.#mesh;
+	}
+	public set mesh(value) {
+		this.#meshChanged = true;
+		this.#mesh = value;
+	}
+
 	//#region Getters and Setters
 	get x() {
 		return this.#x;
@@ -133,6 +143,9 @@ export default abstract class Polygon {
 	}
 	//#endregion
 
+	#mesh: Graphics.Mesh;
+	#model: Graphics.VertexBuffer | null;
+
 	#x: number;
 	#y: number;
 	#width: number;
@@ -144,51 +157,67 @@ export default abstract class Polygon {
 	#rotation: number;
 	#color: Graphics.Color;
 
-	#geometry: GeometryData;
-	#model: Graphics.VertexBuffer;
+	#meshChanged: boolean;
 	#transformChanged: boolean;
 
 	constructor(
-		graphics: Graphics.GraphicsManager,
-		geometry: GeometryData,
+		mesh: Graphics.Mesh,
 		x: number,
 		y: number,
 		width: number,
 		height: number
 	) {
-		this.#geometry = geometry;
+		this.#mesh = mesh;
+
+		this.geometryData = null;
+		this.#model = null;
+
 		this.#x = x;
 		this.#y = y;
 		this.#width = width;
 		this.#height = height;
 
-		// ? Do we really need a sperate translation? It is basically just position...
 		this.#translation = new Maths.Vector3(0, 0, 0);
 		this.#scale = new Maths.Vector3(1, 1, 1);
 		this.#rotationOffset = new Maths.Vector3(0, 0, 0);
 		this.#rotation = 0;
 		this.#color = new Graphics.Color(0xffffff);
 
+		this.#meshChanged = false;
+		this.#transformChanged = false;
+	}
+
+	public createGeometry(graphics: Graphics.GraphicsManager) {
+		this.geometryData = new GeometryData(graphics, this.mesh);
+	}
+
+	public createModel(graphics: Graphics.GraphicsManager) {
+		this.#meshChanged = false;
 		// I hate this but for some reason Blink doesnt bode well with VertexUsage.DYNAMIC.
 		// Refer to this issue for more info: https://github.com/thismarvin/susurrus/issues/5
-		let modelLength = ATTRIBUTE_SCHEMA.size;
+		let modelLength = _attributeSchema.size;
 		if (Utilities.BrowserDetection.IS_BLINK) {
-			modelLength *= this.#geometry.totalVertices;
+			modelLength *= this.#mesh.totalVertices;
 		}
 
 		this.#model = new Graphics.VertexBuffer(
 			graphics,
-			ATTRIBUTE_SCHEMA,
+			_attributeSchema,
 			modelLength,
 			Graphics.VertexUsage.DYNAMIC,
 			1
 		);
 
 		this.updateBuffer();
-		this.#transformChanged = false;
 	}
 
 	public applyChanges() {
+		if (this.#model === null) {
+			throw new TypeError(
+				"A model has not been created; cannot apply changes."
+			);
+		}
+
 		this.#transformChanged = false;
 		this.updateBuffer();
 	}
@@ -198,21 +227,33 @@ export default abstract class Polygon {
 		effect: Graphics.Effect,
 		camera: Camera
 	) {
+		if (this.geometryData === null || this.#model === null) {
+			return;
+		}
+
+		if (this.#meshChanged) {
+			throw new TypeError(
+				"The polygon's mesh was modified, but a new model was not created. Make sure to call createModel(graphics)."
+			);
+		}
+
 		// Ideally this would always be false, but I'll just keep this here in case the user ever forgets to applyChanges themselves.
 		if (this.#transformChanged) {
-			this.applyChanges();
+			throw new TypeError(
+				"The polygon's transform was modified, but applyChanges() was never called."
+			);
 		}
 
 		graphics.begin(effect);
 
-		graphics.setVertexBuffers([this.#geometry.vertexBuffer, this.#model]);
-		graphics.setIndexBuffer(this.#geometry.indexBuffer);
+		graphics.setVertexBuffers([this.geometryData.vertexBuffer, this.#model]);
+		graphics.setIndexBuffer(this.geometryData.indexBuffer);
 
 		graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
 
 		graphics.drawElements(
 			Graphics.DrawMode.TRIANGLES,
-			this.#geometry.totalTriangles,
+			this.geometryData.totalTriangles,
 			0
 		);
 
@@ -220,6 +261,10 @@ export default abstract class Polygon {
 	}
 
 	private updateBuffer() {
+		if (this.#model === null) {
+			return;
+		}
+
 		let bufferData: number[] = [];
 		bufferData = bufferData.concat(
 			new Maths.Vector3(
