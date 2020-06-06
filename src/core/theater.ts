@@ -5,19 +5,29 @@ import GeometryManager from "./graphics/geometry/geometryManager.js";
 import Factory from "./factory.js";
 
 export default class Theater {
-	public readonly parent: HTMLElement;
-	public readonly canvas: HTMLCanvasElement;
-	public readonly graphics: Graphics.GraphicsManager;
-
 	public readonly smartKeyboard: Input.SmartKeyboard;
 	public readonly smartPointer: Input.SmartPointer;
 
 	public readonly sceneManager: SceneManager;
-	public readonly geometryManager: GeometryManager;
-
 	public readonly factory: Factory;
 
 	public loop: boolean;
+
+	public get parent() {
+		return this.#parent;
+	}
+
+	public get canvas() {
+		return this.#canvas;
+	}
+
+	public get graphics() {
+		return this.#graphics;
+	}
+
+	public get geometryManager() {
+		return this.#geometryManager;
+	}
 
 	public get inFocus() {
 		return this.#inFocus;
@@ -27,32 +37,27 @@ export default class Theater {
 		return this.#totalElapsedTime;
 	}
 
+	#parent: HTMLElement | null;
+	#canvas: HTMLCanvasElement | null;
+	#graphics: Graphics.GraphicsManager | null;
+
+	#geometryManager: GeometryManager | null;
+
 	#initialized: boolean;
 	#inFocus: boolean;
 	#totalElapsedTime: number;
 
-	constructor(id: string) {
-		const element = document.getElementById(id);
+	constructor() {
+		this.#parent = null;
+		this.#canvas = null;
+		this.#graphics = null;
 
-		if (element === null) {
-			throw new TypeError(`Could not find an element with an id of '${id}'.`);
-		}
-
-		this.parent = element;
-		this.canvas = document.createElement("canvas");
-		this.parent.appendChild(this.canvas);
-		this.canvas.id = `${id}-canvas`;
-
-		this.graphics = new Graphics.GraphicsManager(
-			Graphics.WebGL.getWebGLContext(this.canvas)
-		);
+		this.#geometryManager = null;
 
 		this.smartKeyboard = new Input.SmartKeyboard();
-		this.smartPointer = new Input.SmartPointer(this.canvas);
+		this.smartPointer = new Input.SmartPointer();
 
 		this.sceneManager = new SceneManager();
-		this.geometryManager = new GeometryManager(this.graphics);
-
 		this.factory = new Factory(this);
 
 		this.loop = true;
@@ -61,18 +66,13 @@ export default class Theater {
 		this.#totalElapsedTime = 0;
 
 		window.addEventListener("mousedown", (event) => {
-			this.#inFocus = event.target === this.canvas;
+			if (this.#canvas === null) {
+				return;
+			}
+
+			this.#inFocus = event.target === this.#canvas;
 		});
 
-		Object.defineProperty(this, "parent", {
-			writable: false,
-		});
-		Object.defineProperty(this, "canvas", {
-			writable: false,
-		});
-		Object.defineProperty(this, "graphics", {
-			writable: false,
-		});
 		Object.defineProperty(this, "smartKeyboard", {
 			writable: false,
 		});
@@ -82,7 +82,7 @@ export default class Theater {
 		Object.defineProperty(this, "sceneManager", {
 			writable: false,
 		});
-		Object.defineProperty(this, "geometryManager", {
+		Object.defineProperty(this, "factory", {
 			writable: false,
 		});
 	}
@@ -100,6 +100,32 @@ export default class Theater {
 	}
 
 	/**
+	 * Creates and appends a new HTMLCanvas to an existing HTMLElement thas has a given id.
+	 * Moreover, a valid GraphicsManager is created and initialized.
+	 * @param id The id of an existing HTMLElement on the current page.
+	 */
+	public appendCanvas(id: string) {
+		const element = document.getElementById(id);
+
+		if (element === null) {
+			throw new TypeError(`Could not find an element with an id of '${id}'.`);
+		}
+
+		this.#parent = element;
+		this.#canvas = document.createElement("canvas");
+		this.#parent.appendChild(this.#canvas);
+		this.#canvas.id = `${id}-canvas`;
+
+		this.#graphics = new Graphics.GraphicsManager(
+			Graphics.WebGL.getWebGLContext(this.#canvas)
+		);
+
+		this.smartPointer.attachElement(this.#canvas);
+
+		this.#geometryManager = new GeometryManager(this.#graphics);
+	}
+
+	/**
 	 * A method that is called once at the start of runtime that is typically used to setup your project.
 	 */
 	public initialize() {}
@@ -113,11 +139,17 @@ export default class Theater {
 	}
 
 	/**
-	 * A method called once every frame, after update, that is typically used to display visualizes.
+	 * A method called once every frame, after update, that is typically used to present visuals.
 	 * @param deltaTime The total amount of time, in seconds, that has elapsed between updates.
 	 */
 	public draw(deltaTime: number) {
-		this.sceneManager.draw(this.graphics, deltaTime);
+		if (this.#graphics === null) {
+			throw new TypeError(
+				"The GraphicsManager has not been instantiated; cannot draw anything. Make sure to call appendCanvas() before rendering anything."
+			);
+		}
+
+		this.sceneManager.draw(this.#graphics, deltaTime);
 	}
 
 	/**
@@ -139,7 +171,9 @@ export default class Theater {
 
 		this.managedUpdate(deltaTime);
 		this.update(deltaTime);
-		this.draw(deltaTime);
+		if (this.graphics !== null) {
+			this.draw(deltaTime);
+		}
 
 		if (this.loop) {
 			window.requestAnimationFrame((timeStamp) => {
