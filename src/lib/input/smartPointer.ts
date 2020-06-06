@@ -10,18 +10,22 @@ export default class SmartPointer {
 		return this.#y;
 	}
 
-	#element: HTMLElement;
+	#element: HTMLElement | null;
 	#previousPointerState: PointerState | null;
 	#currentPointerState: PointerState | null;
 	#x: number;
 	#y: number;
 
-	constructor(element: HTMLElement) {
-		this.#element = element;
+	constructor() {
+		this.#element = null;
 		this.#previousPointerState = null;
 		this.#currentPointerState = null;
 		this.#x = 0;
 		this.#y = 0;
+	}
+
+	public attachElement(element: HTMLElement) {
+		this.#element = element;
 	}
 
 	public pressed(button: string) {
@@ -50,7 +54,7 @@ export default class SmartPointer {
 		this.#previousPointerState = this.#currentPointerState;
 		this.#currentPointerState = Pointer.getState();
 
-		if (this.#currentPointerState !== null) {
+		if (this.#element !== null && this.#currentPointerState !== null) {
 			this.#x =
 				this.#currentPointerState.event.clientX - this.#element.offsetLeft;
 			this.#y =

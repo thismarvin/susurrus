@@ -27,10 +27,12 @@ export default class InputHandler {
 	constructor(element: HTMLElement, playerIndex: number) {
 		this.playerIndex = playerIndex;
 		this.#smartKeyboard = new SmartKeyboard();
-		this.#smartPointer = new SmartPointer(element);
+		this.#smartPointer = new SmartPointer();
 		this.#smartGamepad = new SmartGamepad(playerIndex);
 		this.#inputProfile = null;
 		this.#inputMode = "keyboard";
+
+		this.#smartPointer.attachElement(element);
 
 		Object.defineProperty(this, "playerIndex", {
 			writable: false,
