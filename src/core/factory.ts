@@ -11,6 +11,12 @@ export default class Factory {
 	}
 
 	public createCircle(x: number, y: number, radius: number) {
+		if (this.#theater.graphics === null) {
+			throw new TypeError(
+				"The GraphicsManager has not been instantiated; cannot create geometry. Make sure to call Theater's appendCanvas() before using a Factory."
+			);
+		}
+
 		const circle = new Circle(x, y, radius);
 		//@ts-ignore
 		circle.geometryData = this.#theater.geometryManager.getGeometry(
@@ -21,6 +27,12 @@ export default class Factory {
 	}
 
 	public createQuad(x: number, y: number, width: number, height: number) {
+		if (this.#theater.graphics === null) {
+			throw new TypeError(
+				"The GraphicsManager has not been instantiated; cannot create geometry. Make sure to call Theater's appendCanvas() before using a Factory."
+			);
+		}
+
 		const quad = new Quad(x, y, width, height);
 		//@ts-ignore
 		quad.geometryData = this.#theater.geometryManager.getGeometry(
