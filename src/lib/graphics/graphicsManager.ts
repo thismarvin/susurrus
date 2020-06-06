@@ -66,11 +66,11 @@ export default class Graphics {
 		// I do not trust that people will read the README, so if the resolution has not been set
 		// yet then just set the resolution to the canvas' dimensions.
 		if (this.#drawWidth < 0) {
-			this.setTheaterResolution(width, height);
+			this.setResolution(width, height);
 		}
 	}
 
-	public setTheaterResolution(width: number, height: number) {
+	public setResolution(width: number, height: number) {
 		this.#drawWidth = Math.max(0, width);
 		this.#drawHeight = Math.max(0, height);
 
