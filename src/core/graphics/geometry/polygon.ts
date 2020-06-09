@@ -148,6 +148,7 @@ export default abstract class Polygon {
 
 	#x: number;
 	#y: number;
+	#z: number;
 	#width: number;
 	#height: number;
 
@@ -174,6 +175,7 @@ export default abstract class Polygon {
 
 		this.#x = x;
 		this.#y = y;
+		this.#z = 0;
 		this.#width = width;
 		this.#height = height;
 
@@ -270,7 +272,7 @@ export default abstract class Polygon {
 			new Maths.Vector3(
 				this.#x + this.translation.x,
 				this.#y + this.translation.y,
-				this.#x + this.translation.z
+				this.#z + this.translation.z
 			).toArray()
 		);
 		bufferData = bufferData.concat(

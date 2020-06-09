@@ -39,8 +39,9 @@ const POLYGON_SHADERS = {
         }
 
         void main() {
-			mat4 transform = createTranslation(a_translation - a_rotationOffset) * createRotationZ(a_rotation) * createTranslation(a_rotationOffset) * createScale(a_scale);
-            gl_Position =  worldViewProjection * transform * vec4(a_position, 1);
+			mat4 model = createTranslation(a_translation - a_rotationOffset) * createRotationZ(a_rotation) * createTranslation(a_rotationOffset) * createScale(a_scale);
+			gl_Position = worldViewProjection * model * vec4(a_position, 1);
+
             v_color = a_color;
         }
     `,
