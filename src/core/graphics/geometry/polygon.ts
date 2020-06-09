@@ -239,7 +239,6 @@ export default abstract class Polygon {
 			);
 		}
 
-		// Ideally this would always be false, but I'll just keep this here in case the user ever forgets to applyChanges themselves.
 		if (this.#transformChanged) {
 			throw new TypeError(
 				"The polygon's transform was modified, but applyChanges() was never called."
