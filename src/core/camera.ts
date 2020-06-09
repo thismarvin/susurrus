@@ -13,16 +13,7 @@ export default class Camera {
 			new Maths.Vector3(0, 0, 0),
 			new Maths.Vector3(0, 1, 0)
 		);
-
-		this.projection = Maths.Transforms.createOrthographic2(
-			-width / 2,
-			width / 2,
-			-height / 2,
-			height / 2,
-			1,
-			16
-		);
-
+		this.projection = Maths.Transforms.createOrthographic(width, height, 1, 16);
 		this.worldViewProjection = Maths.Transforms.identity();
 
 		this.updateWorldViewProjection();

@@ -45,23 +45,17 @@ export function createOrthographic(
 	far: number
 ) {
 	const temp = _getIdentityData();
+	const fn = 1 / (far - near);
 
 	temp[0] = 2 / width;
 	temp[5] = 2 / height;
-	temp[10] = 1 / (near - far);
-	temp[14] = near / (near - far);
+	temp[10] = -2 * fn;
+	temp[14] = -(far + near) * fn;
 
 	return new Matrix4(temp);
-
-	// matrix.set(0, 0, 2 / width);
-	// matrix.set(1, 1, 2 / height);
-	// matrix.set(2, 2, -2 / (far - near));
-	// matrix.set(0, 3, -1);
-	// matrix.set(1, 3, -1);
-	// matrix.set(2, 3, -(far + near) / (far - near));
 }
 
-export function createOrthographic2(
+export function createOrthographicOffCenter(
 	left: number,
 	right: number,
 	bottom: number,
@@ -70,7 +64,6 @@ export function createOrthographic2(
 	far: number
 ) {
 	const temp = new Array(16).fill(0);
-
 	const rl = 1 / (right - left);
 	const tb = 1 / (top - bottom);
 	const fn = 1 / (far - near);
