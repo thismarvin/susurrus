@@ -63,7 +63,7 @@ export function createOrthographicOffCenter(
 	near: number,
 	far: number
 ) {
-	const temp = new Array(16).fill(0);
+	const temp = _getEmptyData();
 	const rl = 1 / (right - left);
 	const tb = 1 / (top - bottom);
 	const fn = 1 / (far - near);
@@ -77,6 +77,48 @@ export function createOrthographicOffCenter(
 	temp[14] = -(far + near) * fn;
 
 	temp[15] = 1;
+
+	return new Matrix4(temp);
+}
+
+export function createPerspective(
+	width: number,
+	height: number,
+	near: number,
+	far: number
+) {
+	const temp = _getEmptyData();
+	const fn = 1 / (far - near);
+
+	temp[0] = (2 * near) / width;
+	temp[5] = (2 * near) / height;
+	temp[10] = -(far + near) * fn;
+	temp[11] = -1;
+	temp[14] = -2 * far * near * fn;
+
+	return new Matrix4(temp);
+}
+
+export function createPerspectiveOffCenter(
+	left: number,
+	right: number,
+	bottom: number,
+	top: number,
+	near: number,
+	far: number
+) {
+	const temp = _getEmptyData();
+	const rl = 1 / (right - left);
+	const tb = 1 / (top - bottom);
+	const fn = 1 / (far - near);
+
+	temp[0] = 2 * near * rl;
+	temp[5] = 2 * near * tb;
+	temp[8] = (right + left) * rl;
+	temp[9] = (top + bottom) * tb;
+	temp[10] = -(far + near) * fn;
+	temp[11] = -1;
+	temp[14] = -2 * far * near * fn;
 
 	return new Matrix4(temp);
 }
@@ -113,6 +155,10 @@ export function createLookAt(
 	temp[14] = -V3H.dot(a, cameraPosition);
 
 	return new Matrix4(temp);
+}
+
+function _getEmptyData() {
+	return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 }
 
 function _getIdentityData() {
