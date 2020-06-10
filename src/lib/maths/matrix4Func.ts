@@ -152,7 +152,29 @@ export function divideScalar(a: Matrix4, scalar: number) {
 }
 //#endregion
 
-//#region Transforms
+//#region Affine Transformations
+export function createRotationX(angle: number) {
+	const temp = _getIdentityData();
+
+	temp[5] = Math.cos(angle);
+	temp[6] = Math.sin(angle);
+	temp[9] = -Math.sin(angle);
+	temp[10] = Math.cos(angle);
+
+	return new Matrix4(temp);
+}
+
+export function createRotationY(angle: number) {
+	const temp = _getIdentityData();
+
+	temp[0] = Math.cos(angle);
+	temp[2] = -Math.sin(angle);
+	temp[8] = Math.sin(angle);
+	temp[10] = Math.cos(angle);
+
+	return new Matrix4(temp);
+}
+
 export function createRotationZ(angle: number) {
 	const temp = _getIdentityData();
 
