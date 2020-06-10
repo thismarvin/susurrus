@@ -28,6 +28,7 @@ export { Matrix4 } from "../lib/maths.js";
 export { Matrix4Func } from "../lib/maths.js";
 export { Rectangle } from "../lib/maths.js";
 export { Vector2 } from "../lib/maths.js";
+export { Vector2Func } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
 export { Vector3Func } from "../lib/maths.js";
 export { Vector4 } from "../lib/maths.js";
