@@ -33,7 +33,7 @@ export function normalize(a: Vector3) {
 
 export function cross(a: Vector3, b: Vector3) {
 	const x = a.y * b.z - b.y * a.z;
-	const y = -(a.x * b.z - b.x * a.z);
+	const y = a.z * b.x - b.z * a.x;
 	const z = a.x * b.y - b.x * a.y;
 
 	return new Vector3(x, y, z);

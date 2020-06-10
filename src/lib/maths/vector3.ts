@@ -1,4 +1,4 @@
-import * as V3H from "./vector3Func.js";
+import * as Vector3Func from "./vector3Func.js";
 
 export default class Vector3 {
 	public x: number;
@@ -12,15 +12,15 @@ export default class Vector3 {
 	}
 
 	public length() {
-		return V3H.length(this);
+		return Vector3Func.length(this);
 	}
 
 	public lengthSquared() {
-		return V3H.lengthSquared(this);
+		return Vector3Func.lengthSquared(this);
 	}
 
 	public normalize() {
-		const temp = V3H.normalize(this);
+		const temp = Vector3Func.normalize(this);
 		this.copy(temp);
 	}
 
