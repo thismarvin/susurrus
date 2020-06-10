@@ -7,20 +7,30 @@ export default class Camera {
 	public worldViewProjection: Maths.Matrix4;
 
 	constructor(width: number, height: number) {
-		this.world = Maths.Transforms.identity();
-		this.view = Maths.Transforms.createLookAt(
+		this.world = Maths.Matrix4Func.identity();
+		this.view = Maths.Matrix4Func.createLookAt(
 			new Maths.Vector3(0, 0, 1),
 			new Maths.Vector3(0, 0, 0),
 			new Maths.Vector3(0, 1, 0)
 		);
-		this.projection = Maths.Transforms.createOrthographic(width, height, 1, 16);
-		this.worldViewProjection = Maths.Transforms.identity();
+		this.projection = Maths.Matrix4Func.createOrthographic(
+			width,
+			height,
+			1,
+			16
+		);
+		this.worldViewProjection = Maths.Matrix4Func.identity();
 
 		this.updateWorldViewProjection();
 	}
 
 	public setBounds(width: number, height: number) {
-		this.projection = Maths.Transforms.createOrthographic(width, height, 0, 16);
+		this.projection = Maths.Matrix4Func.createOrthographic(
+			width,
+			height,
+			0,
+			16
+		);
 
 		this.updateWorldViewProjection();
 	}
@@ -28,7 +38,7 @@ export default class Camera {
 	// ? I really do not know the best way to modify the camera moving forward.
 	// ? This works fine for now, but you gotta think of a better way! 😯
 	public setLocation(x: number, y: number) {
-		this.view = Maths.Transforms.createLookAt(
+		this.view = Maths.Matrix4Func.createLookAt(
 			new Maths.Vector3(x, y, 1),
 			new Maths.Vector3(x, y, 0),
 			new Maths.Vector3(0, 1, 0)
@@ -38,8 +48,8 @@ export default class Camera {
 	}
 
 	private updateWorldViewProjection() {
-		this.worldViewProjection = Maths.M4H.multiply(
-			Maths.M4H.multiply(this.world, this.view),
+		this.worldViewProjection = Maths.Matrix4Func.multiply(
+			Maths.Matrix4Func.multiply(this.world, this.view),
 			this.projection
 		);
 	}

@@ -1,4 +1,4 @@
-import * as V3H from "./vector3Helper.js";
+import * as V3H from "./vector3Func.js";
 
 export default class Vector3 {
 	public x: number;
@@ -24,10 +24,10 @@ export default class Vector3 {
 		this.copy(temp);
 	}
 
-	public copy(a: Vector3) {
-		this.x = a.x;
-		this.y = a.y;
-		this.z = a.z;
+	public copy(vector: Vector3) {
+		this.x = vector.x;
+		this.y = vector.y;
+		this.z = vector.z;
 	}
 
 	public clone() {

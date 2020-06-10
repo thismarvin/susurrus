@@ -25,10 +25,11 @@ export { InputProfile } from "../lib/input.js";
 
 export { Matrix } from "../lib/maths.js";
 export { Matrix4 } from "../lib/maths.js";
-export { M4H } from "../lib/maths.js";
+export { Matrix4Func } from "../lib/maths.js";
 export { Rectangle } from "../lib/maths.js";
 export { Vector2 } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
+export { Vector3Func } from "../lib/maths.js";
 export { Vector4 } from "../lib/maths.js";
 
 export { default as Camera } from "./camera.js";

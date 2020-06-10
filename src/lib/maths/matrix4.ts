@@ -1,4 +1,12 @@
+import * as Matrix4Func from "./matrix4Func.js";
+
 export default class Matrix4 {
+	public get rows() {
+		return this.#rows;
+	}
+	public get columns() {
+		return this.#columns;
+	}
 	public get data() {
 		return this.#data;
 	}
@@ -33,5 +41,9 @@ export default class Matrix4 {
 
 	public set(x: number, y: number, value: number) {
 		this.#data[this.#columns * y + x] = value;
+	}
+
+	public transpose() {
+		this.setData(Matrix4Func.transpose(this).data);
 	}
 }
