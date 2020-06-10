@@ -1,4 +1,5 @@
 import Vector3 from "./vector3.js";
+import * as MathFunc from "./mathFunc.js";
 
 export function lengthSquared(a: Vector3) {
 	return a.x ** 2 + a.y ** 2 + a.z ** 2;
@@ -29,6 +30,22 @@ export function normalize(a: Vector3) {
 	const temp = 1 / magnitude;
 
 	return multiplyScalar(a, temp);
+}
+
+export function lerp(a: Vector3, b: Vector3, step: number) {
+	const x = MathFunc.lerp(a.x, b.x, step);
+	const y = MathFunc.lerp(a.y, b.y, step);
+	const z = MathFunc.lerp(a.z, b.z, step);
+
+	return new Vector3(x, y, z);
+}
+
+export function lerpPrecise(a: Vector3, b: Vector3, step: number) {
+	const x = MathFunc.lerpPrecise(a.x, b.x, step);
+	const y = MathFunc.lerpPrecise(a.y, b.y, step);
+	const z = MathFunc.lerpPrecise(a.z, b.z, step);
+
+	return new Vector3(x, y, z);
 }
 
 export function cross(a: Vector3, b: Vector3) {

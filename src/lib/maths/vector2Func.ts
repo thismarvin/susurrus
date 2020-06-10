@@ -1,4 +1,5 @@
 import Vector2 from "./vector2.js";
+import * as MathFunc from "./mathFunc.js";
 
 export function lengthSquared(a: Vector2) {
 	return a.x ** 2 + a.y ** 2;
@@ -28,6 +29,20 @@ export function normalize(a: Vector2) {
 	const temp = 1 / magnitude;
 
 	return multiplyScalar(a, temp);
+}
+
+export function lerp(a: Vector2, b: Vector2, step: number) {
+	const x = MathFunc.lerp(a.x, b.x, step);
+	const y = MathFunc.lerp(a.y, b.y, step);
+
+	return new Vector2(x, y);
+}
+
+export function lerpPrecise(a: Vector2, b: Vector2, step: number) {
+	const x = MathFunc.lerpPrecise(a.x, b.x, step);
+	const y = MathFunc.lerpPrecise(a.y, b.y, step);
+
+	return new Vector2(x, y);
 }
 
 export function add(a: Vector2, b: Vector2) {
