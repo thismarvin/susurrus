@@ -48,6 +48,24 @@ export function lerpPrecise(a: Vector3, b: Vector3, step: number) {
 	return new Vector3(x, y, z);
 }
 
+/**
+ * Converts spherical coordinates into Cartesian coordinates (represented as a Vector3).
+ * @param radius The distance between the origin and the new point.
+ * @param inclination The angle between the x and y axis (longitude).
+ * @param azimuth The angle between the x and z axis (latitude).
+ */
+export function sphericalToCartesian(
+	radius: number,
+	inclination: number,
+	azimuth: number
+) {
+	return new Vector3(
+		radius * Math.sin(inclination) * Math.cos(azimuth),
+		radius * Math.sin(inclination) * Math.sin(azimuth),
+		radius * Math.cos(inclination)
+	);
+}
+
 export function cross(a: Vector3, b: Vector3) {
 	const x = a.y * b.z - b.y * a.z;
 	const y = a.z * b.x - b.z * a.x;

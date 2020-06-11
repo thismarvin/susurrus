@@ -45,6 +45,14 @@ export function lerpPrecise(a: Vector2, b: Vector2, step: number) {
 	return new Vector2(x, y);
 }
 
+export function polarToCartesian(radius: number, theta: number) {
+	return new Vector2(radius * Math.cos(theta), radius * Math.sin(theta));
+}
+
+export function fromAngle(theta: number) {
+	return polarToCartesian(1, theta);
+}
+
 export function add(a: Vector2, b: Vector2) {
 	const x = a.x + b.x;
 	const y = a.y + b.y;
