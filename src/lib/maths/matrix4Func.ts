@@ -32,12 +32,22 @@ export function transpose(a: Matrix4) {
 
 //#region Math
 export function add(a: Matrix4, b: Matrix4) {
-	const temp = a.data.map((value, index) => value + b.data[index]);
+	const temp = a.data.slice(0);
+
+	for (let i = 0; i < temp.length; i++) {
+		temp[i] += b.data[i];
+	}
+
 	return new Matrix4(temp);
 }
 
 export function subtract(a: Matrix4, b: Matrix4) {
-	const temp = a.data.map((value, index) => value - b.data[index]);
+	const temp = a.data.slice(0);
+
+	for (let i = 0; i < temp.length; i++) {
+		temp[i] -= b.data[i];
+	}
+
 	return new Matrix4(temp);
 }
 
@@ -132,22 +142,38 @@ export function multiply(a: Matrix4, b: Matrix4) {
 }
 
 export function addScalar(a: Matrix4, scalar: number) {
-	const temp = a.data.map((value) => value + scalar);
+	const temp = a.data.slice(0);
+
+	for (let i = 0; i < temp.length; i++) {
+		temp[i] += scalar;
+	}
+
 	return new Matrix4(temp);
 }
 
 export function subtractScalar(a: Matrix4, scalar: number) {
-	const temp = a.data.map((value) => value - scalar);
+	const temp = a.data.slice(0);
+
+	for (let i = 0; i < temp.length; i++) {
+		temp[i] -= scalar;
+	}
+
 	return new Matrix4(temp);
 }
 
 export function multiplyScalar(a: Matrix4, scalar: number) {
-	const temp = a.data.map((value) => value * scalar);
+	const temp = a.data.slice(0);
+
+	for (let i = 0; i < temp.length; i++) {
+		temp[i] *= scalar;
+	}
+
 	return new Matrix4(temp);
 }
 
 export function divideScalar(a: Matrix4, scalar: number) {
 	const temp = 1 / scalar;
+
 	return multiplyScalar(a, temp);
 }
 //#endregion
