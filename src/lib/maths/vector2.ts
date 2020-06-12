@@ -1,4 +1,4 @@
-import * as Vector2Func from "./vector2Func.js";
+import * as Vector2Func from "./vector2Ext.js";
 
 export default class Vector2 {
 	public x: number;

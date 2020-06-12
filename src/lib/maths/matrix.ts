@@ -1,4 +1,4 @@
-import * as MatrixFunc from "./matrixFunc.js";
+import * as MatrixFunc from "./matrixExt.js";
 
 export default class Matrix {
 	get rows(): number {

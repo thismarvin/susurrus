@@ -1,4 +1,4 @@
-import * as Matrix4Func from "./matrix4Func.js";
+import * as Matrix4Func from "./matrix4Ext.js";
 
 export default class Matrix4 {
 	public get rows() {

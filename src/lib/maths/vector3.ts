@@ -1,4 +1,4 @@
-import * as Vector3Func from "./vector3Func.js";
+import * as Vector3Func from "./vector3Ext.js";
 
 export default class Vector3 {
 	public x: number;

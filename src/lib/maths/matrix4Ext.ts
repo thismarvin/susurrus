@@ -1,7 +1,7 @@
 import Matrix4 from "./matrix4.js";
 // eslint-disable-next-line no-unused-vars
 import Vector3 from "./vector3.js";
-import * as Vector3Func from "./vector3Func.js";
+import * as Vector3Func from "./vector3Ext.js";
 
 export function identity() {
 	return new Matrix4(_getIdentityData());

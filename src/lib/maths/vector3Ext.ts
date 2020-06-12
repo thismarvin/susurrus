@@ -1,5 +1,5 @@
 import Vector3 from "./vector3.js";
-import * as MathFunc from "./mathFunc.js";
+import * as MathFunc from "./mathExt.js";
 
 export function lengthSquared(a: Vector3) {
 	return a.x ** 2 + a.y ** 2 + a.z ** 2;

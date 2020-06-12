@@ -23,14 +23,15 @@ export { default as Quad } from "./graphics/geometry/quad.js";
 export { InputHandler } from "../lib/input.js";
 export { InputProfile } from "../lib/input.js";
 
+export { MathExt } from "../lib/maths.js";
 export { Matrix } from "../lib/maths.js";
 export { Matrix4 } from "../lib/maths.js";
-export { Matrix4Func } from "../lib/maths.js";
+export { Matrix4Ext } from "../lib/maths.js";
 export { Rectangle } from "../lib/maths.js";
 export { Vector2 } from "../lib/maths.js";
-export { Vector2Func } from "../lib/maths.js";
+export { Vector2Ext } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
-export { Vector3Func } from "../lib/maths.js";
+export { Vector3Ext } from "../lib/maths.js";
 export { Vector4 } from "../lib/maths.js";
 
 export { default as Camera } from "./camera.js";

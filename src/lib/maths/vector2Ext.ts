@@ -1,5 +1,5 @@
 import Vector2 from "./vector2.js";
-import * as MathFunc from "./mathFunc.js";
+import * as MathFunc from "./mathExt.js";
 
 export function lengthSquared(a: Vector2) {
 	return a.x ** 2 + a.y ** 2;
