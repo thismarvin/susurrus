@@ -57,33 +57,12 @@ export function multiply(a: Matrix, b: Matrix) {
 	const result = new Matrix(a.rows, b.columns);
 
 	for (let ay = 0; ay < a.rows; ay++) {
-		for (let ax = 0; ax < a.columns; ax++) {
-			for (let bx = 0; bx < b.columns; bx++) {
-				result.set(bx, ay, result.get(bx, ay) + a.get(ax, ay) * b.get(bx, ax));
-			}
-		}
-	}
-
-	return result;
-}
-
-export function multiply2(a: Matrix, b: Matrix) {
-	// Make sure we can even multiply the matrices.
-	if (a.columns !== b.rows) {
-		throw new TypeError(
-			`Matrix b must have ${a.columns} rows; cannot multiply matrices.`
-		);
-	}
-
-	const result = new Matrix(a.rows, b.columns);
-
-	for (let ay = 0; ay < a.rows; ay++) {
 		for (let bx = 0; bx < b.columns; bx++) {
 			let temp = 0;
 			for (let ax = 0; ax < a.columns; ax++) {
-				temp += a.get(ay, ax) * b.get(ax, bx);
+				temp += a.get(ax, ay) * b.get(bx, ax);
 			}
-			result.set(ay, bx, temp);
+			result.set(bx, ay, temp);
 		}
 	}
 
