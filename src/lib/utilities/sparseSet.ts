@@ -4,6 +4,9 @@ function* spareSetIterator(data: number[]) {
 	}
 }
 
+/**
+ * A data structure that stores a set of positive numbers that all fall within a given range.
+ */
 export default class SparseSet {
 	public get size() {
 		return this.#n;
@@ -18,47 +21,71 @@ export default class SparseSet {
 	#u: number;
 	#n: number;
 
+	/**
+	 * Creates a data structure that stores a set of positive numbers that all fall within a given range.
+	 * @param range The maximum amount of elements allowed inside the sparse set AND the maximum value allowed inside the set.
+	 */
 	constructor(range: number) {
+		if (range < 0) {
+			throw new TypeError("The range must be greater than or equal to zero.");
+		}
+
 		this.#u = range;
 		this.#n = 0;
 		this.#sparse = new Array(this.#u).fill(0);
 		this.#dense = new Array(this.#u).fill(0);
 	}
 
-	public has(k: number) {
+	/**
+	 * Returns whether or not a given number is in the set.
+	 * @param value The element to find in the set.
+	 */
+	public has(value: number) {
+		if (value < 0) {
+			throw new TypeError("The 'value' parameter must be a positive number.");
+		}
+
 		return (
-			k < this.#u &&
-			this.#sparse[k] < this.#n &&
-			this.#dense[this.#sparse[k]] === k
+			value < this.#u &&
+			this.#sparse[value] < this.#n &&
+			this.#dense[this.#sparse[value]] === value
 		);
 	}
 
-	public add(k: number) {
-		if (k < 0 || k >= this.#u) {
+	/**
+	 * Adds a given positive number to the set.
+	 * @param value The element to find in the set.
+	 */
+	public add(value: number) {
+		if (value >= this.#u) {
 			throw new TypeError(
-				"Index was outside the bounds of the array. A SparseSet cannot contain a value less than 0 or greater than its range."
+				"The 'value' parameter cannot be greater than or equal to the SparseSet's range."
 			);
 		}
 
-		if (this.has(k)) {
+		if (this.has(value)) {
 			return false;
 		}
 
-		this.#dense[this.#n] = k;
-		this.#sparse[k] = this.#n;
+		this.#dense[this.#n] = value;
+		this.#sparse[value] = this.#n;
 		this.#n++;
 
 		return true;
 	}
 
-	public delete(k: number) {
-		if (!this.has(k)) {
+	/**
+	 * Removes a given positive number from the set.
+	 * @param value The element to remove from the set.
+	 */
+	public delete(value: number) {
+		if (!this.has(value)) {
 			return false;
 		}
 
 		this.#n--;
 
-		for (let i = this.#dense.indexOf(k); i < this.#n; i++) {
+		for (let i = this.#dense.indexOf(value); i < this.#n; i++) {
 			this.#dense[i] = this.#dense[i + 1];
 			this.#sparse[this.#dense[i + 1]] = i;
 		}
@@ -66,10 +93,14 @@ export default class SparseSet {
 		return true;
 	}
 
+	/**
+	 * Removes all elements from the set.
+	 */
 	public clear() {
 		this.#n = 0;
 	}
 
+	// Support for iteration through a for-of loop.
 	public *[Symbol.iterator]() {
 		for (let i = 0; i < this.#n; i++) {
 			yield this.#dense[i];
