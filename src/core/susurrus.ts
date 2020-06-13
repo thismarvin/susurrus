@@ -1,6 +1,6 @@
-export { default as Theater } from "./theater.js";
-
+export { default as Camera } from "./camera.js";
 export { default as Scene } from "./scene.js";
+export { default as Theater } from "./theater.js";
 
 export { AttributeElement } from "../lib/graphics.js";
 export { AttributeSchema } from "../lib/graphics.js";
@@ -37,4 +37,4 @@ export { Vector3 } from "../lib/maths.js";
 export { Vector3Ext } from "../lib/maths.js";
 export { Vector4 } from "../lib/maths.js";
 
-export { default as Camera } from "./camera.js";
+export { SparseSet } from "../lib/utilities.js";
