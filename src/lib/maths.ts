@@ -1,3 +1,4 @@
+export { default as LineSegment } from "./maths/lineSegment.js";
 export * as MathExt from "./maths/mathExt.js";
 export { default as Matrix } from "./maths/matrix.js";
 export { default as Matrix4 } from "./maths/matrix4.js";
