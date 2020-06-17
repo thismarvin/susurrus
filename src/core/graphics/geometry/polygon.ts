@@ -6,6 +6,8 @@ import GeometryData from "./geometryData.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../../camera.js";
 
+import * as SS from "./shapeSchema.js";
+
 const _attributeSchema = new Graphics.AttributeSchema([
 	new Graphics.AttributeElement(
 		"a_translation",
@@ -141,6 +143,14 @@ export default abstract class Polygon {
 		this.#color = value;
 		this.#transformChanged = true;
 	}
+
+	get position() {
+		return new Maths.Vector3(this.#x, this.#y, this.#z);
+	}
+
+	get bounds() {
+		return new Maths.Rectangle(this.#x, this.#y, this.#width, this.#height);
+	}
 	//#endregion
 
 	#mesh: Graphics.Mesh;
@@ -211,6 +221,51 @@ export default abstract class Polygon {
 		);
 
 		this.updateBuffer();
+	}
+
+	public calculateTransform() {
+		const scale = Maths.Matrix4Ext.createScale(
+			this.width * this.scale.x,
+			this.height * this.scale.y,
+			this.scale.z
+		);
+		const preTranslation = Maths.Matrix4Ext.createTranslation(
+			-this.rotationOffset.x,
+			-this.rotationOffset.y,
+			0
+		);
+		const rotation = Maths.Matrix4Ext.createRotationZ(this.rotation);
+		const postTranslation = Maths.Matrix4Ext.createTranslation(
+			this.x + this.translation.x + this.rotationOffset.x,
+			this.y + this.translation.y + this.rotationOffset.y,
+			this.translation.z
+		);
+
+		const mul = Maths.Matrix4Ext.multiply;
+
+		return mul(mul(mul(scale, preTranslation), rotation), postTranslation);
+	}
+
+	public resolve(polygon: Polygon) {
+		const a = SS.createSchema(this);
+		const b = SS.createSchema(polygon);
+
+		const resolution = Maths.CollisionHelper.getResolution(
+			{
+				bounds: this.bounds,
+				vertices: a.vertices,
+				lineSegments: a.lineSegments,
+			},
+			{
+				bounds: polygon.bounds,
+				vertices: b.vertices,
+				lineSegments: b.lineSegments,
+			}
+		);
+
+		this.x += resolution.x;
+		this.y += resolution.y;
+		this.applyChanges();
 	}
 
 	public applyChanges() {
