@@ -1,4 +1,6 @@
 import Vector2 from "./vector2.js";
+// eslint-disable-next-line no-unused-vars
+import Matrix4 from "./matrix4.js";
 import * as MathFunc from "./mathExt.js";
 
 export function lengthSquared(a: Vector2) {
@@ -105,6 +107,13 @@ export function multiplyScalar(a: Vector2, scalar: number) {
 export function divideScalar(a: Vector2, scalar: number) {
 	const x = a.x / scalar;
 	const y = a.y / scalar;
+
+	return new Vector2(x, y);
+}
+
+export function transform(a: Vector2, b: Matrix4) {
+	const x = a.x * b.data[0] + a.y * b.data[4] + b.data[12];
+	const y = a.x * b.data[1] + a.y * b.data[5] + b.data[13];
 
 	return new Vector2(x, y);
 }
