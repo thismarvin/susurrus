@@ -33,6 +33,7 @@ export { MatrixExt } from "../lib/maths.js";
 export { Random } from "../lib/maths.js";
 export { RandomExt } from "../lib/maths.js";
 export { Rectangle } from "../lib/maths.js";
+export { RectangleHelper } from "../lib/maths.js";
 export { Vector2 } from "../lib/maths.js";
 export { Vector2Ext } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
