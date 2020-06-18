@@ -1,8 +1,8 @@
 export default class Rectangle {
-	public readonly x: number;
-	public readonly y: number;
-	public readonly width: number;
-	public readonly height: number;
+	public x: number;
+	public y: number;
+	public width: number;
+	public height: number;
 
 	public get left() {
 		return this.x;
@@ -22,19 +22,6 @@ export default class Rectangle {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-
-		Object.defineProperty(this, "x", {
-			writable: false,
-		});
-		Object.defineProperty(this, "y", {
-			writable: false,
-		});
-		Object.defineProperty(this, "width", {
-			writable: false,
-		});
-		Object.defineProperty(this, "height", {
-			writable: false,
-		});
 	}
 
 	public intersects(rectangle: Rectangle) {
