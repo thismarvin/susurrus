@@ -2,48 +2,67 @@
 import Rectangle from "./rectangle.js";
 import * as Vector2Ext from "./vector2Ext.js";
 import Vector2 from "./vector2.js";
-// eslint-disable-next-line no-unused-vars
 import LineSegment from "./lineSegment.js";
 
-interface IShape {
-	bounds: Rectangle;
-	vertices: Vector2[];
-	lineSegments: LineSegment[];
+export function getResolutionAABB(a: Rectangle, b: Rectangle) {
+	const aVertices = [
+		new Vector2(a.left, a.top),
+		new Vector2(a.right, a.top),
+		new Vector2(a.right, a.bottom),
+		new Vector2(a.left, a.bottom),
+	];
+
+	const bVertices = [
+		new Vector2(b.left, b.top),
+		new Vector2(b.right, b.top),
+		new Vector2(b.right, b.bottom),
+		new Vector2(b.left, b.bottom),
+	];
+
+	return _resolveSAT(aVertices, bVertices);
 }
 
-export function getResolution(a: IShape, b: IShape) {
-	if (!a.bounds.intersects(b.bounds)) return new Vector2(0, 0);
+function _createAABB(vertices: Vector2[]) {
+	let xMin = vertices[0].x;
+	let xMax = xMin;
+	let yMin = vertices[0].y;
+	let yMax = yMin;
 
-	const MTV = _calculateMTV(a, b);
+	for (let i = 1; i < vertices.length; i++) {
+		xMin = Math.min(xMin, vertices[i].x);
+		xMax = Math.max(xMax, vertices[i].x);
+		yMin = Math.min(yMin, vertices[i].y);
+		yMax = Math.max(yMax, vertices[i].y);
+	}
 
-	if (MTV === null) return new Vector2(0, 0);
+	return new Rectangle(xMin, yMax, xMax - xMin, yMax - yMin);
+}
 
-	const axis = new Vector2(
-		-(MTV.edge.y2 - MTV.edge.y1),
-		MTV.edge.x2 - MTV.edge.x1
+function _createLineSegments(vertices: Vector2[]) {
+	const totalVertices = vertices.length;
+	const result: LineSegment[] = new Array(totalVertices);
+
+	result[0] = new LineSegment(
+		vertices[totalVertices - 1].x,
+		vertices[totalVertices - 1].y,
+		vertices[0].x,
+		vertices[0].y
 	);
-	const edgeLength = axis.length();
-	const angle = Math.acos(Vector2Ext.dot(axis, new Vector2(1, 0)) / edgeLength);
 
-	const xFactor = Math.round(edgeLength * Math.cos(angle));
-	const yFactor = Math.round(edgeLength * Math.sin(angle));
+	for (let i = 1; i < totalVertices; i++) {
+		result[i] = new LineSegment(
+			vertices[i - 1].x,
+			vertices[i - 1].y,
+			vertices[i].x,
+			vertices[i].y
+		);
+	}
 
-	const xResolutionDirection = a.bounds.left > b.bounds.left ? -1 : 1;
-	const yResolutionDirection = a.bounds.bottom > b.bounds.bottom ? 1 : -1;
-
-	const xResolution =
-		xFactor === 0 ? 0 : (MTV.overlap / xFactor) * xResolutionDirection;
-	const yResolution =
-		yFactor === 0 ? 0 : (MTV.overlap / yFactor) * yResolutionDirection;
-
-	return new Vector2(xResolution, yResolution);
+	return result;
 }
 
-function _getCollisionInformation(a: IShape, b: IShape) {
-	const aLineSegments = a.lineSegments;
-
-	const aVertices = a.vertices;
-	const bVertices = b.vertices;
+function _passSAT(aVertices: Vector2[], bVertices: Vector2[]) {
+	const aLineSegments = _createLineSegments(aVertices);
 
 	let edge = new LineSegment(0, 0, 0, 0);
 	let minOverlap = Number.MAX_SAFE_INTEGER;
@@ -92,11 +111,40 @@ function _getCollisionInformation(a: IShape, b: IShape) {
 	};
 }
 
-function _calculateMTV(a: IShape, b: IShape) {
-	const pass1 = _getCollisionInformation(a, b);
-	const pass2 = _getCollisionInformation(b, a);
+function _resolveSAT(aVertices: Vector2[], bVertices: Vector2[]) {
+	const aAABB = _createAABB(aVertices);
+	const bAABB = _createAABB(bVertices);
 
-	if (pass1 === null || pass2 === null) return null;
+	if (!aAABB.intersects(bAABB)) {
+		return new Vector2(0, 0);
+	}
 
-	return pass1.overlap < pass2.overlap ? pass1 : pass2;
+	const pass0 = _passSAT(aVertices, bVertices);
+	const pass1 = _passSAT(bVertices, aVertices);
+
+	if (pass0 === null || pass1 === null) {
+		return new Vector2(0, 0);
+	}
+
+	const mtv = pass0.overlap < pass1.overlap ? pass0 : pass1;
+
+	const axis = new Vector2(
+		-(mtv.edge.y2 - mtv.edge.y1),
+		mtv.edge.x2 - mtv.edge.x1
+	);
+	const edgeLength = axis.length();
+	const angle = Math.acos(Vector2Ext.dot(axis, new Vector2(1, 0)) / edgeLength);
+
+	const xFactor = Math.round(edgeLength * Math.cos(angle));
+	const yFactor = Math.round(edgeLength * Math.sin(angle));
+
+	const xResolutionDirection = aAABB.left > bAABB.left ? -1 : 1;
+	const yResolutionDirection = aAABB.bottom > bAABB.bottom ? 1 : -1;
+
+	const xResolution =
+		xFactor === 0 ? 0 : (mtv.overlap / xFactor) * xResolutionDirection;
+	const yResolution =
+		yFactor === 0 ? 0 : (mtv.overlap / yFactor) * yResolutionDirection;
+
+	return new Vector2(xResolution, yResolution);
 }
