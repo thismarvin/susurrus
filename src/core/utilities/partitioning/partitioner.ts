@@ -9,6 +9,10 @@ import IPartionable from "./IPartitionable.js";
 export default abstract class Partitioner<T extends IPartionable> {
 	protected boundary: Rectangle;
 
+	/**
+	 * Creates An abstraction of a class that implements spatial partitioning capabilities.
+	 * @param boundary The area that the partitioner will cover.
+	 */
 	constructor(boundary: Rectangle) {
 		this.boundary = boundary;
 	}

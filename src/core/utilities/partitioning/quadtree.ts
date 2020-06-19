@@ -14,7 +14,7 @@ function _entirelyWithin(a: Rectangle, b: Rectangle) {
 }
 
 /**
- * An implementation of a Partitioner that uses a recursive tree structure to store and retrieve IPartitionable items.
+ * An implementation of a Partitioner that uses a recursive tree structure to store and retrieve IPartitionable entries.
  */
 export default class Quadtree<T extends IPartionable> extends Partitioner<T> {
 	#capacity: number;
@@ -28,7 +28,7 @@ export default class Quadtree<T extends IPartionable> extends Partitioner<T> {
 	#bottomLeft: Quadtree<T> | null;
 
 	/**
-	 * Creates an implementation of a Partitioner that uses a recursive tree structure to store and retrieve IPartitionable items.
+	 * Creates an implementation of a Partitioner that uses a recursive tree structure to store and retrieve IPartitionable entries.
 	 * @param boundary The area that the partitioner will cover.
 	 * @param capacity The total amount of entries that exist in a node before overflowing into a new tree.
 	 */
@@ -49,7 +49,7 @@ export default class Quadtree<T extends IPartionable> extends Partitioner<T> {
 	public query(boundary: Rectangle): number[] {
 		const result: number[] = [];
 
-		if (_entirelyWithin(this.boundary, boundary)) {
+		if (_entirelyWithin(boundary, this.boundary)) {
 			for (let i = 0; i < this.#entries.length; i++) {
 				if (this.#entries[i] === null) {
 					continue;
@@ -116,10 +116,6 @@ export default class Quadtree<T extends IPartionable> extends Partitioner<T> {
 	}
 
 	public clear(): void {
-		if (this.#entries === null) {
-			return;
-		}
-
 		if (this.#divided) {
 			//@ts-ignore
 			this.#topLeft.clear();
