@@ -13,4 +13,3 @@ export { default as Vector2 } from "./maths/vector2.js";
 export * as Vector2Ext from "./maths/vector2Ext.js";
 export { default as Vector3 } from "./maths/vector3.js";
 export * as Vector3Ext from "./maths/vector3Ext.js";
-export { default as Vector4 } from "./maths/vector4.js";

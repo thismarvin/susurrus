@@ -38,6 +38,5 @@ export { Vector2 } from "../lib/maths.js";
 export { Vector2Ext } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
 export { Vector3Ext } from "../lib/maths.js";
-export { Vector4 } from "../lib/maths.js";
 
 export { SparseSet } from "../lib/utilities.js";
