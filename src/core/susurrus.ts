@@ -41,5 +41,6 @@ export { Vector3Ext } from "../lib/maths.js";
 
 export { SparseSet } from "../lib/utilities.js";
 
+export { default as Bin } from "./utilities/partitioning/bin.js";
 export { default as Partitioner } from "./utilities/partitioning/partitioner.js";
 export { default as Quadtree } from "./utilities/partitioning/quadtree.js";
