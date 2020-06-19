@@ -100,21 +100,24 @@ export default class Theater {
 	}
 
 	/**
-	 * Creates and appends a new HTMLCanvas to an existing HTMLElement thas has a given id.
+	 * Creates and appends a new HTMLCanvas to an existing HTMLElement.
 	 * Moreover, a valid GraphicsManager is created and initialized.
-	 * @param id The id of an existing HTMLElement on the current page.
+	 * @param elementID The id of an existing HTMLElement on the current page.
+	 * @param canvasID The id the new HTMLCanvas should have.
 	 */
-	public appendCanvas(id: string) {
-		const element = document.getElementById(id);
+	public appendCanvas(elementID: string, canvasID?: string) {
+		const element = document.getElementById(elementID);
 
 		if (element === null) {
-			throw new TypeError(`Could not find an element with an id of '${id}'.`);
+			throw new TypeError(
+				`Could not find an element with an id of '${elementID}'.`
+			);
 		}
 
 		this.#parent = element;
 		this.#canvas = document.createElement("canvas");
 		this.#parent.appendChild(this.#canvas);
-		this.#canvas.id = `${id}-canvas`;
+		this.#canvas.id = canvasID === undefined ? `${elementID}-canvas` : canvasID;
 
 		this.#graphics = new Graphics.GraphicsManager(
 			Graphics.WebGL.getWebGLContext(this.#canvas)
