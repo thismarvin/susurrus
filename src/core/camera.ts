@@ -1,37 +1,26 @@
 import * as Maths from "../lib/maths.js";
 
 export default class Camera {
-	public world: Maths.MatrixTransform;
-	public view: Maths.MatrixTransform;
-	public projection: Maths.MatrixTransform;
-	public worldViewProjection: Maths.MatrixTransform;
+	public world: Maths.Matrix4;
+	public view: Maths.Matrix4;
+	public projection: Maths.Matrix4;
+	public worldViewProjection: Maths.Matrix4;
 
 	constructor(width: number, height: number) {
-		this.world = Maths.MatrixTransform.createTranslation(0, 0, 0);
-		this.view = Maths.MatrixTransform.createLookAt(
+		this.world = Maths.Matrix4Ext.identity();
+		this.view = Maths.Matrix4Ext.createLookAt(
 			new Maths.Vector3(0, 0, 1),
 			new Maths.Vector3(0, 0, 0),
 			new Maths.Vector3(0, 1, 0)
 		);
-		this.projection = Maths.MatrixTransform.createOrthographic(
-			width,
-			height,
-			0,
-			16
-		);
-
-		this.worldViewProjection = Maths.MatrixTransform.getIdentity();
+		this.projection = Maths.Matrix4Ext.createOrthographic(width, height, 1, 16);
+		this.worldViewProjection = Maths.Matrix4Ext.identity();
 
 		this.updateWorldViewProjection();
 	}
 
 	public setBounds(width: number, height: number) {
-		this.projection = Maths.MatrixTransform.createOrthographic(
-			width,
-			height,
-			0,
-			16
-		);
+		this.projection = Maths.Matrix4Ext.createOrthographic(width, height, 0, 16);
 
 		this.updateWorldViewProjection();
 	}
@@ -39,7 +28,7 @@ export default class Camera {
 	// ? I really do not know the best way to modify the camera moving forward.
 	// ? This works fine for now, but you gotta think of a better way! 😯
 	public setLocation(x: number, y: number) {
-		this.view = Maths.MatrixTransform.createLookAt(
+		this.view = Maths.Matrix4Ext.createLookAt(
 			new Maths.Vector3(x, y, 1),
 			new Maths.Vector3(x, y, 0),
 			new Maths.Vector3(0, 1, 0)
@@ -49,8 +38,8 @@ export default class Camera {
 	}
 
 	private updateWorldViewProjection() {
-		this.worldViewProjection = Maths.Matrix.mult(
-			Maths.Matrix.mult(this.view, this.world),
+		this.worldViewProjection = Maths.Matrix4Ext.multiply(
+			Maths.Matrix4Ext.multiply(this.world, this.view),
 			this.projection
 		);
 	}

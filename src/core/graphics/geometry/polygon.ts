@@ -25,6 +25,7 @@ const _attributeSchema = new Graphics.AttributeSchema([
 export default abstract class Polygon {
 	public geometryData: GeometryData | null;
 
+	//#region Getters and Setters
 	public get mesh() {
 		return this.#mesh;
 	}
@@ -33,7 +34,6 @@ export default abstract class Polygon {
 		this.#mesh = value;
 	}
 
-	//#region Getters and Setters
 	get x() {
 		return this.#x;
 	}
@@ -141,6 +141,14 @@ export default abstract class Polygon {
 		this.#color = value;
 		this.#transformChanged = true;
 	}
+
+	get position() {
+		return new Maths.Vector3(this.#x, this.#y, this.#z);
+	}
+
+	get aabb() {
+		return new Maths.Rectangle(this.#x, this.#y, this.#width, this.#height);
+	}
 	//#endregion
 
 	#mesh: Graphics.Mesh;
@@ -148,6 +156,7 @@ export default abstract class Polygon {
 
 	#x: number;
 	#y: number;
+	#z: number;
 	#width: number;
 	#height: number;
 
@@ -174,6 +183,7 @@ export default abstract class Polygon {
 
 		this.#x = x;
 		this.#y = y;
+		this.#z = 0;
 		this.#width = width;
 		this.#height = height;
 
@@ -211,6 +221,29 @@ export default abstract class Polygon {
 		this.updateBuffer();
 	}
 
+	public calculateTransform() {
+		const scale = Maths.Matrix4Ext.createScale(
+			this.width * this.scale.x,
+			this.height * this.scale.y,
+			this.scale.z
+		);
+		const preTranslation = Maths.Matrix4Ext.createTranslation(
+			-this.rotationOffset.x,
+			-this.rotationOffset.y,
+			0
+		);
+		const rotation = Maths.Matrix4Ext.createRotationZ(this.rotation);
+		const postTranslation = Maths.Matrix4Ext.createTranslation(
+			this.x + this.translation.x + this.rotationOffset.x,
+			this.y + this.translation.y + this.rotationOffset.y,
+			this.translation.z
+		);
+
+		const mul = Maths.Matrix4Ext.multiply;
+
+		return mul(mul(mul(scale, preTranslation), rotation), postTranslation);
+	}
+
 	public applyChanges() {
 		if (this.#model === null) {
 			throw new TypeError(
@@ -237,7 +270,6 @@ export default abstract class Polygon {
 			);
 		}
 
-		// Ideally this would always be false, but I'll just keep this here in case the user ever forgets to applyChanges themselves.
 		if (this.#transformChanged) {
 			throw new TypeError(
 				"The polygon's transform was modified, but applyChanges() was never called."
@@ -270,7 +302,7 @@ export default abstract class Polygon {
 			new Maths.Vector3(
 				this.#x + this.translation.x,
 				this.#y + this.translation.y,
-				this.#x + this.translation.z
+				this.#z + this.translation.z
 			).toArray()
 		);
 		bufferData = bufferData.concat(

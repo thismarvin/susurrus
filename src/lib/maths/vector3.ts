@@ -1,3 +1,5 @@
+import * as Vector3Func from "./vector3Ext.js";
+
 export default class Vector3 {
 	public x: number;
 	public y: number;
@@ -9,50 +11,34 @@ export default class Vector3 {
 		this.z = z;
 	}
 
-	public multiply(value: number) {
-		this.x *= value;
-		this.y *= value;
-		this.z *= value;
-	}
-
-	public divide(value: number) {
-		this.x /= value;
-		this.y /= value;
-		this.z /= value;
-	}
-
 	public length() {
-		return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+		return Vector3Func.length(this);
+	}
+
+	public lengthSquared() {
+		return Vector3Func.lengthSquared(this);
 	}
 
 	public normalize() {
-		const magnitude = this.length();
-		if (magnitude > 0) {
-			this.divide(magnitude);
-		}
+		const temp = Vector3Func.normalize(this);
+		this.copy(temp);
+	}
+
+	public copy(vector: Vector3) {
+		this.x = vector.x;
+		this.y = vector.y;
+		this.z = vector.z;
+	}
+
+	public clone() {
+		return new Vector3(this.x, this.y, this.z);
 	}
 
 	public toArray() {
 		return [this.x, this.y, this.z];
 	}
 
-	static dot(a: Vector3, b: Vector3) {
-		return a.x * b.x + a.y * b.y + a.z * b.z;
-	}
-
-	static cross(a: Vector3, b: Vector3) {
-		const x = a.y * b.z - b.y * a.z;
-		const y = -(a.x * b.z - b.x * a.z);
-		const z = a.x * b.y - b.x * a.y;
-
-		return new Vector3(x, y, z);
-	}
-
-	static subtract(a: Vector3, b: Vector3) {
-		const x = a.x - b.x;
-		const y = a.y - b.y;
-		const z = a.z - b.z;
-
-		return new Vector3(x, y, z);
+	public toString() {
+		return `(${this.x}, ${this.y}, ${this.z})`;
 	}
 }

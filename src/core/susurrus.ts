@@ -1,6 +1,6 @@
-export { default as Theater } from "./theater.js";
-
+export { default as Camera } from "./camera.js";
 export { default as Scene } from "./scene.js";
+export { default as Theater } from "./theater.js";
 
 export { AttributeElement } from "../lib/graphics.js";
 export { AttributeSchema } from "../lib/graphics.js";
@@ -23,11 +23,21 @@ export { default as Quad } from "./graphics/geometry/quad.js";
 export { InputHandler } from "../lib/input.js";
 export { InputProfile } from "../lib/input.js";
 
+export { CollisionHelper } from "../lib/maths.js";
+export { LineSegment } from "../lib/maths.js";
+export { MathExt } from "../lib/maths.js";
 export { Matrix } from "../lib/maths.js";
-export { MatrixTransform } from "../lib/maths.js";
+export { Matrix4 } from "../lib/maths.js";
+export { Matrix4Ext } from "../lib/maths.js";
+export { MatrixExt } from "../lib/maths.js";
+export { Random } from "../lib/maths.js";
+export { RandomExt } from "../lib/maths.js";
 export { Rectangle } from "../lib/maths.js";
+export { RectangleHelper } from "../lib/maths.js";
 export { Vector2 } from "../lib/maths.js";
+export { Vector2Ext } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
+export { Vector3Ext } from "../lib/maths.js";
 export { Vector4 } from "../lib/maths.js";
 
-export { default as Camera } from "./camera.js";
+export { SparseSet } from "../lib/utilities.js";

@@ -1,3 +1,5 @@
+import * as MatrixFunc from "./matrixExt.js";
+
 export default class Matrix {
 	get rows(): number {
 		return this.#rows;
@@ -41,6 +43,10 @@ export default class Matrix {
 		this.#data[this.columns * y + x] = value;
 	}
 
+	public transpose() {
+		this.setData(MatrixFunc.transpose(this).data);
+	}
+
 	public toString() {
 		let string = "";
 
@@ -59,113 +65,4 @@ export default class Matrix {
 
 		return string;
 	}
-
-	//#region Static Functions
-	public static add(a: Matrix, b: Matrix) {
-		// Make sure we can even add the matrices.
-		if (a.rows !== b.rows || a.columns !== b.columns) {
-			throw new TypeError(
-				"Both matrices are not the same size; cannot perform operation."
-			);
-		}
-
-		const data = a.data.slice(0);
-		for (let i = 0; i < a.rows * a.columns; i++) {
-			data[i] += b.data[i];
-		}
-
-		return new Matrix(a.rows, b.rows, data);
-	}
-
-	public static addScalar(a: Matrix, scalar: number) {
-		const data = a.data.slice(0);
-		for (let i = 0; i < a.rows * a.columns; i++) {
-			data[i] += scalar;
-		}
-
-		return new Matrix(a.rows, a.columns, data);
-	}
-
-	public static sub(a: Matrix, b: Matrix) {
-		// Make sure we can even add the matrices.
-		if (a.rows !== b.rows || a.columns !== b.columns) {
-			throw new TypeError(
-				"Both matrices are not the same size; cannot perform operation."
-			);
-		}
-
-		const data = a.data.slice(0);
-		for (let i = 0; i < a.rows * a.columns; i++) {
-			data[i] -= b.data[i];
-		}
-
-		return new Matrix(a.rows, b.rows, data);
-	}
-
-	public static subScalar(a: Matrix, scalar: number) {
-		const data = a.data.slice(0);
-		for (let i = 0; i < a.rows * a.columns; i++) {
-			data[i] -= scalar;
-		}
-
-		return new Matrix(a.rows, a.columns, data);
-	}
-
-	public static mult(a: Matrix, b: Matrix) {
-		// Make sure we can even multiply the matrices.
-		if (a.columns !== b.rows) {
-			throw new TypeError(
-				`Matrix b must have ${a.columns} rows; cannot multiply matrices.`
-			);
-		}
-
-		const result = new Matrix(a.rows, b.columns);
-
-		for (let aY = 0; aY < a.rows; aY++) {
-			for (let aX = 0; aX < a.columns; aX++) {
-				for (let bX = 0; bX < b.columns; bX++) {
-					result.set(
-						bX,
-						aY,
-						result.get(bX, aY) + a.get(aX, aY) * b.get(bX, aX)
-					);
-				}
-			}
-		}
-
-		return result;
-	}
-
-	public static multScalar(a: Matrix, scalar: number) {
-		const data = a.data.slice(0);
-		for (let i = 0; i < a.rows * a.columns; i++) {
-			data[i] *= scalar;
-		}
-
-		return new Matrix(a.rows, a.columns, data);
-	}
-
-	public static divideScalar(a: Matrix, scalar: number) {
-		const data = a.data.slice(0);
-		for (let i = 0; i < a.rows * a.columns; i++) {
-			data[i] /= scalar;
-		}
-
-		return new Matrix(a.rows, a.columns, data);
-	}
-
-	public static transpose(a: Matrix) {
-		const transposed = new Array(a.rows * a.columns).fill(0);
-		const newRows = a.columns;
-		const newColumns = a.rows;
-
-		for (let y = 0; y < newRows; y++) {
-			for (let x = 0; x < newColumns; x++) {
-				transposed[newColumns * y + x] = a.data[a.columns * x + y];
-			}
-		}
-
-		return new Matrix(newRows, newColumns, transposed);
-	}
-	//#endregion
 }

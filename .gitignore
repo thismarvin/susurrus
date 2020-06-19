@@ -4,6 +4,7 @@ node_modules.nosync
 .eslintcache
 /dev
 
+/.vscode
 index.html
 main.mjs
 main.css
