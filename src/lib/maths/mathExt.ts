@@ -26,3 +26,14 @@ export function lerp(a: number, b: number, step: number) {
 export function lerpPrecise(a: number, b: number, step: number) {
 	return (1 - step) * a + step * b;
 }
+
+export function log(x: number, base: number) {
+	switch (base) {
+		case 2:
+			return Math.log(x) / Math.LN2;
+		case 10:
+			return Math.log(x) / Math.LN10;
+		default:
+			return Math.log(x) / Math.log(base);
+	}
+}
