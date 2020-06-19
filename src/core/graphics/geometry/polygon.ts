@@ -6,8 +6,6 @@ import GeometryData from "./geometryData.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../../camera.js";
 
-import * as SS from "./shapeSchema.js";
-
 const _attributeSchema = new Graphics.AttributeSchema([
 	new Graphics.AttributeElement(
 		"a_translation",
@@ -27,6 +25,7 @@ const _attributeSchema = new Graphics.AttributeSchema([
 export default abstract class Polygon {
 	public geometryData: GeometryData | null;
 
+	//#region Getters and Setters
 	public get mesh() {
 		return this.#mesh;
 	}
@@ -35,7 +34,6 @@ export default abstract class Polygon {
 		this.#mesh = value;
 	}
 
-	//#region Getters and Setters
 	get x() {
 		return this.#x;
 	}
@@ -148,7 +146,7 @@ export default abstract class Polygon {
 		return new Maths.Vector3(this.#x, this.#y, this.#z);
 	}
 
-	get bounds() {
+	get aabb() {
 		return new Maths.Rectangle(this.#x, this.#y, this.#width, this.#height);
 	}
 	//#endregion
@@ -244,28 +242,6 @@ export default abstract class Polygon {
 		const mul = Maths.Matrix4Ext.multiply;
 
 		return mul(mul(mul(scale, preTranslation), rotation), postTranslation);
-	}
-
-	public resolve(polygon: Polygon) {
-		const a = SS.createSchema(this);
-		const b = SS.createSchema(polygon);
-
-		const resolution = Maths.CollisionHelper.getResolution(
-			{
-				bounds: this.bounds,
-				vertices: a.vertices,
-				lineSegments: a.lineSegments,
-			},
-			{
-				bounds: polygon.bounds,
-				vertices: b.vertices,
-				lineSegments: b.lineSegments,
-			}
-		);
-
-		this.x += resolution.x;
-		this.y += resolution.y;
-		this.applyChanges();
 	}
 
 	public applyChanges() {
