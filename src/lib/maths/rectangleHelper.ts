@@ -4,6 +4,11 @@ import Vector2 from "./vector2.js";
 import LineSegment from "./lineSegment.js";
 import * as Collision from "./collisionHelper.js";
 
+/**
+ * Returns a vector that resolves collision between two rectangles.
+ * @param a The target rectangle that will be resolved.
+ * @param b The rectangle to resolve against.
+ */
 export function getResolution(a: Rectangle, b: Rectangle) {
 	const aVertices = [
 		new Vector2(a.left, a.top),
