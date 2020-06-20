@@ -222,24 +222,24 @@ export default abstract class Polygon {
 	}
 
 	public calculateTransform() {
-		const scale = Maths.Matrix4Ext.createScale(
+		const scale = Maths.Matrix4.createScale(
 			this.width * this.scale.x,
 			this.height * this.scale.y,
 			this.scale.z
 		);
-		const preTranslation = Maths.Matrix4Ext.createTranslation(
+		const preTranslation = Maths.Matrix4.createTranslation(
 			-this.rotationOffset.x,
 			-this.rotationOffset.y,
 			0
 		);
-		const rotation = Maths.Matrix4Ext.createRotationZ(this.rotation);
-		const postTranslation = Maths.Matrix4Ext.createTranslation(
+		const rotation = Maths.Matrix4.createRotationZ(this.rotation);
+		const postTranslation = Maths.Matrix4.createTranslation(
 			this.x + this.translation.x + this.rotationOffset.x,
 			this.y + this.translation.y + this.rotationOffset.y,
 			this.translation.z
 		);
 
-		const mul = Maths.Matrix4Ext.multiply;
+		const mul = Maths.Matrix4.multiply;
 
 		return mul(mul(mul(scale, preTranslation), rotation), postTranslation);
 	}

@@ -1,3 +1,7 @@
+import * as Collision from "./collisionHelper.js";
+import LineSegment from "./lineSegment.js";
+import Vector2 from "./vector2.js";
+
 /**
  * An axis-aligned 2D-rectangle.
  */
@@ -57,6 +61,67 @@ export default class Rectangle {
 			this.right <= rectangle.right &&
 			this.bottom >= rectangle.bottom &&
 			this.top <= rectangle.top
+		);
+	}
+
+	/**
+	 * Returns a vector that resolves collision between this rectangle and a given rectangle.
+	 * @param rectangle The rectangle to resolve against.
+	 */
+	public getResolution(rectangle: Rectangle) {
+		const aVertices = [
+			new Vector2(this.left, this.top),
+			new Vector2(this.right, this.top),
+			new Vector2(this.right, this.bottom),
+			new Vector2(this.left, this.bottom),
+		];
+
+		const aEdges = [
+			new LineSegment(
+				aVertices[0].x,
+				aVertices[0].y,
+				aVertices[1].x,
+				aVertices[1].y
+			),
+			new LineSegment(
+				aVertices[1].x,
+				aVertices[1].y,
+				aVertices[2].x,
+				aVertices[2].y
+			),
+		];
+
+		const bVertices = [
+			new Vector2(rectangle.left, rectangle.top),
+			new Vector2(rectangle.right, rectangle.top),
+			new Vector2(rectangle.right, rectangle.bottom),
+			new Vector2(rectangle.left, rectangle.bottom),
+		];
+
+		const bEdges = [
+			new LineSegment(
+				bVertices[0].x,
+				bVertices[0].y,
+				bVertices[1].x,
+				bVertices[1].y
+			),
+			new LineSegment(
+				bVertices[1].x,
+				bVertices[1].y,
+				bVertices[2].x,
+				bVertices[2].y
+			),
+		];
+
+		return Collision.getResolution(
+			{
+				vertices: aVertices,
+				edges: aEdges,
+			},
+			{
+				vertices: bVertices,
+				edges: bEdges,
+			}
 		);
 	}
 }

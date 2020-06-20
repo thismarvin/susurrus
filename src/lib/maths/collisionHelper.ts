@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import Rectangle from "./rectangle.js";
-import * as Vector2Ext from "./vector2Ext.js";
 import Vector2 from "./vector2.js";
 import LineSegment from "./lineSegment.js";
 
@@ -40,7 +39,7 @@ export function getResolution(a: IShape, b: IShape) {
 	);
 
 	const axisLength = axis.length();
-	const angle = Math.acos(Vector2Ext.dot(axis, new Vector2(1, 0)) / axisLength);
+	const angle = Math.acos(Vector2.dot(axis, new Vector2(1, 0)) / axisLength);
 
 	const xFactor = Math.round(axisLength * Math.cos(angle));
 	const yFactor = Math.round(axisLength * Math.sin(angle));
@@ -82,20 +81,20 @@ function _calculateOverlap(a: IShape, b: IShape) {
 			a.edges[i].x2 - a.edges[i].x1
 		);
 
-		let minProjectionA = Vector2Ext.dot(a.vertices[0], normal);
+		let minProjectionA = Vector2.dot(a.vertices[0], normal);
 		let maxProjectionA = minProjectionA;
 
 		for (let j = 1; j < a.vertices.length; j++) {
-			const projection = Vector2Ext.dot(a.vertices[j], normal);
+			const projection = Vector2.dot(a.vertices[j], normal);
 			minProjectionA = Math.min(minProjectionA, projection);
 			maxProjectionA = Math.max(maxProjectionA, projection);
 		}
 
-		let minProjectionB = Vector2Ext.dot(b.vertices[0], normal);
+		let minProjectionB = Vector2.dot(b.vertices[0], normal);
 		let maxProjectionB = minProjectionB;
 
 		for (let j = 1; j < b.vertices.length; j++) {
-			const projection = Vector2Ext.dot(b.vertices[j], normal);
+			const projection = Vector2.dot(b.vertices[j], normal);
 			minProjectionB = Math.min(minProjectionB, projection);
 			maxProjectionB = Math.max(maxProjectionB, projection);
 		}

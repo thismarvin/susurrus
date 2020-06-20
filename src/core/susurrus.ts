@@ -28,16 +28,11 @@ export { LineSegment } from "../lib/maths.js";
 export { MathExt } from "../lib/maths.js";
 export { Matrix } from "../lib/maths.js";
 export { Matrix4 } from "../lib/maths.js";
-export { Matrix4Ext } from "../lib/maths.js";
-export { MatrixExt } from "../lib/maths.js";
 export { Random } from "../lib/maths.js";
-export { RandomExt } from "../lib/maths.js";
+export { RandomHelper } from "../lib/maths.js";
 export { Rectangle } from "../lib/maths.js";
-export { RectangleHelper } from "../lib/maths.js";
 export { Vector2 } from "../lib/maths.js";
-export { Vector2Ext } from "../lib/maths.js";
 export { Vector3 } from "../lib/maths.js";
-export { Vector3Ext } from "../lib/maths.js";
 
 export { SparseSet } from "../lib/utilities.js";
 
