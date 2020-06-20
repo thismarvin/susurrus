@@ -19,6 +19,10 @@ export default class Matrix4 {
 		return this.#data;
 	}
 
+	public static get IDENTITY() {
+		return _identity;
+	}
+
 	#rows: number;
 	#columns: number;
 	#data: number[];
@@ -54,28 +58,24 @@ export default class Matrix4 {
 	public transpose() {
 		const temp = _getEmptyData();
 
-		temp[0] = this.data[0];
-		temp[1] = this.data[4];
-		temp[2] = this.data[8];
-		temp[3] = this.data[12];
-		temp[4] = this.data[1];
-		temp[5] = this.data[5];
-		temp[6] = this.data[9];
-		temp[7] = this.data[13];
-		temp[8] = this.data[2];
-		temp[9] = this.data[6];
-		temp[10] = this.data[10];
-		temp[11] = this.data[14];
-		temp[12] = this.data[3];
-		temp[13] = this.data[7];
-		temp[14] = this.data[11];
-		temp[15] = this.data[15];
+		temp[0] = this.#data[0];
+		temp[1] = this.#data[4];
+		temp[2] = this.#data[8];
+		temp[3] = this.#data[12];
+		temp[4] = this.#data[1];
+		temp[5] = this.#data[5];
+		temp[6] = this.#data[9];
+		temp[7] = this.#data[13];
+		temp[8] = this.#data[2];
+		temp[9] = this.#data[6];
+		temp[10] = this.#data[10];
+		temp[11] = this.#data[14];
+		temp[12] = this.#data[3];
+		temp[13] = this.#data[7];
+		temp[14] = this.#data[11];
+		temp[15] = this.#data[15];
 
-		this.setData(temp);
-	}
-
-	public static identity() {
-		return new Matrix4(_getIdentityData());
+		this.#data = temp;
 	}
 
 	//#region Math
@@ -396,3 +396,5 @@ export default class Matrix4 {
 	}
 	//#endregion
 }
+
+const _identity = new Matrix4(_getIdentityData());

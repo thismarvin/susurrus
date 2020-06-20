@@ -6,6 +6,19 @@ export default class Vector2 {
 	public x: number;
 	public y: number;
 
+	public static get ZERO() {
+		return _zero;
+	}
+	public static get ONE() {
+		return _one;
+	}
+	public static get UNIT_X() {
+		return _unitX;
+	}
+	public static get UNIT_Y() {
+		return _unitY;
+	}
+
 	constructor(x: number, y: number) {
 		this.x = x;
 		this.y = y;
@@ -152,3 +165,8 @@ export default class Vector2 {
 	}
 	//#endregion
 }
+
+const _zero = new Vector2(0, 0);
+const _one = new Vector2(1, 1);
+const _unitX = new Vector2(1, 0);
+const _unitY = new Vector2(0, 1);

@@ -7,6 +7,40 @@ export default class Vector3 {
 	public y: number;
 	public z: number;
 
+	public static get ZERO() {
+		return _zero;
+	}
+	public static get ONE() {
+		return _one;
+	}
+	public static get UNIT_X() {
+		return _unitX;
+	}
+	public static get UNIT_Y() {
+		return _unitY;
+	}
+	public static get UNIT_Z() {
+		return _unitZ;
+	}
+	public static get LEFT() {
+		return _left;
+	}
+	public static get UP() {
+		return _up;
+	}
+	public static get RIGHT() {
+		return _right;
+	}
+	public static get DOWN() {
+		return _down;
+	}
+	public static get FORWARD() {
+		return _forward;
+	}
+	public static get BACKWARD() {
+		return _backward;
+	}
+
 	constructor(x: number, y: number, z: number) {
 		this.x = x;
 		this.y = y;
@@ -182,3 +216,15 @@ export default class Vector3 {
 	}
 	//#endregion
 }
+
+const _zero = new Vector3(0, 0, 0);
+const _one = new Vector3(1, 1, 1);
+const _unitX = new Vector3(1, 0, 0);
+const _unitY = new Vector3(0, 1, 0);
+const _unitZ = new Vector3(0, 0, 1);
+const _left = new Vector3(-1, 0, 0);
+const _up = new Vector3(0, 1, 0);
+const _right = new Vector3(1, 0, 0);
+const _down = new Vector3(0, -1, 0);
+const _forward = new Vector3(0, 0, -1);
+const _backward = new Vector3(0, 0, 1);
