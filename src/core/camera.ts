@@ -7,14 +7,14 @@ export default class Camera {
 	public worldViewProjection: Maths.Matrix4;
 
 	constructor(width: number, height: number) {
-		this.world = Maths.Matrix4.identity();
+		this.world = Maths.Matrix4.IDENTITY;
 		this.view = Maths.Matrix4.createLookAt(
 			new Maths.Vector3(0, 0, 1),
 			new Maths.Vector3(0, 0, 0),
 			new Maths.Vector3(0, 1, 0)
 		);
 		this.projection = Maths.Matrix4.createOrthographic(width, height, 1, 16);
-		this.worldViewProjection = Maths.Matrix4.identity();
+		this.worldViewProjection = Maths.Matrix4.IDENTITY;
 
 		this.updateWorldViewProjection();
 	}
