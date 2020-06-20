@@ -7,16 +7,16 @@ export default class Vector2 {
 	public y: number;
 
 	public static get ZERO() {
-		return _zero;
+		return new Vector2(0, 0);
 	}
 	public static get ONE() {
-		return _one;
+		return new Vector2(1, 1);
 	}
 	public static get UNIT_X() {
-		return _unitX;
+		return new Vector2(1, 0);
 	}
 	public static get UNIT_Y() {
-		return _unitY;
+		return new Vector2(0, 1);
 	}
 
 	constructor(x: number, y: number) {
@@ -165,8 +165,3 @@ export default class Vector2 {
 	}
 	//#endregion
 }
-
-const _zero = new Vector2(0, 0);
-const _one = new Vector2(1, 1);
-const _unitX = new Vector2(1, 0);
-const _unitY = new Vector2(0, 1);

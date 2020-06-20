@@ -20,7 +20,7 @@ export default class Matrix4 {
 	}
 
 	public static get IDENTITY() {
-		return _identity;
+		return new Matrix4(_getIdentityData());
 	}
 
 	#rows: number;
@@ -396,5 +396,3 @@ export default class Matrix4 {
 	}
 	//#endregion
 }
-
-const _identity = new Matrix4(_getIdentityData());
