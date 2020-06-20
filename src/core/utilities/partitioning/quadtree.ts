@@ -4,15 +4,6 @@ import { Rectangle } from "../../../lib/maths.js";
 import IPartionable from "./IPartitionable.js";
 import Partitioner from "./partitioner.js";
 
-function _entirelyWithin(a: Rectangle, b: Rectangle) {
-	return (
-		a.left >= b.left &&
-		a.right <= b.right &&
-		a.top <= b.top &&
-		b.bottom >= b.bottom
-	);
-}
-
 /**
  * An implementation of a Partitioner that uses a recursive tree structure to store and retrieve IPartitionable entries.
  */
@@ -49,7 +40,7 @@ export default class Quadtree<T extends IPartionable> extends Partitioner<T> {
 	public query(boundary: Rectangle): number[] {
 		const result: number[] = [];
 
-		if (_entirelyWithin(boundary, this.boundary)) {
+		if (this.boundary.completelyWithin(boundary)) {
 			for (let i = 0; i < this.#entries.length; i++) {
 				if (this.#entries[i] === null) {
 					continue;
