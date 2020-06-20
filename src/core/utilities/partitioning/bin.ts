@@ -9,15 +9,6 @@ interface IPoint {
 	y: number;
 }
 
-// function _entirelyWithin(a: Rectangle, b: Rectangle) {
-// 	return (
-// 		a.left >= b.left &&
-// 		a.right <= b.right &&
-// 		a.top <= b.top &&
-// 		b.bottom >= b.bottom
-// 	);
-// }
-
 function _constrainPoint(point: IPoint, boundary: Rectangle) {
 	let xConstrained = point.x;
 	let yConstrained = point.y;
@@ -109,15 +100,15 @@ export default class Bin<T extends IPartionable> extends Partitioner<T> {
 	public query(boundary: Rectangle): number[] {
 		const result: number[] = [];
 
-		// if (_entirelyWithin(boundary, this.boundary)) {
-		// 	for (let i = 0; i < this.#buckets.length; i++) {
-		// 		for (let entry of this.#buckets[i]) {
-		// 			result.push(entry);
-		// 		}
-		// 	}
+		if (this.boundary.completelyWithin(boundary)) {
+			for (let i = 0; i < this.#buckets.length; i++) {
+				for (let entry of this.#buckets[i]) {
+					result.push(entry);
+				}
+			}
 
-		// 	return result;
-		// }
+			return result;
+		}
 
 		const unique = new Set<number>();
 		const ids = this.getHashIDs(boundary);
