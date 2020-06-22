@@ -153,6 +153,7 @@ export default abstract class Polygon {
 
 	#mesh: Graphics.Mesh;
 	#model: Graphics.VertexBuffer | null;
+	#effect: Graphics.Effect | null;
 
 	#x: number;
 	#y: number;
@@ -195,6 +196,12 @@ export default abstract class Polygon {
 
 		this.#meshChanged = false;
 		this.#transformChanged = false;
+
+		this.#effect = null;
+	}
+
+	public attachEffect(effect: Graphics.Effect) {
+		this.#effect = effect;
 	}
 
 	public createGeometry(graphics: Graphics.GraphicsManager) {
@@ -255,12 +262,12 @@ export default abstract class Polygon {
 		this.updateBuffer();
 	}
 
-	public draw(
-		graphics: Graphics.GraphicsManager,
-		effect: Graphics.Effect,
-		camera: Camera
-	) {
-		if (this.geometryData === null || this.#model === null) {
+	public draw(graphics: Graphics.GraphicsManager, camera: Camera) {
+		if (
+			this.geometryData === null ||
+			this.#model === null ||
+			this.#effect === null
+		) {
 			return;
 		}
 
@@ -276,7 +283,7 @@ export default abstract class Polygon {
 			);
 		}
 
-		graphics.begin(effect);
+		graphics.begin(this.#effect);
 
 		graphics.setVertexBuffers([this.geometryData.vertexBuffer, this.#model]);
 		graphics.setIndexBuffer(this.geometryData.indexBuffer);
