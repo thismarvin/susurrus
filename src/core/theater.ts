@@ -123,9 +123,10 @@ export default class Theater {
 			Graphics.WebGL.getWebGLContext(this.#canvas)
 		);
 
-		this.smartPointer.attachElement(this.#canvas);
-
 		this.#geometryManager = new GeometryManager(this.#graphics);
+		this.factory.attachGraphics(this.#graphics);
+
+		this.smartPointer.attachElement(this.#canvas);
 	}
 
 	/**

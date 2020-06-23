@@ -15,7 +15,7 @@ export { VertexUsage } from "../lib/graphics.js";
 
 export * as Palettes from "./graphics/palettes.js";
 
-export { default as BasicEffect } from "./graphics/geometry/basicEffect.js";
+export { default as PolygonEffect } from "./graphics/geometry/polygonEffect.js";
 export { default as GeometryData } from "./graphics/geometry/geometryData.js";
 export { default as Polygon } from "./graphics/geometry/polygon.js";
 export { default as Quad } from "./graphics/geometry/quad.js";
