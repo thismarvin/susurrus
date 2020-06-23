@@ -36,41 +36,34 @@ export default class Camera {
 	#far: number;
 	#width: number;
 	#height: number;
+	#projectionType: ProjectionType;
 
 	#world: Matrix4;
 	#view: Matrix4;
 	#projection: Matrix4;
 
-	#projectionType: ProjectionType;
-
 	#wvp: Matrix4;
 
-	constructor(width: number, height: number) {
+	constructor() {
 		this.#target = Vector3.ZERO;
 		this.#position = new Vector3(
 			this.#target.x,
 			this.#target.y,
-			this.#target.z - 1
+			this.#target.z + 1
 		);
 		this.#up = Vector3.UP;
 
-		this.#near = 1;
-		this.#far = 16;
-		this.#width = width;
-		this.#height = height;
+		this.#near = 0;
+		this.#far = 0;
+		this.#width = 0;
+		this.#height = 0;
+		this.#projectionType = ProjectionType.None;
 
 		this.#world = Matrix4.IDENTITY;
 		this.#view = Matrix4.createLookAt(this.#position, this.#target, this.#up);
-		this.#projection = Matrix4.createOrthographic(
-			this.#width,
-			this.#height,
-			this.#near,
-			this.#far
-		);
+		this.#projection = Matrix4.IDENTITY;
 
-		this.#projectionType = ProjectionType.None;
-
-		this.#wvp = _createWVP(this.#world, this.#view, this.#projection);
+		this.#wvp = Matrix4.IDENTITY;
 	}
 
 	public createOrthographic(
@@ -83,8 +76,8 @@ export default class Camera {
 		this.#height = height;
 		this.#near = near === undefined ? 0 : near;
 		this.#far = far === undefined ? 0 : far;
-
 		this.#projectionType = ProjectionType.Orthographic;
+
 		this.#projection = Matrix4.createOrthographic(
 			this.#width,
 			this.#height,
@@ -175,6 +168,14 @@ export default class Camera {
 		this.#up.z = z;
 
 		this.#view = Matrix4.createLookAt(this.#position, this.#target, this.#up);
+
+		return this;
+	}
+
+	public setWorld(transform: Matrix4) {
+		this.#world = transform;
+
+		this.#wvp = _createWVP(this.#world, this.#view, this.#projection);
 
 		return this;
 	}
