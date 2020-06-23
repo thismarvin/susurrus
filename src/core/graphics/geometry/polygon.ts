@@ -23,8 +23,6 @@ const _attributeSchema = new Graphics.AttributeSchema([
 ]);
 
 export default abstract class Polygon {
-	public geometryData: GeometryData | null;
-
 	//#region Getters and Setters
 	public get mesh() {
 		return this.#mesh;
@@ -153,6 +151,7 @@ export default abstract class Polygon {
 
 	#mesh: Graphics.Mesh;
 	#model: Graphics.VertexBuffer | null;
+	#geometryData: GeometryData | null;
 	#effect: Graphics.Effect | null;
 
 	#x: number;
@@ -179,7 +178,7 @@ export default abstract class Polygon {
 	) {
 		this.#mesh = mesh;
 
-		this.geometryData = null;
+		this.#geometryData = null;
 		this.#model = null;
 
 		this.#x = x;
@@ -200,12 +199,22 @@ export default abstract class Polygon {
 		this.#effect = null;
 	}
 
+	public attachGeometry(geometry: GeometryData) {
+		this.#geometryData = geometry;
+
+		return this;
+	}
+
 	public attachEffect(effect: Graphics.Effect) {
 		this.#effect = effect;
+
+		return this;
 	}
 
 	public createGeometry(graphics: Graphics.GraphicsManager) {
-		this.geometryData = new GeometryData(graphics, this.mesh);
+		this.#geometryData = new GeometryData(graphics, this.mesh);
+
+		return this;
 	}
 
 	public createModel(graphics: Graphics.GraphicsManager) {
@@ -226,6 +235,8 @@ export default abstract class Polygon {
 		);
 
 		this.updateBuffer();
+
+		return this;
 	}
 
 	public calculateTransform() {
@@ -264,7 +275,7 @@ export default abstract class Polygon {
 
 	public draw(graphics: Graphics.GraphicsManager, camera: Camera) {
 		if (
-			this.geometryData === null ||
+			this.#geometryData === null ||
 			this.#model === null ||
 			this.#effect === null
 		) {
@@ -285,14 +296,14 @@ export default abstract class Polygon {
 
 		graphics.begin(this.#effect);
 
-		graphics.setVertexBuffers([this.geometryData.vertexBuffer, this.#model]);
-		graphics.setIndexBuffer(this.geometryData.indexBuffer);
+		graphics.setVertexBuffers([this.#geometryData.vertexBuffer, this.#model]);
+		graphics.setIndexBuffer(this.#geometryData.indexBuffer);
 
 		graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
 
 		graphics.drawElements(
 			Graphics.DrawMode.TRIANGLES,
-			this.geometryData.totalTriangles,
+			this.#geometryData.totalTriangles,
 			0
 		);
 

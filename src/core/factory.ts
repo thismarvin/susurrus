@@ -32,17 +32,28 @@ export default class Factory {
 		}
 		if (this.#sharedPolygonEffect === null) {
 			throw new Error(
-				"Something went wrong! Could not create shared PolygonEffect."
+				"Something unexpected happen! Could not create shared PolygonEffect."
 			);
 		}
 
-		const circle = new Circle(x, y, radius);
-		circle.attachEffect(this.#sharedPolygonEffect);
-		//@ts-ignore
-		circle.geometryData = this.#theater.geometryManager.getGeometry(
+		if (this.#theater.geometryManager === null) {
+			throw new Error(
+				"Something unexpected happen! The Theater's GeometryManager was not initialized."
+			);
+		}
+
+		const geometry = this.#theater.geometryManager.getGeometry(
 			"Susurrus_Circle"
 		);
-		circle.createModel(this.#graphics);
+
+		if (geometry === undefined) {
+			throw new Error("Could not find geometry.");
+		}
+
+		const circle = new Circle(x, y, radius)
+			.attachEffect(this.#sharedPolygonEffect)
+			.attachGeometry(geometry)
+			.createModel(this.#graphics);
 
 		return circle;
 	}
@@ -55,17 +66,28 @@ export default class Factory {
 		}
 		if (this.#sharedPolygonEffect === null) {
 			throw new Error(
-				"Something went wrong! Could not create shared PolygonEffect."
+				"Something unexpected happen! Could not create shared PolygonEffect."
 			);
 		}
 
-		const quad = new Quad(x, y, width, height);
-		quad.attachEffect(this.#sharedPolygonEffect);
-		//@ts-ignore
-		quad.geometryData = this.#theater.geometryManager.getGeometry(
+		if (this.#theater.geometryManager === null) {
+			throw new Error(
+				"Something unexpected happen! The Theater's GeometryManager was not initialized."
+			);
+		}
+
+		const geometry = this.#theater.geometryManager.getGeometry(
 			"Susurrus_Square"
 		);
-		quad.createModel(this.#graphics);
+
+		if (geometry === undefined) {
+			throw new Error("Could not find geometry.");
+		}
+
+		const quad = new Quad(x, y, width, height)
+			.attachEffect(this.#sharedPolygonEffect)
+			.attachGeometry(geometry)
+			.createModel(this.#graphics);
 
 		return quad;
 	}
