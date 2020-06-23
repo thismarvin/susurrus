@@ -24,14 +24,6 @@ const _attributeSchema = new Graphics.AttributeSchema([
 
 export default abstract class Polygon {
 	//#region Getters and Setters
-	public get mesh() {
-		return this.#mesh;
-	}
-	public set mesh(value) {
-		this.#meshChanged = true;
-		this.#mesh = value;
-	}
-
 	get x() {
 		return this.#x;
 	}
@@ -53,6 +45,18 @@ export default abstract class Polygon {
 		}
 
 		this.#y = value;
+		this.#transformChanged = true;
+	}
+
+	get z() {
+		return this.#z;
+	}
+	set z(value) {
+		if (value === this.#z) {
+			return;
+		}
+
+		this.#z = value;
 		this.#transformChanged = true;
 	}
 
@@ -199,6 +203,23 @@ export default abstract class Polygon {
 		this.#effect = null;
 	}
 
+	public setPosition(x: number, y: number, z: number) {
+		this.#x = x;
+		this.#y = y;
+		this.#z = z;
+
+		this.#transformChanged = true;
+
+		return this;
+	}
+
+	public attachMesh(mesh: Graphics.Mesh) {
+		this.#mesh = mesh;
+		this.#meshChanged = true;
+
+		return this;
+	}
+
 	public attachGeometry(geometry: GeometryData) {
 		this.#geometryData = geometry;
 
@@ -211,13 +232,21 @@ export default abstract class Polygon {
 		return this;
 	}
 
+	/**
+	 * Creates a new GeometryData object from the prexsisting mesh, and attaches it to the polygon.
+	 * @param graphics The current theater's GraphicsManager.
+	 */
 	public createGeometry(graphics: Graphics.GraphicsManager) {
-		this.#geometryData = new GeometryData(graphics, this.mesh);
+		this.#geometryData = new GeometryData(graphics, this.#mesh);
 
 		return this;
 	}
 
-	public createModel(graphics: Graphics.GraphicsManager) {
+	/**
+	 * Creates a buffer that handles model specific transformations and properties.
+	 * @param graphics The current theater's GraphicsManager.
+	 */
+	public createModelBuffer(graphics: Graphics.GraphicsManager) {
 		this.#meshChanged = false;
 		// I hate this but for some reason Blink doesnt bode well with VertexUsage.DYNAMIC.
 		// Refer to this issue for more info: https://github.com/thismarvin/susurrus/issues/5
@@ -234,11 +263,14 @@ export default abstract class Polygon {
 			1
 		);
 
-		this.updateBuffer();
+		this.updateModelBuffer();
 
 		return this;
 	}
 
+	/**
+	 * Creates and returns a 4x4 matrix that represents all of the polygon's transformations.
+	 */
 	public calculateTransform() {
 		const scale = Maths.Matrix4.createScale(
 			this.width * this.scale.x,
@@ -262,6 +294,9 @@ export default abstract class Polygon {
 		return mul(mul(mul(scale, preTranslation), rotation), postTranslation);
 	}
 
+	/**
+	 * Updates the model buffer to reflect any new changes.
+	 */
 	public applyChanges() {
 		if (this.#model === null) {
 			throw new TypeError(
@@ -270,7 +305,7 @@ export default abstract class Polygon {
 		}
 
 		this.#transformChanged = false;
-		this.updateBuffer();
+		this.updateModelBuffer();
 	}
 
 	public draw(graphics: Graphics.GraphicsManager, camera: Camera) {
@@ -310,7 +345,7 @@ export default abstract class Polygon {
 		graphics.end();
 	}
 
-	private updateBuffer() {
+	private updateModelBuffer() {
 		if (this.#model === null) {
 			return;
 		}

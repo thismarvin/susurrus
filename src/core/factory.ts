@@ -53,7 +53,7 @@ export default class Factory {
 		const circle = new Circle(x, y, radius)
 			.attachEffect(this.#sharedPolygonEffect)
 			.attachGeometry(geometry)
-			.createModel(this.#graphics);
+			.createModelBuffer(this.#graphics);
 
 		return circle;
 	}
@@ -87,7 +87,7 @@ export default class Factory {
 		const quad = new Quad(x, y, width, height)
 			.attachEffect(this.#sharedPolygonEffect)
 			.attachGeometry(geometry)
-			.createModel(this.#graphics);
+			.createModelBuffer(this.#graphics);
 
 		return quad;
 	}
