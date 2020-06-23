@@ -334,7 +334,7 @@ export default abstract class Polygon {
 		graphics.setVertexBuffers([this.#geometryData.vertexBuffer, this.#model]);
 		graphics.setIndexBuffer(this.#geometryData.indexBuffer);
 
-		graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
+		graphics.setUniform("worldViewProjection", camera.wvp.data);
 
 		graphics.drawElements(
 			Graphics.DrawMode.TRIANGLES,
