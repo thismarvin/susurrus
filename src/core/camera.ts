@@ -148,6 +148,7 @@ export default class Camera {
 		this.#position.z = z;
 
 		this.#view = Matrix4.createLookAt(this.#position, this.#target, this.#up);
+		this.#wvp = _createWVP(this.#world, this.#view, this.#projection);
 
 		return this;
 	}
@@ -158,6 +159,7 @@ export default class Camera {
 		this.#target.z = z;
 
 		this.#view = Matrix4.createLookAt(this.#position, this.#target, this.#up);
+		this.#wvp = _createWVP(this.#world, this.#view, this.#projection);
 
 		return this;
 	}
@@ -168,6 +170,7 @@ export default class Camera {
 		this.#up.z = z;
 
 		this.#view = Matrix4.createLookAt(this.#position, this.#target, this.#up);
+		this.#wvp = _createWVP(this.#world, this.#view, this.#projection);
 
 		return this;
 	}
