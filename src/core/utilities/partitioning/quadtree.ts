@@ -76,7 +76,7 @@ export default class Quadtree<T extends IPartionable> extends Partitioner<T> {
 		return result;
 	}
 
-	public insert(entry: T): boolean {
+	public add(entry: T): boolean {
 		if (!entry.boundary.intersects(this.boundary)) {
 			return false;
 		}
