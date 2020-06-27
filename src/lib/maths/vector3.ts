@@ -120,18 +120,20 @@ export default class Vector3 {
 	/**
 	 * Converts spherical coordinates into Cartesian coordinates (represented as a Vector3).
 	 * @param radius The distance between the origin and the new point.
-	 * @param inclination The angle between the x and y axis (longitude).
-	 * @param azimuth The angle between the x and z axis (latitude).
+	 * @param inclination The angle between the point and y axis (latitude).
+	 * @param azimuth The angle between the point and z axis (longitude).
 	 */
 	public static sphericalToCartesian(
 		radius: number,
 		inclination: number,
 		azimuth: number
 	) {
+		// Normally azimuth and inclination would be swapped in this formula.
+		// However, because of OpenGL's coordinate system, they were switched around for the sake of convenience.
 		return new Vector3(
-			radius * Math.sin(inclination) * Math.cos(azimuth),
-			radius * Math.sin(inclination) * Math.sin(azimuth),
-			radius * Math.cos(inclination)
+			radius * Math.sin(azimuth) * Math.cos(inclination),
+			radius * Math.sin(azimuth) * Math.sin(inclination),
+			radius * Math.cos(azimuth)
 		);
 	}
 
