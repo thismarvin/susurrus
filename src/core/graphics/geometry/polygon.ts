@@ -154,7 +154,7 @@ export default abstract class Polygon {
 	//#endregion
 
 	#mesh: Graphics.Mesh;
-	#model: Graphics.VertexBuffer | null;
+	#modelBuffer: Graphics.VertexBuffer | null;
 	#geometryData: GeometryData | null;
 	#effect: Graphics.Effect | null;
 
@@ -183,7 +183,7 @@ export default abstract class Polygon {
 		this.#mesh = mesh;
 
 		this.#geometryData = null;
-		this.#model = null;
+		this.#modelBuffer = null;
 
 		this.#x = x;
 		this.#y = y;
@@ -255,7 +255,7 @@ export default abstract class Polygon {
 			modelLength *= this.#mesh.totalVertices;
 		}
 
-		this.#model = new Graphics.VertexBuffer(
+		this.#modelBuffer = new Graphics.VertexBuffer(
 			graphics,
 			_attributeSchema,
 			modelLength,
@@ -298,7 +298,7 @@ export default abstract class Polygon {
 	 * Updates the model buffer to reflect any new changes.
 	 */
 	public applyChanges() {
-		if (this.#model === null) {
+		if (this.#modelBuffer === null) {
 			throw new TypeError(
 				"A model has not been created; cannot apply changes."
 			);
@@ -311,7 +311,7 @@ export default abstract class Polygon {
 	public draw(graphics: Graphics.GraphicsManager, camera: Camera) {
 		if (
 			this.#geometryData === null ||
-			this.#model === null ||
+			this.#modelBuffer === null ||
 			this.#effect === null
 		) {
 			return;
@@ -329,24 +329,21 @@ export default abstract class Polygon {
 			);
 		}
 
-		graphics.begin(this.#effect);
-
-		graphics.setVertexBuffers([this.#geometryData.vertexBuffer, this.#model]);
-		graphics.setIndexBuffer(this.#geometryData.indexBuffer);
-
-		graphics.setUniform("worldViewProjection", camera.wvp.data);
-
-		graphics.drawElements(
-			Graphics.DrawMode.TRIANGLES,
-			this.#geometryData.totalTriangles,
-			0
-		);
-
-		graphics.end();
+		graphics
+			.begin(this.#effect)
+			.setVertexBuffer(this.#geometryData.vertexBuffer, this.#modelBuffer)
+			.setIndexBuffer(this.#geometryData.indexBuffer)
+			.setUniform("worldViewProjection", camera.wvp.data)
+			.drawElements(
+				Graphics.DrawMode.TRIANGLES,
+				this.#geometryData.totalTriangles,
+				0
+			)
+			.end();
 	}
 
 	private updateModelBuffer() {
-		if (this.#model === null) {
+		if (this.#modelBuffer === null) {
 			return;
 		}
 
@@ -369,6 +366,6 @@ export default abstract class Polygon {
 		bufferData = bufferData.concat(this.#rotation);
 		bufferData = bufferData.concat(this.#color.toArray());
 
-		this.#model.setData(bufferData);
+		this.#modelBuffer.setData(bufferData);
 	}
 }

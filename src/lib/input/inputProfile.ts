@@ -35,6 +35,8 @@ export default class InputProfile {
 			mouseButtons
 		);
 		this.#inputMappings.set(inputMapping.name, inputMapping);
+
+		return this;
 	}
 
 	public getMapping(name: string) {
@@ -71,5 +73,7 @@ export default class InputProfile {
 		}
 
 		this.#inputMappings.delete(formattedName);
+
+		return this;
 	}
 }

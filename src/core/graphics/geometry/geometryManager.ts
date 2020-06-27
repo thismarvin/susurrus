@@ -17,6 +17,8 @@ export default class GeometryManager {
 
 	public registerGeometry(name: string, geometry: GeometryData) {
 		this.#geometry.register(name, geometry);
+
+		return this;
 	}
 
 	public getGeometry(name: string) {
@@ -25,6 +27,8 @@ export default class GeometryManager {
 
 	public removeGeometry(name: string) {
 		this.#geometry.remove(name);
+
+		return this;
 	}
 
 	private createDefaults() {
