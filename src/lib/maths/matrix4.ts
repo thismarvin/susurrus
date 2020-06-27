@@ -78,6 +78,10 @@ export default class Matrix4 {
 		this.#data = temp;
 	}
 
+	public toString() {
+		return `(${this.data[0]}, ${this.data[1]}, ${this.data[2]}, ${this.data[3]}) (${this.data[4]}, ${this.data[5]}, ${this.data[6]}, ${this.data[7]}) (${this.data[8]}, ${this.data[9]}, ${this.data[10]}, ${this.data[11]}) (${this.data[12]}, ${this.data[13]}, ${this.data[14]}, ${this.data[15]})`;
+	}
+
 	//#region Math
 	public static add(a: Matrix4, b: Matrix4) {
 		const temp = a.data.slice(0);
