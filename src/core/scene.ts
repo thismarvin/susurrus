@@ -27,6 +27,7 @@ export default abstract class Scene {
 	 * @param deltaTime The total amount of time, in seconds, that has elapsed between updates.
 	 */
 	public abstract update(deltaTime: number): void;
+
 	/**
 	 * A method called once every frame, after update, that is typically used to present visuals.
 	 * @param deltaTime The total amount of time, in seconds, that has elapsed between updates.

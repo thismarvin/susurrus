@@ -59,12 +59,12 @@ export default class Matrix {
 		let string = "";
 
 		for (let i = 0; i < this.#data.length; i += this.columns) {
-			string += `( ${this.#data[i]}`;
+			string += `(${this.#data[i]}`;
 			for (let j = 1; j < this.columns; j++) {
 				string += ` ${this.#data[i + j]}`;
 			}
 
-			string += " )";
+			string += ")";
 
 			if (i !== this.#data.length - this.columns) {
 				string += " ";

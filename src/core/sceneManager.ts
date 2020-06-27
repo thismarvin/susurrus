@@ -1,17 +1,18 @@
 // eslint-disable-next-line no-unused-vars
-import * as Graphics from "../lib/graphics.js";
+import { GraphicsManager } from "../lib/graphics.js";
+import { ResourceHandler } from "../lib/utilities.js";
 // eslint-disable-next-line no-unused-vars
 import Scene from "./scene.js";
 
 export default class SceneManager {
-	public readonly scenes: Map<string, Scene>;
+	public readonly scenes: ResourceHandler<Scene>;
 
 	#transitionInProgress: boolean;
 	#currentScene: Scene | null;
 	#nextScene: Scene | null;
 
 	constructor() {
-		this.scenes = new Map<string, Scene>();
+		this.scenes = new ResourceHandler<Scene>();
 
 		this.#transitionInProgress = false;
 		this.#currentScene = null;
@@ -25,22 +26,22 @@ export default class SceneManager {
 		});
 	}
 
-	public registerScene(scene: Scene) {
-		if (this.scenes.has(scene.name)) {
-			throw new TypeError(
-				"A scene with that name has already been registered."
-			);
+	public register(...scenes: Scene[]) {
+		for (let i = 0; i < scenes.length; i++) {
+			this.scenes.register(scenes[i].name, scenes[i]);
 		}
 
-		this.scenes.set(scene.name, scene);
+		return this;
 	}
 
-	public queueScene(name: string) {
-		if (!this.scenes.has(name)) {
-			throw new TypeError("A scene with that name does not exist.");
+	public queue(name: string) {
+		const scene = this.scenes.get(name);
+
+		if (scene === undefined) {
+			throw new Error("Something went wrong!");
 		}
 
-		this.#nextScene = this.scenes.get(name) as Scene;
+		this.#nextScene = scene;
 		this.#transitionInProgress = true;
 	}
 
@@ -49,7 +50,7 @@ export default class SceneManager {
 		this.#currentScene?.update(deltaTime);
 	}
 
-	public draw(graphics: Graphics.GraphicsManager, deltaTime: number) {
+	public draw(graphics: GraphicsManager, deltaTime: number) {
 		this.#currentScene?.draw(graphics, deltaTime);
 	}
 

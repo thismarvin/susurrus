@@ -41,6 +41,8 @@ export default class InputHandler {
 
 	public loadProfile(profile: InputProfile) {
 		this.#inputProfile = profile;
+
+		return this;
 	}
 
 	public pressed(name: string) {

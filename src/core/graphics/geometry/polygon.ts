@@ -23,17 +23,7 @@ const _attributeSchema = new Graphics.AttributeSchema([
 ]);
 
 export default abstract class Polygon {
-	public geometryData: GeometryData | null;
-
 	//#region Getters and Setters
-	public get mesh() {
-		return this.#mesh;
-	}
-	public set mesh(value) {
-		this.#meshChanged = true;
-		this.#mesh = value;
-	}
-
 	get x() {
 		return this.#x;
 	}
@@ -55,6 +45,18 @@ export default abstract class Polygon {
 		}
 
 		this.#y = value;
+		this.#transformChanged = true;
+	}
+
+	get z() {
+		return this.#z;
+	}
+	set z(value) {
+		if (value === this.#z) {
+			return;
+		}
+
+		this.#z = value;
 		this.#transformChanged = true;
 	}
 
@@ -152,7 +154,8 @@ export default abstract class Polygon {
 	//#endregion
 
 	#mesh: Graphics.Mesh;
-	#model: Graphics.VertexBuffer | null;
+	#modelBuffer: Graphics.VertexBuffer | null;
+	#geometryData: GeometryData | null;
 	#effect: Graphics.Effect | null;
 
 	#x: number;
@@ -179,8 +182,8 @@ export default abstract class Polygon {
 	) {
 		this.#mesh = mesh;
 
-		this.geometryData = null;
-		this.#model = null;
+		this.#geometryData = null;
+		this.#modelBuffer = null;
 
 		this.#x = x;
 		this.#y = y;
@@ -200,15 +203,50 @@ export default abstract class Polygon {
 		this.#effect = null;
 	}
 
+	public setPosition(x: number, y: number, z: number) {
+		this.#x = x;
+		this.#y = y;
+		this.#z = z;
+
+		this.#transformChanged = true;
+
+		return this;
+	}
+
+	public attachMesh(mesh: Graphics.Mesh) {
+		this.#mesh = mesh;
+		this.#meshChanged = true;
+
+		return this;
+	}
+
+	public attachGeometry(geometry: GeometryData) {
+		this.#geometryData = geometry;
+
+		return this;
+	}
+
 	public attachEffect(effect: Graphics.Effect) {
 		this.#effect = effect;
+
+		return this;
 	}
 
+	/**
+	 * Creates a new GeometryData object from the prexsisting mesh, and attaches it to the polygon.
+	 * @param graphics The current theater's GraphicsManager.
+	 */
 	public createGeometry(graphics: Graphics.GraphicsManager) {
-		this.geometryData = new GeometryData(graphics, this.mesh);
+		this.#geometryData = new GeometryData(graphics, this.#mesh);
+
+		return this;
 	}
 
-	public createModel(graphics: Graphics.GraphicsManager) {
+	/**
+	 * Creates a buffer that handles model specific transformations and properties.
+	 * @param graphics The current theater's GraphicsManager.
+	 */
+	public createModelBuffer(graphics: Graphics.GraphicsManager) {
 		this.#meshChanged = false;
 		// I hate this but for some reason Blink doesnt bode well with VertexUsage.DYNAMIC.
 		// Refer to this issue for more info: https://github.com/thismarvin/susurrus/issues/5
@@ -217,7 +255,7 @@ export default abstract class Polygon {
 			modelLength *= this.#mesh.totalVertices;
 		}
 
-		this.#model = new Graphics.VertexBuffer(
+		this.#modelBuffer = new Graphics.VertexBuffer(
 			graphics,
 			_attributeSchema,
 			modelLength,
@@ -225,9 +263,14 @@ export default abstract class Polygon {
 			1
 		);
 
-		this.updateBuffer();
+		this.updateModelBuffer();
+
+		return this;
 	}
 
+	/**
+	 * Creates and returns a 4x4 matrix that represents all of the polygon's transformations.
+	 */
 	public calculateTransform() {
 		const scale = Maths.Matrix4.createScale(
 			this.width * this.scale.x,
@@ -251,21 +294,24 @@ export default abstract class Polygon {
 		return mul(mul(mul(scale, preTranslation), rotation), postTranslation);
 	}
 
+	/**
+	 * Updates the model buffer to reflect any new changes.
+	 */
 	public applyChanges() {
-		if (this.#model === null) {
+		if (this.#modelBuffer === null) {
 			throw new TypeError(
 				"A model has not been created; cannot apply changes."
 			);
 		}
 
 		this.#transformChanged = false;
-		this.updateBuffer();
+		this.updateModelBuffer();
 	}
 
 	public draw(graphics: Graphics.GraphicsManager, camera: Camera) {
 		if (
-			this.geometryData === null ||
-			this.#model === null ||
+			this.#geometryData === null ||
+			this.#modelBuffer === null ||
 			this.#effect === null
 		) {
 			return;
@@ -283,24 +329,21 @@ export default abstract class Polygon {
 			);
 		}
 
-		graphics.begin(this.#effect);
-
-		graphics.setVertexBuffers([this.geometryData.vertexBuffer, this.#model]);
-		graphics.setIndexBuffer(this.geometryData.indexBuffer);
-
-		graphics.setUniform("worldViewProjection", camera.worldViewProjection.data);
-
-		graphics.drawElements(
-			Graphics.DrawMode.TRIANGLES,
-			this.geometryData.totalTriangles,
-			0
-		);
-
-		graphics.end();
+		graphics
+			.begin(this.#effect)
+			.setVertexBuffer(this.#geometryData.vertexBuffer, this.#modelBuffer)
+			.setIndexBuffer(this.#geometryData.indexBuffer)
+			.setUniform("worldViewProjection", camera.wvp.data)
+			.drawElements(
+				Graphics.DrawMode.TRIANGLES,
+				this.#geometryData.totalTriangles,
+				0
+			)
+			.end();
 	}
 
-	private updateBuffer() {
-		if (this.#model === null) {
+	private updateModelBuffer() {
+		if (this.#modelBuffer === null) {
 			return;
 		}
 
@@ -323,6 +366,6 @@ export default abstract class Polygon {
 		bufferData = bufferData.concat(this.#rotation);
 		bufferData = bufferData.concat(this.#color.toArray());
 
-		this.#model.setData(bufferData);
+		this.#modelBuffer.setData(bufferData);
 	}
 }

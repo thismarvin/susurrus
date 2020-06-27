@@ -68,6 +68,8 @@ export default class Graphics {
 		if (this.#drawWidth < 0) {
 			this.setResolution(width, height);
 		}
+
+		return this;
 	}
 
 	public setResolution(width: number, height: number) {
@@ -87,6 +89,8 @@ export default class Graphics {
 				this.#scale = this.gl.canvas.width / this.#drawWidth;
 			}
 		}
+
+		return this;
 	}
 
 	public clear(color: Color) {
@@ -96,56 +100,58 @@ export default class Graphics {
 	public begin(effect: Effect) {
 		this.#currentProgram = effect.program;
 		this.gl.useProgram(this.#currentProgram);
+
+		return this;
 	}
 
-	public setVertexBuffer(buffer: VertexBuffer) {
+	public setVertexBuffer(...buffers: VertexBuffer[]) {
 		if (this.#currentProgram === null) {
 			throw new Error(
 				"'begin(effect)' must be called before setting a VertexBuffer."
 			);
 		}
 
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer.buffer);
+		for (let i = 0; i < buffers.length; i++) {
+			this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffers[i].buffer);
 
-		for (let element of buffer.attributeSchema.elements) {
-			const index = this.gl.getAttribLocation(
-				this.#currentProgram,
-				element.name
-			);
-
-			if (index < 0) {
-				throw new Error(
-					`The current program does not have a(n) '${element.name}' attribute.`
+			for (let element of buffers[i].attributeSchema.elements) {
+				const index = this.gl.getAttribLocation(
+					this.#currentProgram,
+					element.name
 				);
-			}
 
-			this.gl.enableVertexAttribArray(index);
-			this.gl.vertexAttribPointer(
-				index,
-				element.size,
-				element.type,
-				false,
-				element.stride,
-				element.offset
-			);
+				if (index < 0) {
+					throw new Error(
+						`The current program does not have a(n) '${element.name}' attribute.`
+					);
+				}
 
-			if (buffer.instanceFrequency > 0) {
-				this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(
+				this.gl.enableVertexAttribArray(index);
+				this.gl.vertexAttribPointer(
 					index,
-					buffer.instanceFrequency
+					element.size,
+					element.type,
+					false,
+					element.stride,
+					element.offset
 				);
+
+				if (buffers[i].instanceFrequency > 0) {
+					this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(
+						index,
+						buffers[i].instanceFrequency
+					);
+				}
 			}
 		}
-	}
 
-	public setVertexBuffers(buffers: VertexBuffer[]) {
-		for (let buffer of buffers) {
-			this.setVertexBuffer(buffer);
-		}
+		return this;
 	}
 
 	public setIndexBuffer(buffer: IndexBuffer) {
 		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, buffer.buffer);
+
+		return this;
 	}
 
 	// ! This literally only works for setting the wvp matrix... 😞
@@ -159,10 +165,14 @@ export default class Graphics {
 
 		const location = this.gl.getUniformLocation(this.#currentProgram, uniform);
 		this.gl.uniformMatrix4fv(location, false, value);
+
+		return this;
 	}
 
 	public drawArrays(mode: number, offset: number, primitiveCount: number) {
 		this.gl.drawArrays(mode, offset, primitiveCount);
+
+		return this;
 	}
 
 	public drawElements(mode: number, totalTriangles: number, offset: number) {
@@ -172,6 +182,8 @@ export default class Graphics {
 			this.gl.UNSIGNED_SHORT,
 			offset
 		);
+
+		return this;
 	}
 
 	public drawInstancedElements(
@@ -187,6 +199,8 @@ export default class Graphics {
 			offset,
 			primitiveCount
 		);
+
+		return this;
 	}
 
 	public deleteBuffer(buffer: Buffer) {
@@ -216,6 +230,8 @@ export default class Graphics {
 		}
 
 		this.gl.deleteBuffer(buffer.buffer);
+
+		return this;
 	}
 
 	public end() {

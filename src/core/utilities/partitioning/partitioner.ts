@@ -27,10 +27,20 @@ export default abstract class Partitioner<T extends IPartionable> {
 	 * Adds a given IPartitionable entry to the partitioner.
 	 * @param entry The IPartitionable item to add to the partitioner.
 	 */
-	public abstract insert(entry: T): boolean;
+	public abstract add(entry: T): boolean;
 
 	/**
 	 * Removes all entries that were inside the partitioner.
 	 */
 	public abstract clear(): void;
+
+	/**
+	 * Adds a list of IPartitionable entries to the partitioner.
+	 * @param entries The list of IPartitionable entries to add to the partitioner.
+	 */
+	public addRange(entries: T[]) {
+		for (let i = 0; i < entries.length; i++) {
+			this.add(entries[i]);
+		}
+	}
 }

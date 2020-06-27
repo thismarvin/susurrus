@@ -100,24 +100,41 @@ export default class Theater {
 	}
 
 	/**
-	 * Creates and appends a new HTMLCanvas to an existing HTMLElement.
-	 * Moreover, a valid GraphicsManager is created and initialized.
-	 * @param elementID The id of an existing HTMLElement on the current page.
-	 * @param canvasID The id the new HTMLCanvas should have.
+	 * Finds an HTMLElement with a given id, and sets the element as the parent of the theater.
+	 * Any HTMLElements created using this theater will be appended to said parent.
+	 * @param id The id of an existing HTMLElement on the current page.
 	 */
-	public appendCanvas(elementID: string, canvasID?: string) {
-		const element = document.getElementById(elementID);
+	public setParent(id: string) {
+		const element = document.getElementById(id);
 
 		if (element === null) {
-			throw new TypeError(
-				`Could not find an element with an id of '${elementID}'.`
-			);
+			throw new TypeError(`Could not find an element with an id of '${id}'.`);
 		}
 
 		this.#parent = element;
+
+		return this;
+	}
+
+	/**
+	 * Creates and appends a new HTMLCanvas to the theater's parent HTMLElement.
+	 * Moreover, a valid GraphicsManager is created and initialized.
+	 * @param id The id the new HTMLCanvas should have.
+	 * @param width The width of the new HTMLCanvas.
+	 * @param height The height of the new HTMLCanvas.
+	 */
+	public createCanvas(id: string, width: number, height: number) {
+		if (this.#parent === null) {
+			throw new Error(
+				"A parent element does not exist; a canvas cannot be created. Make sure to call that 'setParent(id)' was called."
+			);
+		}
+
 		this.#canvas = document.createElement("canvas");
+		this.#canvas.id = id;
+		this.#canvas.width = width;
+		this.#canvas.height = height;
 		this.#parent.appendChild(this.#canvas);
-		this.#canvas.id = canvasID === undefined ? `${elementID}-canvas` : canvasID;
 
 		this.#graphics = new Graphics.GraphicsManager(
 			Graphics.WebGL.getWebGLContext(this.#canvas)
