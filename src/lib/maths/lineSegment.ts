@@ -49,6 +49,7 @@ export default class LineSegment {
 
 	public intersects(lineSegment: LineSegment) {
 		const result = this.getIntersectionInformation(lineSegment);
+
 		return result === null ? false : result.intersected;
 	}
 }
