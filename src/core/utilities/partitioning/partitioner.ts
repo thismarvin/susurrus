@@ -34,7 +34,11 @@ export default abstract class Partitioner<T extends IPartionable> {
 	 */
 	public abstract clear(): void;
 
-	public addRange(...entries: T[]) {
+	/**
+	 * Adds a list of IPartitionable entries to the partitioner.
+	 * @param entries The list of IPartitionable entries to add to the partitioner.
+	 */
+	public addRange(entries: T[]) {
 		for (let i = 0; i < entries.length; i++) {
 			this.add(entries[i]);
 		}
