@@ -37,6 +37,10 @@ export default class Theater {
 		return this.#totalElapsedTime;
 	}
 
+	public get args() {
+		return this.#args;
+	}
+
 	#parent: HTMLElement | null;
 	#canvas: HTMLCanvasElement | null;
 	#graphics: Graphics.GraphicsManager | null;
@@ -46,6 +50,8 @@ export default class Theater {
 	#initialized: boolean;
 	#inFocus: boolean;
 	#totalElapsedTime: number;
+
+	#args: string[];
 
 	constructor() {
 		this.#parent = null;
@@ -64,6 +70,8 @@ export default class Theater {
 		this.#initialized = false;
 		this.#inFocus = false;
 		this.#totalElapsedTime = 0;
+
+		this.#args = [];
 
 		window.addEventListener("mousedown", (event) => {
 			if (this.#canvas === null) {
@@ -89,9 +97,15 @@ export default class Theater {
 
 	/**
 	 * Jumpstarts the runtime of your project.
+	 * @param args An optional string that serves as command-line arguments for the theater.
 	 */
-	public run() {
+	public run(args?: string) {
 		if (!this.#initialized) {
+			if (args !== undefined) {
+				const test = args.trim().split(" ");
+				this.#args = test;
+			}
+
 			this.initialize();
 			this.#initialized = true;
 		}
