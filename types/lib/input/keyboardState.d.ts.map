@@ -1,0 +1,1 @@
+{"version":3,"file":"keyboardState.d.ts","sourceRoot":"","sources":["../../../src/lib/input/keyboardState.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,aAAa;IACjC,SAAgB,KAAK,EAAE,aAAa,CAAC;IACrC,SAAgB,WAAW,EAAE,GAAG,CAAC,MAAM,CAAC,CAAC;gBAE7B,KAAK,EAAE,aAAa,EAAE,WAAW,EAAE,GAAG,CAAC,MAAM,CAAC;CAW1D"}

@@ -4,17 +4,17 @@
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.esm.js",
-  "types": "./build/susurrus.d.ts",
+  "types": "./types/core/susurrus.d.ts",
   "files": [
     "build",
     "dist"
   ],
   "scripts": {
-    "pretty": "prettier --use-tabs --write src/**/*.ts",
-    "lint": "eslint ./src/** --ext .ts",
-    "devbuild": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
-    "build": "rimraf ./build && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.{js,ts}",
+    "build": "rimraf ./build && rimraf ./types && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.{js,ts} && prettier --use-tabs --write types/**/*.ts",
+    "build:dev": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
     "dist": "rimraf ./dist && rollup -c ./rollup.config.js",
+    "lint": "eslint ./src/** --ext .ts",
+    "pretty": "prettier --use-tabs --write src/**/*.ts",
     "release": "npm run build && npm run dist"
   },
   "repository": {

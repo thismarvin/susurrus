@@ -1,0 +1,1 @@
+{"version":3,"file":"polygonEffect.d.ts","sourceRoot":"","sources":["../../../../src/core/graphics/geometry/polygonEffect.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,QAAQ,MAAM,0BAA0B,CAAC;AAGrD,MAAM,CAAC,OAAO,OAAO,aAAc,SAAQ,QAAQ,CAAC,MAAM;gBAC7C,QAAQ,EAAE,QAAQ,CAAC,eAAe;CAG9C"}

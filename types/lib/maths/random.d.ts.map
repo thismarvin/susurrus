@@ -1,0 +1,1 @@
+{"version":3,"file":"random.d.ts","sourceRoot":"","sources":["../../../src/lib/maths/random.ts"],"names":[],"mappings":"AAeA;;GAEG;AACH,MAAM,CAAC,OAAO,OAAO,MAAM;;IAG1B;;;;OAIG;gBACS,IAAI,CAAC,EAAE,MAAM;IAUzB;;OAEG;IACI,IAAI;IAIX;;;;OAIG;IACI,KAAK,CAAC,QAAQ,EAAE,MAAM,EAAE,QAAQ,EAAE,MAAM;CAS/C"}

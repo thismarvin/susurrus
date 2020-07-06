@@ -1,0 +1,1 @@
+{"version":3,"file":"indexBuffer.d.ts","sourceRoot":"","sources":["../../../src/lib/graphics/indexBuffer.ts"],"names":[],"mappings":"AACA,OAAO,MAAM,MAAM,aAAa,CAAC;AAGjC,OAAO,QAAQ,MAAM,sBAAsB,CAAC;AAE5C,MAAM,CAAC,OAAO,OAAO,WAAY,SAAQ,MAAM;gBAClC,QAAQ,EAAE,QAAQ,EAAE,MAAM,EAAE,MAAM;CAM9C"}

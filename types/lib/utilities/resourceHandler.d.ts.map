@@ -1,0 +1,1 @@
+{"version":3,"file":"resourceHandler.d.ts","sourceRoot":"","sources":["../../../src/lib/utilities/resourceHandler.ts"],"names":[],"mappings":"AAIA,MAAM,CAAC,OAAO,OAAO,eAAe,CAAC,CAAC;;IACrC,IAAW,MAAM,WAEhB;IAED,IAAW,OAAO,wCAEjB;;IAQM,QAAQ,CAAC,IAAI,EAAE,MAAM,EAAE,KAAK,EAAE,CAAC;IAY/B,GAAG,CAAC,IAAI,EAAE,MAAM;IAUhB,MAAM,CAAC,IAAI,EAAE,MAAM;CAW1B"}

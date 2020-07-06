@@ -1,0 +1,1 @@
+{"version":3,"file":"IPartitionable.d.ts","sourceRoot":"","sources":["../../../../src/core/utilities/partitioning/IPartitionable.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,SAAS,EAAE,MAAM,uBAAuB,CAAC;AAElD,MAAM,CAAC,OAAO,WAAW,YAAY;IACpC,UAAU,EAAE,MAAM,CAAC;IACnB,QAAQ,EAAE,SAAS,CAAC;CACpB"}
