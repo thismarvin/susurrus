@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rimraf ./build && rimraf ./types && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.{js,ts} && prettier --use-tabs --write types/**/*.ts",
+    "build": "rimraf ./build && rimraf ./types && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.js && prettier --use-tabs --write types/**/*.ts",
     "build:dev": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
     "dist": "rimraf ./dist && rollup -c ./rollup.config.js",
     "lint": "eslint ./src/** --ext .ts",
