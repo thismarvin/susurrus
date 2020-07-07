@@ -10,10 +10,13 @@ export { DrawMode } from "../lib/graphics.js";
 export { Effect } from "../lib/graphics.js";
 export { IndexBuffer } from "../lib/graphics.js";
 export { Mesh } from "../lib/graphics.js";
+export { Texture2D } from "../lib/graphics.js";
 export { VertexBuffer } from "../lib/graphics.js";
 export { VertexUsage } from "../lib/graphics.js";
 
 export * as Palettes from "./graphics/palettes.js";
+export { default as Sprite } from "./graphics/sprite.js";
+export { default as SpriteEffect } from "./graphics/spriteEffect.js";
 
 export { default as PolygonEffect } from "./graphics/geometry/polygonEffect.js";
 export { default as GeometryData } from "./graphics/geometry/geometryData.js";
