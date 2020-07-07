@@ -169,6 +169,24 @@ export default class Graphics {
 		return this;
 	}
 
+	public setUniform2(uniform: string) {
+		if (this.#currentProgram === null) {
+			throw new Error("'begin(effect)' must be called before setting a NULL.");
+		}
+
+		const location = this.gl.getUniformLocation(this.#currentProgram, uniform);
+		this.gl.uniform1i(location, 0);
+
+		return this;
+	}
+
+	public setTexture(texture: WebGLTexture) {
+		this.gl.activeTexture(this.gl.TEXTURE0);
+		this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+
+		return this;
+	}
+
 	public drawArrays(mode: number, offset: number, primitiveCount: number) {
 		this.gl.drawArrays(mode, offset, primitiveCount);
 
