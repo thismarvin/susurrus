@@ -1,26 +1,37 @@
 const SPRITE_SHADERS = {
 	VERTEX: `
-        uniform mat4 worldViewProjection;
+		uniform mat4 worldViewProjection;
 
-				attribute vec3 a_position;
-				attribute vec2 a_textureCoord;
+		attribute vec3 a_vertexPosition;
+		attribute vec2 a_textureCoord;
+		attribute vec3 a_scale;
 
-        varying highp vec2 v_textureCoord;
+		varying highp vec2 v_textureCoord;
 
-        void main() {
-					gl_Position = worldViewProjection * vec4(a_position, 1);
+		mat4 createScale(vec3 scale) {
+			return mat4(
+					scale.x, 0, 0, 0,
+					0, scale.y, 0, 0,
+					0, 0, scale.z, 0,
+					0, 0, 0, 1
+			);
+		}
 
-          v_textureCoord = a_textureCoord;
-        }
-				`,
+		void main() {
+			mat4 model = createScale(a_scale);
+			gl_Position = worldViewProjection * model * vec4(a_vertexPosition, 1);
+
+			v_textureCoord = a_textureCoord;
+		}
+		`,
 	FRAGMENT: `
-				uniform sampler2D sampler;
+		uniform sampler2D sampler;
 
-				varying highp vec2 v_textureCoord;
+		varying highp vec2 v_textureCoord;
 
-        void main() {
-            gl_FragColor = texture2D(sampler, v_textureCoord);
-        }
+		void main() {
+			gl_FragColor = texture2D(sampler, v_textureCoord);
+		}
     `,
 };
 
