@@ -1,7 +1,11 @@
 import * as Graphics from "../../../lib/graphics.js";
 
 const _attributeSchema = new Graphics.AttributeSchema([
-	new Graphics.AttributeElement("a_position", 3, Graphics.AttributeType.FLOAT),
+	new Graphics.AttributeElement(
+		"a_vertexPosition",
+		3,
+		Graphics.AttributeType.FLOAT
+	),
 ]);
 
 export default class GeometryData {
