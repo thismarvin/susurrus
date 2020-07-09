@@ -103,11 +103,6 @@ export default class Sprite {
 			.setUniform2("sampler")
 			.setTexture(this.#texture.data)
 			.drawElements(DrawMode.TRIANGLES, this.#geometryData.totalTriangles, 0)
-			.deleteBuffer(
-				this.#geometryData.vertexBuffer,
-				this.#textureBuffer,
-				this.#modelBuffer
-			)
 			.end();
 	}
 }
