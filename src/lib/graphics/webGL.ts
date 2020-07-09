@@ -130,9 +130,13 @@ export function createTexture2DFromImage(
 	return texture;
 }
 
+// * At this point, this is really just my default OpenGL settings ._.
 export function enablePremultipliedAlpha(gl: WebGLRenderingContext) {
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+	gl.clearDepth(1);
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
 }
 
 export function clear(
