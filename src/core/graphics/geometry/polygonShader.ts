@@ -1,4 +1,4 @@
-const POLYGON_SHADERS = {
+const POLYGON_SHADER = {
 	VERTEX: `
 		uniform mat4 worldViewProjection;
 
@@ -54,6 +54,6 @@ const POLYGON_SHADERS = {
 	`,
 };
 
-Object.freeze(POLYGON_SHADERS);
+Object.freeze(POLYGON_SHADER);
 
-export { POLYGON_SHADERS as default };
+export { POLYGON_SHADER as default };
