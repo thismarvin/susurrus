@@ -4,7 +4,7 @@
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.esm.js",
-  "types": "./types/core/susurrus.d.ts",
+  "types": "./types/index.d.ts",
   "files": [
     "build",
     "dist"
