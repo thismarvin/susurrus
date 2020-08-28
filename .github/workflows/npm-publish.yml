@@ -17,7 +17,7 @@ jobs:
           node-version: 12
       - run: npm ci
       - run: npm run lint
-      - run: npm run build
+      - run: npm run publish
 
   publish-npm:
     needs: build
