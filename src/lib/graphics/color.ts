@@ -50,7 +50,16 @@ export default class Color {
 				break;
 			}
 			case "string": {
-				const hexAsNumber = parseInt(hex, 16);
+				let formatted = hex.toLowerCase().trim();
+				formatted =
+					formatted.substring(0, 1) == "#" ? formatted.substring(1) : formatted;
+
+				if (!/^[\da-f]{6}$/.test(formatted))
+					throw new TypeError(
+						"The given string could not be parsed as a hexadecimal value."
+					);
+
+				const hexAsNumber = parseInt(formatted, 16);
 				this.#r = this.validateValue(((hexAsNumber & 0xff0000) >> 16) / 255);
 				this.#g = this.validateValue(((hexAsNumber & 0xff00) >> 8) / 255);
 				this.#b = this.validateValue((hexAsNumber & 0xff) / 255);
