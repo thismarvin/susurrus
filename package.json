@@ -1,16 +1,16 @@
 {
   "name": "susurrus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.esm.js",
-  "types": "./types/core/susurrus.d.ts",
+  "types": "./typings/index.d.ts",
   "files": [
     "build",
     "dist"
   ],
   "scripts": {
-    "build": "rimraf ./build && rimraf ./types && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.js && prettier --use-tabs --write types/**/*.ts",
+    "build": "rimraf ./build && rimraf ./typings && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.js && prettier --use-tabs --write types/**/*.ts",
     "build:dev": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
     "dist": "rimraf ./dist && rollup -c ./rollup.config.js",
     "lint": "eslint ./src/** --ext .ts",

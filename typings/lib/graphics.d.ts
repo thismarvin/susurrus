@@ -10,6 +10,7 @@ export { default as Effect } from "./graphics/effect.js";
 export { default as GraphicsManager } from "./graphics/graphicsManager.js";
 export { default as IndexBuffer } from "./graphics/indexBuffer.js";
 export { default as Mesh } from "./graphics/mesh.js";
+export { default as Texture2D } from "./graphics/texture2D.js";
 export { default as VertexBuffer } from "./graphics/vertexBuffer.js";
 export { default as VertexUsage } from "./graphics/vertexUsage.js";
 export * as WebGL from "./graphics/webGL.js";

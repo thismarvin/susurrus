@@ -1,1 +1,0 @@
-{"version":3,"file":"mesh.d.ts","sourceRoot":"","sources":["../../../src/lib/graphics/mesh.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,IAAI;IACxB,SAAgB,QAAQ,EAAE,MAAM,EAAE,CAAC;IACnC,SAAgB,OAAO,EAAE,MAAM,EAAE,CAAC;IAElC,IAAW,aAAa,WAEvB;IAED,IAAW,YAAY,WAEtB;gBAEW,QAAQ,EAAE,MAAM,EAAE,EAAE,OAAO,EAAE,MAAM,EAAE;CAWjD"}

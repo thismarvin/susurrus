@@ -25,6 +25,17 @@ export declare function setIndexBufferData(
 	buffer: WebGLBuffer,
 	data: BufferSource
 ): void;
+export declare function loadImage(url: string): Promise<HTMLImageElement>;
+export declare function createTexture2D(
+	gl: WebGLRenderingContext,
+	width: number,
+	height: number,
+	pixels: Uint8Array
+): WebGLTexture;
+export declare function createTexture2DFromImage(
+	gl: WebGLRenderingContext,
+	image: HTMLImageElement
+): WebGLTexture;
 export declare function enablePremultipliedAlpha(
 	gl: WebGLRenderingContext
 ): void;
