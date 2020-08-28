@@ -1,5 +1,5 @@
 {
-  "name": "@thismarvin/susurrus",
+  "name": "susurrus",
   "version": "0.1.5",
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
