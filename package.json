@@ -1,6 +1,6 @@
 {
-  "name": "susurrus",
-  "version": "0.1.6",
+  "name": "@thismarvin/susurrus",
+  "version": "0.1.7",
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
   "module": "./dist/susurrus.esm.js",
