@@ -1,5 +1,5 @@
 {
-  "name": "susurrus",
+  "name": "@thismarvin/susurrus",
   "version": "0.1.4",
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
@@ -17,9 +17,6 @@
     "lint": "eslint ./src/** --ext .ts",
     "pretty": "prettier --use-tabs --write src/**/*.ts",
     "publish": "npm run build && npm run dist"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
