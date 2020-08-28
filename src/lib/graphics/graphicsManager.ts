@@ -4,7 +4,6 @@ import Color from "./color.js";
 // eslint-disable-next-line no-unused-vars
 import Effect from "./effect.js";
 // eslint-disable-next-line no-unused-vars
-import Buffer from "./buffer.js";
 import VertexBuffer from "./vertexBuffer.js";
 // eslint-disable-next-line no-unused-vars
 import IndexBuffer from "./indexBuffer.js";
@@ -136,12 +135,10 @@ export default class Graphics {
 					element.offset
 				);
 
-				if (buffers[i].instanceFrequency > 0) {
-					this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(
-						index,
-						buffers[i].instanceFrequency
-					);
-				}
+				this.extensions["ANGLE_instanced_arrays"].vertexAttribDivisorANGLE(
+					index,
+					buffers[i].instanceFrequency
+				);
 			}
 		}
 
@@ -165,6 +162,24 @@ export default class Graphics {
 
 		const location = this.gl.getUniformLocation(this.#currentProgram, uniform);
 		this.gl.uniformMatrix4fv(location, false, value);
+
+		return this;
+	}
+
+	public setUniform2(uniform: string) {
+		if (this.#currentProgram === null) {
+			throw new Error("'begin(effect)' must be called before setting a NULL.");
+		}
+
+		const location = this.gl.getUniformLocation(this.#currentProgram, uniform);
+		this.gl.uniform1i(location, 0);
+
+		return this;
+	}
+
+	public setTexture(texture: WebGLTexture) {
+		this.gl.activeTexture(this.gl.TEXTURE0);
+		this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
 
 		return this;
 	}
@@ -203,17 +218,16 @@ export default class Graphics {
 		return this;
 	}
 
-	public deleteBuffer(buffer: Buffer) {
+	// ? I am not sure if you ever really need to do this, but the method is here if you want.
+	public disableVertexBuffer(...buffers: VertexBuffer[]) {
 		if (this.#currentProgram === null) {
 			throw new Error(
 				"'begin(effect)' must be called before deleting a Buffer."
 			);
 		}
 
-		if (buffer instanceof VertexBuffer) {
-			const bufferVertexBuffer = buffer as VertexBuffer;
-
-			for (let element of bufferVertexBuffer.attributeSchema.elements) {
+		for (let i = 0; i < buffers.length; i++) {
+			for (let element of buffers[i].attributeSchema.elements) {
 				const index = this.gl.getAttribLocation(
 					this.#currentProgram,
 					element.name
@@ -228,8 +242,6 @@ export default class Graphics {
 				this.gl.disableVertexAttribArray(index);
 			}
 		}
-
-		this.gl.deleteBuffer(buffer.buffer);
 
 		return this;
 	}

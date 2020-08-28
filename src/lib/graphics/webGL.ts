@@ -52,9 +52,91 @@ export function setIndexBufferData(
 	_setBufferData(gl, gl.ELEMENT_ARRAY_BUFFER, buffer, data);
 }
 
+export async function loadImage(url: string) {
+	return new Promise<HTMLImageElement>((resolve, reject) => {
+		try {
+			const image = new Image();
+
+			image.onload = () => {
+				resolve(image);
+			};
+
+			image.src = url;
+		} catch (error) {
+			reject(error);
+		}
+	});
+}
+
+export function createTexture2D(
+	gl: WebGLRenderingContext,
+	width: number,
+	height: number,
+	pixels: Uint8Array
+) {
+	const texture = gl.createTexture();
+
+	if (texture === null) {
+		throw new Error("Something went wrong; could not create WebGLTexture.");
+	}
+
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texImage2D(
+		gl.TEXTURE_2D,
+		0,
+		gl.RGBA,
+		width,
+		height,
+		0,
+		gl.RGBA,
+		gl.UNSIGNED_BYTE,
+		pixels
+	);
+
+	if (_isPowerOfTwo(width) && _isPowerOfTwo(height)) {
+		gl.generateMipmap(gl.TEXTURE_2D);
+	} else {
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	}
+
+	return texture;
+}
+
+export function createTexture2DFromImage(
+	gl: WebGLRenderingContext,
+	image: HTMLImageElement
+) {
+	const texture = gl.createTexture();
+
+	if (texture === null) {
+		throw new Error("Something went wrong; could not create WebGLTexture.");
+	}
+
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+
+	if (_isPowerOfTwo(image.width) && _isPowerOfTwo(image.height)) {
+		gl.generateMipmap(gl.TEXTURE_2D);
+	} else {
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+	}
+
+	return texture;
+}
+
+// * At this point, this is really just my default OpenGL settings ._.
 export function enablePremultipliedAlpha(gl: WebGLRenderingContext) {
 	gl.enable(gl.BLEND);
 	gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+	gl.clearDepth(1);
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
 }
 
 export function clear(
@@ -149,5 +231,9 @@ function _createProgram(
 	}
 
 	return program;
+}
+
+function _isPowerOfTwo(value: number) {
+	return (value & (value - 1)) === 0;
 }
 //#endregion

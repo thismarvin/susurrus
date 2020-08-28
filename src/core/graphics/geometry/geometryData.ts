@@ -1,7 +1,11 @@
 import * as Graphics from "../../../lib/graphics.js";
 
 const _attributeSchema = new Graphics.AttributeSchema([
-	new Graphics.AttributeElement("a_position", 3, Graphics.AttributeType.FLOAT),
+	new Graphics.AttributeElement(
+		"a_vertexPosition",
+		3,
+		Graphics.AttributeType.FLOAT
+	),
 ]);
 
 export default class GeometryData {
@@ -18,8 +22,9 @@ export default class GeometryData {
 			Graphics.VertexUsage.STATIC
 		);
 		this.indexBuffer = new Graphics.IndexBuffer(graphics, mesh.indices.length);
+
 		this.totalVertices = mesh.totalVertices;
-		this.totalTriangles = mesh.totalIndices;
+		this.totalTriangles = mesh.totalIndices / 3;
 
 		this.vertexBuffer.setData(mesh.vertices);
 		this.indexBuffer.setData(mesh.indices);

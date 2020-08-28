@@ -1,8 +1,8 @@
 import * as Graphics from "../../../lib/graphics.js";
-import Shaders from "./polygonShaders.js";
+import Shader from "./polygonShader.js";
 
 export default class PolygonEffect extends Graphics.Effect {
 	constructor(graphics: Graphics.GraphicsManager) {
-		super(graphics, Shaders.VERTEX, Shaders.FRAGMENT);
+		super(graphics, Shader.VERTEX, Shader.FRAGMENT);
 	}
 }
