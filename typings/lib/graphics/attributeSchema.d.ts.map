@@ -1,0 +1,1 @@
+{"version":3,"file":"attributeSchema.d.ts","sourceRoot":"","sources":["../../../src/lib/graphics/attributeSchema.ts"],"names":[],"mappings":"AAGA,OAAO,gBAAgB,MAAM,uBAAuB,CAAC;AAiCrD,MAAM,CAAC,OAAO,OAAO,eAAe;IACnC,SAAgB,QAAQ,EAAE,gBAAgB,EAAE,CAAC;IAC7C,SAAgB,IAAI,EAAE,MAAM,CAAC;IAC7B,SAAgB,MAAM,EAAE,MAAM,CAAC;gBAEnB,QAAQ,EAAE,gBAAgB,EAAE;CAiBxC"}

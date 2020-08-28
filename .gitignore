@@ -2,7 +2,12 @@ node_modules
 node_modules.nosync
 .DS_Store
 .eslintcache
+/build
 /dev
 
+/.vscode
 index.html
 main.mjs
+main.css
+sprites.png
+

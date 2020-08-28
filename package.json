@@ -1,15 +1,20 @@
 {
   "name": "susurrus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "a simple lightweight javascript library intended to help create highly performant visualizations for the web.",
   "main": "./dist/susurrus.js",
-  "module": "./dist/susurrus.module.js",
+  "module": "./dist/susurrus.esm.js",
+  "types": "./typings/index.d.ts",
+  "files": [
+    "build",
+    "dist"
+  ],
   "scripts": {
-    "pretty": "prettier --use-tabs --write src/**/*.ts",
-    "lint": "eslint ./src/** --ext .ts",
-    "devbuild": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
-    "build": "rimraf ./build && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.{js,ts}",
+    "build": "rimraf ./build && rimraf ./typings && tsc -p ./configs/build/tsconfig.json && prettier --use-tabs --write build/**/*.js && prettier --use-tabs --write types/**/*.ts",
+    "build:dev": "rimraf ./dev && tsc -p ./configs/dev/tsconfig.json",
     "dist": "rimraf ./dist && rollup -c ./rollup.config.js",
+    "lint": "eslint ./src/** --ext .ts",
+    "pretty": "prettier --use-tabs --write src/**/*.ts",
     "release": "npm run build && npm run dist"
   },
   "repository": {
@@ -26,16 +31,16 @@
   },
   "homepage": "https://github.com/thismarvin/susurrus#readme",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.31.0",
-    "@typescript-eslint/parser": "^2.31.0",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
     "eslint": "^6.8.0",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.2",
-    "prettier": "^2.0.5",
+    "lint-staged": "^10.2.13",
+    "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.7.6",
+    "rollup": "^2.26.6",
     "rollup-plugin-terser": "^5.3.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.7"
   },
   "husky": {
     "hooks": {

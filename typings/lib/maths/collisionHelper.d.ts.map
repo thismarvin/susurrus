@@ -1,0 +1,1 @@
+{"version":3,"file":"collisionHelper.d.ts","sourceRoot":"","sources":["../../../src/lib/maths/collisionHelper.ts"],"names":[],"mappings":"AAEA,OAAO,OAAO,MAAM,cAAc,CAAC;AACnC,OAAO,WAAW,MAAM,kBAAkB,CAAC;AAE3C;;GAEG;AACH,UAAU,MAAM;IACf,QAAQ,EAAE,OAAO,EAAE,CAAC;IACpB,KAAK,EAAE,WAAW,EAAE,CAAC;CACrB;AAED;;;;GAIG;AACH,wBAAgB,aAAa,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,WAqCjD"}

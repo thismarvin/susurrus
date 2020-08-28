@@ -1,0 +1,1 @@
+{"version":3,"file":"gamepadState.d.ts","sourceRoot":"","sources":["../../../src/lib/input/gamepadState.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,YAAY;IAChC,SAAgB,OAAO,EAAE,OAAO,CAAC;gBAErB,OAAO,EAAE,OAAO;CAO5B"}

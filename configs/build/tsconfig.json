@@ -1,7 +1,9 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "../../build"
+		"outDir": "../../build",
+		"declarationDir": "../../typings",
+		"declarationMap": true
 	},
 	"include": [
 		"../../src/**/*"

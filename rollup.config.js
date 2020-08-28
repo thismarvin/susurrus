@@ -2,7 +2,7 @@ import { terser } from "rollup-plugin-terser";
 
 export default [
 	{
-		input: "./build/susurrus.js",
+		input: "./build/index.js",
 		output: [
 			{
 				format: "umd",
