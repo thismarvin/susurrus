@@ -20,7 +20,6 @@ export default class PolygonElements extends PolygonGroup {
 	#indices: number[];
 	#indexBuffer: Graphics.IndexBuffer;
 
-	#index: number;
 	#count: number;
 	#totalPrimitives: number;
 
@@ -66,7 +65,6 @@ export default class PolygonElements extends PolygonGroup {
 		);
 		this.#indexBuffer.setData(this.#indices);
 
-		this.#index = 0;
 		this.#count = 0;
 		this.#totalPrimitives = 0;
 
@@ -83,12 +81,12 @@ export default class PolygonElements extends PolygonGroup {
 		if (!(polygon.geometryData == this.#sharedGeometry)) return false;
 
 		const transform = [
-			polygon.scale.x,
-			polygon.scale.y,
+			polygon.width * polygon.scale.x,
+			polygon.height * polygon.scale.y,
 			polygon.scale.z,
-			polygon.translation.x,
-			polygon.translation.y,
-			polygon.translation.z,
+			polygon.position.x + polygon.translation.x,
+			polygon.position.y + polygon.translation.y,
+			polygon.position.z + polygon.translation.z,
 			polygon.origin.x,
 			polygon.origin.y,
 			polygon.origin.z,
@@ -98,39 +96,36 @@ export default class PolygonElements extends PolygonGroup {
 		];
 		const color = polygon.color.toArray();
 
+		let vertexPositionIndex =
+			this.#count * this.#sharedGeometry.mesh.vertices.length;
+
+		for (let i = 0; i < this.#sharedGeometry.mesh.vertices.length; i++) {
+			this.#vertexPositions[
+				vertexPositionIndex + i
+			] = this.#sharedGeometry.mesh.vertices[i];
+		}
+
+		let transformIndex =
+			this.#count * transform.length * this.#sharedGeometry.totalVertices;
+
 		for (let i = 0; i < this.#sharedGeometry.totalVertices; i++) {
-			this.#vertexPositions[
-				this.#index + i + 0
-			] = this.#sharedGeometry.mesh.vertices[i + 0];
-			this.#vertexPositions[
-				this.#index + i + 1
-			] = this.#sharedGeometry.mesh.vertices[i + 1];
-			this.#vertexPositions[
-				this.#index + i + 2
-			] = this.#sharedGeometry.mesh.vertices[i + 2];
+			for (let j = 0; j < transform.length; j++) {
+				this.#transforms[transformIndex + i * transform.length + j] =
+					transform[j];
+			}
+		}
 
-			this.#transforms[this.#index + i + 0] = transform[0];
-			this.#transforms[this.#index + i + 1] = transform[1];
-			this.#transforms[this.#index + i + 2] = transform[2];
-			this.#transforms[this.#index + i + 3] = transform[3];
-			this.#transforms[this.#index + i + 4] = transform[4];
-			this.#transforms[this.#index + i + 5] = transform[5];
-			this.#transforms[this.#index + i + 6] = transform[6];
-			this.#transforms[this.#index + i + 7] = transform[7];
-			this.#transforms[this.#index + i + 8] = transform[8];
-			this.#transforms[this.#index + i + 9] = transform[9];
-			this.#transforms[this.#index + i + 10] = transform[10];
-			this.#transforms[this.#index + i + 11] = transform[11];
+		let colorIndex =
+			this.#count * color.length * this.#sharedGeometry.totalVertices;
 
-			this.#colors[this.#index + i + 0] = color[0];
-			this.#colors[this.#index + i + 1] = color[1];
-			this.#colors[this.#index + i + 2] = color[2];
-			this.#colors[this.#index + i + 3] = color[3];
+		for (let i = 0; i < this.#sharedGeometry.totalVertices; i++) {
+			for (let j = 0; j < color.length; j++) {
+				this.#colors[colorIndex + i * color.length + j] = color[j];
+			}
 		}
 
 		this.#dataModified = true;
 
-		this.#index += this.#sharedGeometry.totalVertices;
 		this.#count++;
 		this.#totalPrimitives += this.#sharedGeometry.totalTriangles;
 
@@ -161,6 +156,8 @@ export default class PolygonElements extends PolygonGroup {
 		);
 
 		console.log(this.#vertexPositions);
+		console.log(this.#transforms);
+		console.log(this.#colors);
 
 		this.#transformBuffer = new Graphics.VertexBuffer(
 			this.graphics,
