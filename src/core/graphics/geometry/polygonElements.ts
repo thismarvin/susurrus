@@ -155,10 +155,6 @@ export default class PolygonElements extends PolygonGroup {
 			this.#vertexPositions.slice(0, vertexCount * 3)
 		);
 
-		console.log(this.#vertexPositions);
-		console.log(this.#transforms);
-		console.log(this.#colors);
-
 		this.#transformBuffer = new Graphics.VertexBuffer(
 			this.graphics,
 			new Graphics.AttributeSchema([
