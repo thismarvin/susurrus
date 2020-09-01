@@ -17,13 +17,12 @@ export default class PolygonElements extends PolygonGroup {
 	#transforms: number[];
 	#colors: number[];
 
-	#indices: number[];
-	#indexBuffer: Graphics.IndexBuffer;
-
 	#count: number;
 	#totalPrimitives: number;
-
 	#dataModified: boolean;
+
+	#indices: number[];
+	#indexBuffer: Graphics.IndexBuffer;
 
 	#vertexPositionBuffer: Graphics.VertexBuffer | null;
 	#transformBuffer: Graphics.VertexBuffer | null;
@@ -45,8 +44,16 @@ export default class PolygonElements extends PolygonGroup {
 		this.#vertexPositions = new Array(this.batchSize * totalVertices * 3).fill(
 			0
 		);
-		this.#transforms = new Array(this.batchSize * totalVertices * 12).fill(0);
-		this.#colors = new Array(this.batchSize * totalVertices * 4).fill(0);
+		this.#transforms = new Array(
+			this.batchSize * totalVertices * this.transformSize
+		).fill(0);
+		this.#colors = new Array(
+			this.batchSize * totalVertices * this.colorSize
+		).fill(0);
+
+		this.#count = 0;
+		this.#totalPrimitives = 0;
+		this.#dataModified = false;
 
 		this.#indices = new Array(this.batchSize * totalIndices).fill(0);
 		for (let i = 0; i < this.batchSize; i++) {
@@ -65,11 +72,6 @@ export default class PolygonElements extends PolygonGroup {
 		);
 		this.#indexBuffer.setData(this.#indices);
 
-		this.#count = 0;
-		this.#totalPrimitives = 0;
-
-		this.#dataModified = false;
-
 		this.#vertexPositionBuffer = null;
 		this.#transformBuffer = null;
 		this.#colorBuffer = null;
@@ -78,23 +80,10 @@ export default class PolygonElements extends PolygonGroup {
 	public add(polygon: Polygon) {
 		if (this.#count >= this.batchSize) return false;
 
-		if (!(polygon.geometryData == this.#sharedGeometry)) return false;
+		if (polygon.geometryData != this.#sharedGeometry) return false;
 
-		const transform = [
-			polygon.width * polygon.scale.x,
-			polygon.height * polygon.scale.y,
-			polygon.scale.z,
-			polygon.position.x + polygon.translation.x,
-			polygon.position.y + polygon.translation.y,
-			polygon.position.z + polygon.translation.z,
-			polygon.origin.x,
-			polygon.origin.y,
-			polygon.origin.z,
-			polygon.rotation.x,
-			polygon.rotation.y,
-			polygon.rotation.z,
-		];
-		const color = polygon.color.toArray();
+		const transform = this.calculateTransformData(polygon);
+		const color = this.calculateColorData(polygon);
 
 		let vertexPositionIndex =
 			this.#count * this.#sharedGeometry.mesh.vertices.length;
@@ -124,10 +113,10 @@ export default class PolygonElements extends PolygonGroup {
 			}
 		}
 
-		this.#dataModified = true;
-
 		this.#count++;
 		this.#totalPrimitives += this.#sharedGeometry.totalTriangles;
+
+		this.#dataModified = true;
 
 		return true;
 	}
@@ -149,12 +138,8 @@ export default class PolygonElements extends PolygonGroup {
 				),
 			]),
 			vertexCount * 3,
-			Graphics.VertexUsage.STATIC
+			Graphics.VertexUsage.DYNAMIC
 		);
-		this.#vertexPositionBuffer.setData(
-			this.#vertexPositions.slice(0, vertexCount * 3)
-		);
-
 		this.#transformBuffer = new Graphics.VertexBuffer(
 			this.graphics,
 			new Graphics.AttributeSchema([
@@ -179,11 +164,9 @@ export default class PolygonElements extends PolygonGroup {
 					Graphics.AttributeType.FLOAT
 				),
 			]),
-			vertexCount * 12,
-			Graphics.VertexUsage.STATIC
+			vertexCount * this.transformSize,
+			Graphics.VertexUsage.DYNAMIC
 		);
-		this.#transformBuffer.setData(this.#transforms.slice(0, vertexCount * 12));
-
 		this.#colorBuffer = new Graphics.VertexBuffer(
 			this.graphics,
 			new Graphics.AttributeSchema([
@@ -193,15 +176,30 @@ export default class PolygonElements extends PolygonGroup {
 					Graphics.AttributeType.FLOAT
 				),
 			]),
-			vertexCount * 4,
-			Graphics.VertexUsage.STATIC
+			vertexCount * this.colorSize,
+			Graphics.VertexUsage.DYNAMIC
 		);
-		this.#colorBuffer.setData(this.#colors.slice(0, vertexCount * 4));
+
+		this.#vertexPositionBuffer.setData(
+			this.#vertexPositions.slice(0, vertexCount * 3)
+		);
+		this.#transformBuffer.setData(
+			this.#transforms.slice(0, vertexCount * this.transformSize)
+		);
+		this.#colorBuffer.setData(
+			this.#colors.slice(0, vertexCount * this.colorSize)
+		);
 
 		this.#dataModified = false;
 	}
 
 	public draw(camera: Camera) {
+		if (this.#dataModified) {
+			throw new Error(
+				"The polygon group was modified, but applyChanges() was never called."
+			);
+		}
+
 		if (
 			this.#vertexPositionBuffer === null ||
 			this.#transformBuffer === null ||
