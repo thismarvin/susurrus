@@ -44,8 +44,8 @@ export function createRegularPolygonMesh(totalVertices: number) {
 
 function _createSquare() {
 	return new Graphics.Mesh(
-		[0, 0, 0, 1, 0, 0, 1, -1, 0, 0, -1, 0],
-		[0, 3, 1, 1, 3, 2]
+		[0, 0, 0, 0, -1, 0, 1, -1, 0, 1, 0, 0],
+		[0, 1, 2, 0, 2, 3]
 	);
 }
 
