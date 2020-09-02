@@ -63,4 +63,8 @@ export default abstract class Buffer {
 			}
 		}
 	}
+
+	public dispose() {
+		this.#graphics.gl.deleteBuffer(this.buffer);
+	}
 }
