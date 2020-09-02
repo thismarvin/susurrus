@@ -133,4 +133,9 @@ export default class PolygonElementsInstanced extends PolygonGroup {
 			)
 			.end();
 	}
+
+	protected onDispose() {
+		this.#transformBuffer?.dispose();
+		this.#colorBuffer?.dispose();
+	}
 }

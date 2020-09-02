@@ -27,6 +27,12 @@ export default class PolygonBatcher extends Batcher<Polygon> {
 	}
 
 	public begin() {
+		// ? I am not sure if I have to include this for loop, but Firefox claims there are thousands of arrays just lying around.
+		// ? Including this extra step seems to mitigate that issue.
+		for (let i = 0; i < this.#polygons.length; i++) {
+			this.#polygons[i].splice(0);
+		}
+
 		this.#polygons.splice(0);
 
 		this.#polygons.push([]);
@@ -39,7 +45,7 @@ export default class PolygonBatcher extends Batcher<Polygon> {
 		this.#polygons[this.#polygons.length - 1].push(polygon);
 		this.#index++;
 
-		if (this.#index > this.batchSize) {
+		if (this.#index >= this.batchSize) {
 			this.#polygons.push([]);
 			this.#index = 0;
 		}
@@ -66,6 +72,7 @@ export default class PolygonBatcher extends Batcher<Polygon> {
 				this.#polygons[i]
 			);
 			polygonCollection.draw(this.camera);
+			polygonCollection.dispose();
 		}
 
 		this.camera = null;

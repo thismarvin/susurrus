@@ -188,4 +188,11 @@ export default class PolygonElements extends PolygonGroup {
 			.drawElements(Graphics.DrawMode.TRIANGLES, this.#totalPrimitives, 0)
 			.end();
 	}
+
+	protected onDispose() {
+		this.#vertexPositionBuffer?.dispose();
+		this.#transformBuffer?.dispose();
+		this.#colorBuffer?.dispose();
+		this.#indexBuffer?.dispose();
+	}
 }

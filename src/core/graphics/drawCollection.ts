@@ -1,16 +1,20 @@
 // eslint-disable-next-line no-unused-vars
+import IDisposable from "../IDisposable.js";
+// eslint-disable-next-line no-unused-vars
 import DrawGroup from "./drawGroup.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../camera.js";
 // eslint-disable-next-line no-unused-vars
 import * as Graphics from "../../lib/graphics.js";
 
-export default abstract class DrawCollection<T> {
+export default abstract class DrawCollection<T> implements IDisposable {
 	protected readonly graphics: Graphics.GraphicsManager;
 	protected readonly batchExecution: number;
 	protected readonly batchSize: number;
 
 	protected groups: DrawGroup<T>[];
+
+	#disposed: boolean;
 
 	constructor(
 		graphics: Graphics.GraphicsManager,
@@ -22,6 +26,8 @@ export default abstract class DrawCollection<T> {
 		this.batchSize = batchSize;
 
 		this.groups = [];
+
+		this.#disposed = false;
 
 		Object.defineProperty(this, "graphics", {
 			writable: false,
@@ -73,6 +79,15 @@ export default abstract class DrawCollection<T> {
 	public draw(camera: Camera) {
 		for (let i = 0; i < this.groups.length; i++) {
 			this.groups[i].draw(camera);
+		}
+	}
+
+	public dispose() {
+		if (!this.#disposed) {
+			for (let i = 0; i < this.groups.length; i++) {
+				this.groups[i].dispose();
+			}
+			this.#disposed = true;
 		}
 	}
 }
