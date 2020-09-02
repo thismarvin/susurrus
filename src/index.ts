@@ -23,6 +23,7 @@ export { default as PolygonEffect } from "./core/graphics/geometry/polygonEffect
 export { default as GeometryData } from "./core/graphics/geometry/geometryData.js";
 export { default as Polygon } from "./core/graphics/geometry/polygon.js";
 export { default as PolygonCollection } from "./core/graphics/geometry/polygonCollection.js";
+export { default as PolygonBatcher } from "./core/graphics/geometry/polygonBatcher.js";
 
 export { InputHandler } from "./lib/input.js";
 export { InputProfile } from "./lib/input.js";

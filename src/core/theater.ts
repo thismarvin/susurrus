@@ -4,12 +4,22 @@ import SceneManager from "./sceneManager.js";
 import GeometryManager from "./graphics/geometry/geometryManager.js";
 import Factory from "./factory.js";
 
+import PolygonBatcher from "./graphics/geometry/polygonBatcher.js";
+import PolygonEffect from "./graphics/geometry/polygonEffect.js";
+
 export default class Theater {
 	public readonly smartKeyboard: Input.SmartKeyboard;
 	public readonly smartPointer: Input.SmartPointer;
 
 	public readonly sceneManager: SceneManager;
 	public readonly factory: Factory;
+
+	// ? Not sure where to put this. I need like a Art class or something...
+	public get polygonBatcher() {
+		return this.#polygonBatcher;
+	}
+	#polygonEffect: PolygonEffect | null;
+	#polygonBatcher: PolygonBatcher | null;
 
 	public loop: boolean;
 
@@ -65,6 +75,9 @@ export default class Theater {
 
 		this.sceneManager = new SceneManager();
 		this.factory = new Factory(this);
+
+		this.#polygonEffect = null;
+		this.#polygonBatcher = null;
 
 		this.loop = true;
 		this.#initialized = false;
@@ -156,6 +169,12 @@ export default class Theater {
 
 		this.#geometryManager = new GeometryManager(this.#graphics);
 		this.factory.attachGraphics(this.#graphics);
+
+		this.#polygonEffect = new PolygonEffect(this.#graphics);
+		this.#polygonBatcher = new PolygonBatcher(
+			this.#graphics,
+			this.#polygonEffect
+		);
 
 		this.smartPointer.attachElement(this.#canvas);
 	}
