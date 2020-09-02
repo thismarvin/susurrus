@@ -39,7 +39,7 @@ const POLYGON_SHADER = {
 		}
 
 		mat4 caclulateTransform(vec3 scale, vec3 translation, vec3 origin, vec3 rotation) {
-			return createTranslation(translation - origin) * createRotation(rotation) * createTranslation(origin) * createScale(scale);
+			return createTranslation(translation + origin) * createRotation(rotation) * createTranslation(-origin) * createScale(scale);
 		}
 
 		void main() {
