@@ -1,3 +1,4 @@
+import * as AttributeSchemas from "./attributeSchemas.js";
 import BatchExecution from "../batchExecution.js";
 import PolygonGroup from "./polygonGroup.js";
 // eslint-disable-next-line no-unused-vars
@@ -81,41 +82,14 @@ export default class PolygonElementsInstanced extends PolygonGroup {
 
 		this.#transformBuffer = new Graphics.VertexBuffer(
 			this.graphics,
-			new Graphics.AttributeSchema([
-				new Graphics.AttributeElement(
-					"a_scale",
-					3,
-					Graphics.AttributeType.FLOAT
-				),
-				new Graphics.AttributeElement(
-					"a_translation",
-					3,
-					Graphics.AttributeType.FLOAT
-				),
-				new Graphics.AttributeElement(
-					"a_origin",
-					3,
-					Graphics.AttributeType.FLOAT
-				),
-				new Graphics.AttributeElement(
-					"a_rotation",
-					3,
-					Graphics.AttributeType.FLOAT
-				),
-			]),
+			AttributeSchemas.TRANSFORM,
 			this.#count * this.transformSize,
 			Graphics.VertexUsage.DYNAMIC,
 			1
 		);
 		this.#colorBuffer = new Graphics.VertexBuffer(
 			this.graphics,
-			new Graphics.AttributeSchema([
-				new Graphics.AttributeElement(
-					"a_color",
-					3,
-					Graphics.AttributeType.FLOAT
-				),
-			]),
+			AttributeSchemas.COLOR,
 			this.#count * this.colorSize,
 			Graphics.VertexUsage.DYNAMIC,
 			1
