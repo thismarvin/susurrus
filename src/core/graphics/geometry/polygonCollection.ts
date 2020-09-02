@@ -3,6 +3,7 @@ import Polygon from "./polygon.js";
 // eslint-disable-next-line no-unused-vars
 import PolygonEffect from "./polygonEffect.js";
 import PolygonElements from "./polygonElements.js";
+import PolygonElementsInstanced from "./polygonElementsInstanced.js";
 import BatchExecution from "../batchExecution.js";
 import DrawCollection from "../drawCollection.js";
 // eslint-disable-next-line no-unused-vars
@@ -37,6 +38,13 @@ export default class PolygonCollection extends DrawCollection<Polygon> {
 		switch (this.batchExecution) {
 			case BatchExecution.DRAW_ELEMENTS:
 				return new PolygonElements(
+					this.graphics,
+					this.polygonEffect,
+					this.batchSize,
+					polygon.geometryData
+				);
+			case BatchExecution.DRAW_ELEMENTS_INSTANCED:
+				return new PolygonElementsInstanced(
 					this.graphics,
 					this.polygonEffect,
 					this.batchSize,

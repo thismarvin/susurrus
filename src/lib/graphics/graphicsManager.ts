@@ -201,18 +201,18 @@ export default class Graphics {
 		return this;
 	}
 
-	public drawInstancedElements(
+	public drawElementsInstanced(
 		mode: number,
 		totalTriangles: number,
 		offset: number,
-		primitiveCount: number
+		instanceCount: number
 	) {
 		this.extensions["ANGLE_instanced_arrays"].drawElementsInstancedANGLE(
 			mode,
 			totalTriangles * 3,
 			this.gl.UNSIGNED_SHORT,
 			offset,
-			primitiveCount
+			instanceCount
 		);
 
 		return this;
