@@ -25,6 +25,7 @@ export default class PolygonCollection extends DrawCollection<Polygon> {
 
 		if (entries !== undefined) {
 			this.addRange(entries);
+			this.applyChanges();
 		}
 	}
 
