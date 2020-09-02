@@ -3,141 +3,81 @@ import * as Maths from "../../../lib/maths.js";
 // eslint-disable-next-line no-unused-vars
 import GeometryData from "./geometryData.js";
 
-//const _attributeSchema = new Graphics.AttributeSchema([
-//new Graphics.AttributeElement("a_scale", 3, Graphics.AttributeType.FLOAT),
-//new Graphics.AttributeElement(
-//"a_translation",
-//3,
-//Graphics.AttributeType.FLOAT
-//),
-//new Graphics.AttributeElement(
-//"a_origin",
-//3,
-//Graphics.AttributeType.FLOAT
-//),
-//new Graphics.AttributeElement("a_origin", 3, Graphics.AttributeType.FLOAT),
-//new Graphics.AttributeElement("a_color", 4, Graphics.AttributeType.FLOAT),
-//]);
-
-export default abstract class Polygon {
+export default class Polygon {
 	//#region Getters and Setters
 	get position() {
 		return this.#position;
 	}
 	set position(value) {
-		if (value == this.#position) {
-			return;
-		}
-
-		this.#position = value;
+		this.setPosition(value.x, value.y, value.z);
 	}
 
 	get x() {
 		return this.#position.x;
 	}
 	set x(value) {
-		if (value === this.#position.x) {
-			return;
-		}
-
-		this.#position.x = value;
+		this.setPosition(value, this.#position.y, this.#position.z);
 	}
 	get y() {
 		return this.#position.y;
 	}
 	set y(value) {
-		if (value === this.#position.y) {
-			return;
-		}
-
-		this.#position.y = value;
+		this.setPosition(this.#position.x, value, this.#position.z);
 	}
 	get z() {
 		return this.#position.z;
 	}
 	set z(value) {
-		if (value === this.#position.z) {
-			return;
-		}
-
-		this.#position.z = value;
+		this.setPosition(this.#position.x, this.#position.y, value);
 	}
 
 	get width() {
 		return this.#width;
 	}
 	set width(value) {
-		if (value === this.#width) {
-			return;
-		}
-
-		this.#width = value;
+		this.setDimensions(value, this.#height);
 	}
 
 	get height() {
 		return this.#height;
 	}
 	set height(value) {
-		if (value === this.#height) {
-			return;
-		}
-
-		this.#height = value;
+		this.setDimensions(this.#width, value);
 	}
 
 	get scale() {
 		return this.#scale;
 	}
 	set scale(value) {
-		if (value === this.#scale) {
-			return;
-		}
-
-		this.#scale = value;
+		this.setScale(value.x, value.y, value.z);
 	}
 
 	get translation() {
 		return this.#translation;
 	}
 	set translation(value) {
-		if (value === this.#translation) {
-			return;
-		}
-
-		this.#translation = value;
+		this.setTranslation(value.x, value.y, value.z);
 	}
 
 	get origin() {
 		return this.#origin;
 	}
 	set origin(value) {
-		if (value === this.#origin) {
-			return;
-		}
-
-		this.#origin = value;
+		this.setOrigin(value.x, value.y, value.z);
 	}
 
 	get rotation() {
 		return this.#rotation;
 	}
 	set rotation(value) {
-		if (value === this.#rotation) {
-			return;
-		}
-
-		this.#rotation = value;
+		this.setRotation(value.x, value.y, value.z);
 	}
 
 	get color() {
 		return this.#color;
 	}
 	set color(value) {
-		if (value === this.#color) {
-			return;
-		}
-
-		this.#color = value;
+		this.setColor(value);
 	}
 
 	get geometryData() {
@@ -189,6 +129,12 @@ export default abstract class Polygon {
 		this.#transformCache = new Maths.Matrix4();
 	}
 
+	public attachGeometry(geometry: GeometryData) {
+		this.#geometryData = geometry;
+
+		return this;
+	}
+
 	public setPosition(x: number, y: number, z: number) {
 		this.#position.x = x;
 		this.#position.y = y;
@@ -199,37 +145,60 @@ export default abstract class Polygon {
 		return this;
 	}
 
-	public attachGeometry(geometry: GeometryData) {
-		this.#geometryData = geometry;
+	public setDimensions(width: number, height: number) {
+		this.#width = width;
+		this.#height = height;
+
+		this.#transformChanged = true;
 
 		return this;
 	}
 
-	/**
-	 * Creates a buffer that handles model specific transformations and properties.
-	 * @param graphics The current theater's GraphicsManager.
-	 */
-	//public createModelBuffer(graphics: Graphics.GraphicsManager) {
-	//this.#meshChanged = false;
-	//// I hate this but for some reason Blink doesnt bode well with VertexUsage.DYNAMIC.
-	//// Refer to this issue for more info: https://github.com/thismarvin/susurrus/issues/5
-	//let modelLength = _attributeSchema.size;
-	//if (Utilities.BrowserDetection.IS_BLINK) {
-	//modelLength *= this.#mesh.totalVertices;
-	//}
+	public setColor(color: Graphics.Color) {
+		this.#color = color;
 
-	//this.#modelBuffer = new Graphics.VertexBuffer(
-	//graphics,
-	//_attributeSchema,
-	//modelLength,
-	//Graphics.VertexUsage.DYNAMIC,
-	//1
-	//);
+		return this;
+	}
 
-	//this.updateModelBuffer();
+	public setScale(x: number, y: number, z: number) {
+		this.#scale.x = x;
+		this.#scale.y = y;
+		this.#scale.z = z;
 
-	//return this;
-	//}
+		this.#transformChanged = true;
+
+		return this;
+	}
+
+	public setTranslation(x: number, y: number, z: number) {
+		this.#translation.x = x;
+		this.#translation.y = y;
+		this.#translation.z = z;
+
+		this.#transformChanged = true;
+
+		return this;
+	}
+
+	public setOrigin(x: number, y: number, z: number) {
+		this.#origin.x = x;
+		this.#origin.y = y;
+		this.#origin.z = z;
+
+		this.#transformChanged = true;
+
+		return this;
+	}
+
+	public setRotation(roll: number, pitch: number, yaw: number) {
+		this.#rotation.x = roll;
+		this.#rotation.y = pitch;
+		this.#rotation.z = yaw;
+
+		this.#transformChanged = true;
+
+		return this;
+	}
 
 	/**
 	 * Creates and returns a 4x4 matrix that represents all of the polygon's transformations.
@@ -268,45 +237,4 @@ export default abstract class Polygon {
 
 		return this.#transformCache;
 	}
-
-	//public draw(graphics: Graphics.GraphicsManager, camera: Camera) {
-	//graphics
-	//.begin(this.#effect)
-	//.setVertexBuffer(this.#geometryData.vertexBuffer, this.#modelBuffer)
-	//.setIndexBuffer(this.#geometryData.indexBuffer)
-	//.setUniform("worldViewProjection", camera.wvp.data)
-	//.drawElements(
-	//Graphics.DrawMode.TRIANGLES,
-	//this.#geometryData.totalTriangles,
-	//0
-	//)
-	//.end();
-	//}
-
-	//private updateModelBuffer() {
-	//if (this.#modelBuffer === null) {
-	//return;
-	//}
-
-	//let bufferData: number[] = [];
-	//bufferData = bufferData.concat(
-	//new Maths.Vector3(
-	//this.#x + this.translation.x,
-	//this.#y + this.translation.y,
-	//this.#z + this.translation.z
-	//).toArray()
-	//);
-	//bufferData = bufferData.concat(
-	//new Maths.Vector3(
-	//this.#width * this.#scale.x,
-	//this.#height * this.#scale.y,
-	//this.#scale.z
-	//).toArray()
-	//);
-	//bufferData = bufferData.concat(this.#rotationOffset.toArray());
-	//bufferData = bufferData.concat(this.#rotation);
-	//bufferData = bufferData.concat(this.#color.toArray());
-
-	//this.#modelBuffer.setData(bufferData);
-	//}
 }
