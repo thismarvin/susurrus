@@ -1,4 +1,5 @@
 import SpriteMirroringType from "./spriteMirroringType.js";
+import ImageRegion from "./imageRegion.js";
 import * as Graphics from "../../lib/graphics.js";
 import * as Maths from "../../lib/maths.js";
 
@@ -29,7 +30,7 @@ export default class Sprite {
 	#rotation: Maths.Vector3;
 	#color: Graphics.Color;
 
-	#sampleRegion: Graphics.ImageRegion;
+	#sampleRegion: ImageRegion;
 	#spriteMirroring: number;
 
 	constructor() {
@@ -44,7 +45,7 @@ export default class Sprite {
 		this.#rotation = new Maths.Vector3(0, 0, 0);
 		this.#color = new Graphics.Color(0xffffff);
 
-		this.#sampleRegion = new Graphics.ImageRegion(0, 0, 0, 0);
+		this.#sampleRegion = new ImageRegion(0, 0, 0, 0);
 		this.#spriteMirroring = SpriteMirroringType.NONE;
 	}
 
