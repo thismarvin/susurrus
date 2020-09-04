@@ -102,8 +102,6 @@ export default class Sprite {
 	}
 
 	#texture: Graphics.Texture2D | null;
-	#texelWidth: number;
-	#texelHeight: number;
 
 	#position: Maths.Vector3;
 	#scale: Maths.Vector3;
@@ -117,8 +115,6 @@ export default class Sprite {
 
 	constructor() {
 		this.#texture = null;
-		this.#texelWidth = 0;
-		this.#texelHeight = 0;
 
 		this.#position = new Maths.Vector3(0, 0, 0);
 		this.#scale = new Maths.Vector3(1, 1, 1);
@@ -133,8 +129,6 @@ export default class Sprite {
 
 	public setTexture(texture: Graphics.Texture2D) {
 		this.#texture = texture;
-		this.#texelWidth = 1.0 / texture.width;
-		this.#texelHeight = 1.0 / texture.height;
 
 		return this;
 	}
@@ -198,6 +192,76 @@ export default class Sprite {
 		this.#rotation.z = yaw;
 
 		return this;
+	}
+
+	public static calculateTextureCoords(sprite: Sprite) {
+		const topLeft = new Maths.Vector2(
+			Maths.MathExt.remapRange(
+				sprite.sampleRegion.x,
+				0,
+				sprite.texture.width,
+				0,
+				1
+			),
+			Maths.MathExt.remapRange(
+				sprite.sampleRegion.y,
+				0,
+				sprite.texture.height,
+				0,
+				1
+			)
+		);
+		const topRight = Maths.Vector2.add(
+			topLeft,
+			new Maths.Vector2(
+				sprite.texture.texelWidth * sprite.sampleRegion.width,
+				0
+			)
+		);
+		const bottomRight = Maths.Vector2.add(
+			topLeft,
+			new Maths.Vector2(
+				sprite.texture.texelWidth * sprite.sampleRegion.width,
+				sprite.texture.texelHeight * sprite.sampleRegion.height
+			)
+		);
+		const bottomLeft = Maths.Vector2.add(
+			topLeft,
+			new Maths.Vector2(
+				0,
+				sprite.texture.texelHeight * sprite.sampleRegion.height
+			)
+		);
+
+		const corners = [topLeft, bottomLeft, bottomRight, topRight];
+
+		if (
+			(sprite.spriteMirroring & SpriteMirroringType.FLIP_HORIZONTALLY) !=
+			SpriteMirroringType.NONE
+		) {
+			let temp = corners[0].clone();
+			corners[0] = corners[3];
+			corners[3] = temp;
+
+			temp = corners[1];
+			corners[1] = corners[2];
+			corners[2] = temp;
+		}
+
+		if (
+			(sprite.spriteMirroring & SpriteMirroringType.FLIP_VERTICALLY) !=
+			SpriteMirroringType.NONE
+		) {
+			let temp = corners[0];
+			corners[0] = corners[1];
+			corners[1] = temp;
+
+			temp = corners[3];
+			corners[3] = corners[2];
+			corners[2] = temp;
+		}
+
+		return corners;
 	}
 
 	//public createTextureBuffer(graphics: GraphicsManager) {
