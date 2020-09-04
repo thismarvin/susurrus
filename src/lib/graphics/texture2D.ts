@@ -11,25 +11,39 @@ export default class Texture2D {
 		return this.#height;
 	}
 
+	public get texelWidth() {
+		return this.#texelWidth;
+	}
+
+	public get texelHeight() {
+		return this.#texelHeight;
+	}
+
 	public get data() {
 		return this.#data;
 	}
 
 	#width: number;
 	#height: number;
+	#texelWidth: number;
+	#texelHeight: number;
 	#data: WebGLTexture | null;
 
 	constructor(width?: number, height?: number) {
 		this.#width = 0;
 		this.#height = 0;
+		this.#texelWidth = 0;
+		this.#texelHeight = 0;
 		this.#data = null;
 
 		if (width !== undefined) {
 			this.#width = width;
+			this.#texelWidth = 1 / this.#width;
 		}
 
 		if (height !== undefined) {
 			this.#height = height;
+			this.#texelHeight = 1 / this.#height;
 		}
 	}
 
@@ -37,7 +51,7 @@ export default class Texture2D {
 		this.#data = WebGL.createTexture2D(
 			graphics.gl,
 			this.#width,
-			this.height,
+			this.#height,
 			pixels
 		);
 	}
