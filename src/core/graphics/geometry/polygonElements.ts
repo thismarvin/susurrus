@@ -86,7 +86,7 @@ export default class PolygonElements extends PolygonGroup {
 		const transform = this.calculateTransformData(polygon);
 		const color = this.calculateColorData(polygon);
 
-		let vertexPositionIndex =
+		const vertexPositionIndex =
 			this.#count * this.#sharedGeometry.mesh.vertices.length;
 
 		for (let i = 0; i < this.#sharedGeometry.mesh.vertices.length; i++) {
@@ -95,7 +95,7 @@ export default class PolygonElements extends PolygonGroup {
 			] = this.#sharedGeometry.mesh.vertices[i];
 		}
 
-		let transformIndex =
+		const transformIndex =
 			this.#count * transform.length * this.#sharedGeometry.totalVertices;
 
 		for (let i = 0; i < this.#sharedGeometry.totalVertices; i++) {
@@ -105,7 +105,7 @@ export default class PolygonElements extends PolygonGroup {
 			}
 		}
 
-		let colorIndex =
+		const colorIndex =
 			this.#count * color.length * this.#sharedGeometry.totalVertices;
 
 		for (let i = 0; i < this.#sharedGeometry.totalVertices; i++) {

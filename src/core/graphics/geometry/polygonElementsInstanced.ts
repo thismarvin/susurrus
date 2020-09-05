@@ -56,13 +56,13 @@ export default class PolygonElementsInstanced extends PolygonGroup {
 		const transform = this.calculateTransformData(polygon);
 		const color = this.calculateColorData(polygon);
 
-		let transformIndex = this.#count * transform.length;
+		const transformIndex = this.#count * transform.length;
 
 		for (let i = 0; i < transform.length; i++) {
 			this.#transforms[transformIndex + i] = transform[i];
 		}
 
-		let colorIndex = this.#count * color.length;
+		const colorIndex = this.#count * color.length;
 
 		for (let i = 0; i < color.length; i++) {
 			this.#colors[colorIndex + i] = color[i];
