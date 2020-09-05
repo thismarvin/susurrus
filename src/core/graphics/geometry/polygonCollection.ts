@@ -10,7 +10,7 @@ import DrawCollection from "../drawCollection.js";
 import * as Graphics from "../../../lib/graphics.js";
 
 export default class PolygonCollection extends DrawCollection<Polygon> {
-	private readonly polygonEffect: PolygonEffect;
+	#polygonEffect: PolygonEffect;
 
 	constructor(
 		graphics: Graphics.GraphicsManager,
@@ -21,7 +21,7 @@ export default class PolygonCollection extends DrawCollection<Polygon> {
 	) {
 		super(graphics, batchExecution, batchSize);
 
-		this.polygonEffect = polygonEffect;
+		this.#polygonEffect = polygonEffect;
 
 		if (entries !== undefined) {
 			this.addRange(entries);
@@ -40,14 +40,14 @@ export default class PolygonCollection extends DrawCollection<Polygon> {
 			case BatchExecution.DRAW_ELEMENTS:
 				return new PolygonElements(
 					this.graphics,
-					this.polygonEffect,
+					this.#polygonEffect,
 					this.batchSize,
 					polygon.geometryData
 				);
 			case BatchExecution.DRAW_ELEMENTS_INSTANCED:
 				return new PolygonElementsInstanced(
 					this.graphics,
-					this.polygonEffect,
+					this.#polygonEffect,
 					this.batchSize,
 					polygon.geometryData
 				);
