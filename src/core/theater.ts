@@ -6,6 +6,8 @@ import Factory from "./factory.js";
 
 import PolygonBatcher from "./graphics/geometry/polygonBatcher.js";
 import PolygonEffect from "./graphics/geometry/polygonEffect.js";
+import SpriteBatcher from "./graphics/spriteBatcher.js";
+import SpriteEffect from "./graphics/spriteEffect.js";
 
 export default class Theater {
 	public readonly smartKeyboard: Input.SmartKeyboard;
@@ -20,6 +22,11 @@ export default class Theater {
 	}
 	#polygonEffect: PolygonEffect | null;
 	#polygonBatcher: PolygonBatcher | null;
+	public get spriteBatcher() {
+		return this.#spriteBatcher;
+	}
+	#spriteEffect: SpriteEffect | null;
+	#spriteBatcher: SpriteBatcher | null;
 
 	public loop: boolean;
 
@@ -78,6 +85,8 @@ export default class Theater {
 
 		this.#polygonEffect = null;
 		this.#polygonBatcher = null;
+		this.#spriteEffect = null;
+		this.#spriteBatcher = null;
 
 		this.loop = true;
 		this.#initialized = false;
@@ -174,6 +183,14 @@ export default class Theater {
 		this.#polygonBatcher = new PolygonBatcher(
 			this.#graphics,
 			this.#polygonEffect
+		);
+
+		this.#spriteEffect = new SpriteEffect(this.#graphics);
+		this.#spriteBatcher = new SpriteBatcher(
+			this.#graphics,
+			this.#spriteEffect,
+			//@ts-ignore
+			this.#geometryManager.getGeometry("Susurrus_Square")
 		);
 
 		this.smartPointer.attachElement(this.#canvas);
