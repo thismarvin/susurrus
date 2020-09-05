@@ -16,6 +16,10 @@ export default class Sprite {
 		return this.#texture;
 	}
 	set texture(value) {
+		if (value === null) {
+			return;
+		}
+
 		this.setTexture(value);
 	}
 
@@ -130,6 +134,16 @@ export default class Sprite {
 	public setTexture(texture: Graphics.Texture2D) {
 		this.#texture = texture;
 
+		if (
+			this.#sampleRegion.x === 0 &&
+			this.#sampleRegion.y === 0 &&
+			this.#sampleRegion.width === 0 &&
+			this.#sampleRegion.height === 0
+		) {
+			this.#sampleRegion.width = this.#texture.width;
+			this.#sampleRegion.height = this.#texture.height;
+		}
+
 		return this;
 	}
 
@@ -195,6 +209,12 @@ export default class Sprite {
 	}
 
 	public static calculateTextureCoords(sprite: Sprite) {
+		if (sprite.texture === null) {
+			throw new TypeError(
+				"The given sprite does not have a texture; cannot calculate texture coordinates."
+			);
+		}
+
 		const topLeft = new Maths.Vector2(
 			Maths.MathExt.remapRange(
 				sprite.sampleRegion.x,
@@ -261,7 +281,16 @@ export default class Sprite {
 			corners[2] = temp;
 		}
 
-		return corners;
+		return [
+			corners[0].x,
+			corners[0].y,
+			corners[1].x,
+			corners[1].y,
+			corners[2].x,
+			corners[2].y,
+			corners[3].x,
+			corners[3].y,
+		];
 	}
 
 	//public createTextureBuffer(graphics: GraphicsManager) {
