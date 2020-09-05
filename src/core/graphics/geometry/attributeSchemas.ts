@@ -22,3 +22,11 @@ export const TRANSFORM = new Graphics.AttributeSchema([
 export const COLOR = new Graphics.AttributeSchema([
 	new Graphics.AttributeElement("a_color", 4, Graphics.AttributeType.FLOAT),
 ]);
+
+export const TEXTURE_COORD = new Graphics.AttributeSchema([
+	new Graphics.AttributeElement(
+		"a_textureCoord",
+		2,
+		Graphics.AttributeType.FLOAT
+	),
+]);
