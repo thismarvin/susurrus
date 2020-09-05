@@ -1,11 +1,11 @@
 import * as Graphics from "../lib/graphics.js";
 import * as Input from "../lib/input.js";
 import SceneManager from "./sceneManager.js";
-import GeometryManager from "./graphics/geometry/geometryManager.js";
+import GeometryManager from "./graphics/geometryManager.js";
 import Factory from "./factory.js";
 
-import PolygonBatcher from "./graphics/geometry/polygonBatcher.js";
-import PolygonEffect from "./graphics/geometry/polygonEffect.js";
+import PolygonBatcher from "./graphics/polygonBatcher.js";
+import PolygonEffect from "./graphics/polygonEffect.js";
 import SpriteBatcher from "./graphics/spriteBatcher.js";
 import SpriteEffect from "./graphics/spriteEffect.js";
 

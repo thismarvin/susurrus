@@ -1,7 +1,7 @@
 import BatchExecution from "./batchExecution.js";
 import DrawCollection from "./drawCollection.js";
 // eslint-disable-next-line no-unused-vars
-import GeometryData from "./geometry/geometryData.js";
+import GeometryData from "./geometryData.js";
 // eslint-disable-next-line no-unused-vars
 import Sprite from "./sprite.js";
 // eslint-disable-next-line no-unused-vars

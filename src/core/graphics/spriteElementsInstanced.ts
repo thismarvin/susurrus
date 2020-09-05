@@ -1,9 +1,9 @@
-import * as AttributeSchemas from "./geometry/attributeSchemas.js";
+import * as AttributeSchemas from "./attributeSchemas.js";
 import BatchExecution from "./batchExecution.js";
 // eslint-disable-next-line no-unused-vars
 import Camera from "../camera.js";
 // eslint-disable-next-line no-unused-vars
-import GeometryData from "./geometry/geometryData.js";
+import GeometryData from "./geometryData.js";
 // eslint-disable-next-line no-unused-vars
 import Sprite from "./sprite.js";
 // eslint-disable-next-line no-unused-vars

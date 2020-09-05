@@ -6,7 +6,7 @@ import SpriteCollection from "./spriteCollection.js";
 // eslint-disable-next-line no-unused-vars
 import SpriteEffect from "./spriteEffect.js";
 // eslint-disable-next-line no-unused-vars
-import GeometryData from "./geometry/geometryData.js";
+import GeometryData from "./geometryData.js";
 // eslint-disable-next-line no-unused-vars
 import * as Graphics from "../../lib/graphics.js";
 

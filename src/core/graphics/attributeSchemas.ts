@@ -1,4 +1,4 @@
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 export const VERTEX_POSITION = new Graphics.AttributeSchema([
 	new Graphics.AttributeElement(

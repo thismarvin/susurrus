@@ -1,4 +1,4 @@
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 const _attributeSchema = new Graphics.AttributeSchema([
 	new Graphics.AttributeElement(

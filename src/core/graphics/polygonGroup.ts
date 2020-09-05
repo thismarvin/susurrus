@@ -1,10 +1,10 @@
-import DrawGroup from "../drawGroup.js";
+import DrawGroup from "./drawGroup.js";
 // eslint-disable-next-line no-unused-vars
 import Polygon from "./polygon.js";
 // eslint-disable-next-line no-unused-vars
 import PolygonEffect from "./polygonEffect.js";
 // eslint-disable-next-line no-unused-vars
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 export default abstract class PolygonGroup extends DrawGroup<Polygon> {
 	protected readonly transformSize: number;

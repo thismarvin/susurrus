@@ -1,4 +1,4 @@
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 export const SQUARE = _createSquare();
 export const TRIANGLE = _createTriangle();

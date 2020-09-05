@@ -1,12 +1,12 @@
-import Batcher from "../batcher.js";
-import BatchExecution from "../batchExecution.js";
+import Batcher from "./batcher.js";
+import BatchExecution from "./batchExecution.js";
 // eslint-disable-next-line no-unused-vars
 import Polygon from "./polygon.js";
 // eslint-disable-next-line no-unused-vars
 import PolygonEffect from "./polygonEffect.js";
 import PolygonCollection from "./polygonCollection.js";
 // eslint-disable-next-line no-unused-vars
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 const _maxBatchSize = 4096;
 

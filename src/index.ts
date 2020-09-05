@@ -14,16 +14,16 @@ export { Texture2D } from "./lib/graphics.js";
 export { VertexBuffer } from "./lib/graphics.js";
 export { VertexUsage } from "./lib/graphics.js";
 
+export { default as BatchExecution } from "./core/graphics/batchExecution.js";
 export * as Palettes from "./core/graphics/palettes.js";
 export { default as Sprite } from "./core/graphics/sprite.js";
+export { default as SpriteCollection } from "./core/graphics/spriteCollection.js";
 export { default as SpriteEffect } from "./core/graphics/spriteEffect.js";
-export { default as BatchExecution } from "./core/graphics/batchExecution.js";
 
-export { default as PolygonEffect } from "./core/graphics/geometry/polygonEffect.js";
-export { default as GeometryData } from "./core/graphics/geometry/geometryData.js";
-export { default as Polygon } from "./core/graphics/geometry/polygon.js";
-export { default as PolygonCollection } from "./core/graphics/geometry/polygonCollection.js";
-export { default as PolygonBatcher } from "./core/graphics/geometry/polygonBatcher.js";
+export { default as PolygonEffect } from "./core/graphics/polygonEffect.js";
+export { default as GeometryData } from "./core/graphics/geometryData.js";
+export { default as Polygon } from "./core/graphics/polygon.js";
+export { default as PolygonCollection } from "./core/graphics/polygonCollection.js";
 
 export { InputHandler } from "./lib/input.js";
 export { InputProfile } from "./lib/input.js";

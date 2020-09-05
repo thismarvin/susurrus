@@ -1,5 +1,5 @@
 import * as AttributeSchemas from "./attributeSchemas.js";
-import BatchExecution from "../batchExecution.js";
+import BatchExecution from "./batchExecution.js";
 import PolygonGroup from "./polygonGroup.js";
 // eslint-disable-next-line no-unused-vars
 import GeometryData from "./geometryData.js";
@@ -8,8 +8,8 @@ import Polygon from "./polygon.js";
 // eslint-disable-next-line no-unused-vars
 import PolygonEffect from "./polygonEffect.js";
 // eslint-disable-next-line no-unused-vars
-import Camera from "../../camera.js";
-import * as Graphics from "../../../lib/graphics.js";
+import Camera from "../camera.js";
+import * as Graphics from "../../lib/graphics.js";
 
 export default class PolygonElements extends PolygonGroup {
 	#sharedGeometry: GeometryData;

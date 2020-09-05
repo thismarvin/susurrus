@@ -2,7 +2,7 @@
 import { GraphicsManager } from "../lib/graphics.js";
 // eslint-disable-next-line no-unused-vars
 import Theater from "./theater.js";
-import PolygonEffect from "./graphics/geometry/polygonEffect.js";
+import PolygonEffect from "./graphics/polygonEffect.js";
 
 export default class Factory {
 	#theater: Theater;

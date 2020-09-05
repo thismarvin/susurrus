@@ -4,10 +4,10 @@ import Polygon from "./polygon.js";
 import PolygonEffect from "./polygonEffect.js";
 import PolygonElements from "./polygonElements.js";
 import PolygonElementsInstanced from "./polygonElementsInstanced.js";
-import BatchExecution from "../batchExecution.js";
-import DrawCollection from "../drawCollection.js";
+import BatchExecution from "./batchExecution.js";
+import DrawCollection from "./drawCollection.js";
 // eslint-disable-next-line no-unused-vars
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 export default class PolygonCollection extends DrawCollection<Polygon> {
 	#polygonEffect: PolygonEffect;

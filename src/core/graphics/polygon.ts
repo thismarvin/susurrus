@@ -1,5 +1,5 @@
-import * as Graphics from "../../../lib/graphics.js";
-import * as Maths from "../../../lib/maths.js";
+import * as Graphics from "../../lib/graphics.js";
+import * as Maths from "../../lib/maths.js";
 // eslint-disable-next-line no-unused-vars
 import GeometryData from "./geometryData.js";
 
