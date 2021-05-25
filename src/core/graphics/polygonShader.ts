@@ -1,4 +1,4 @@
-const SPRITE_SHADERS = {
+const POLYGON_SHADER = {
 	VERTEX: `
 		uniform mat4 worldViewProjection;
 
@@ -8,10 +8,8 @@ const SPRITE_SHADERS = {
 		attribute vec3 a_origin;
 		attribute vec3 a_rotation;
 		attribute vec4 a_color;
-		attribute vec2 a_textureCoord;
 
 		varying lowp vec4 v_color;
-		varying highp vec2 v_textureCoord;
 
 		mat4 createTranslation(vec3 translation) {
 			return mat4(
@@ -49,21 +47,17 @@ const SPRITE_SHADERS = {
 			gl_Position = worldViewProjection * transform * vec4(a_vertexPosition, 1);
 
 			v_color = a_color;
-			v_textureCoord = a_textureCoord;
 		}
-		`,
+	`,
 	FRAGMENT: `
-		uniform sampler2D sampler;
-
 		varying lowp vec4 v_color;
-		varying highp vec2 v_textureCoord;
 
 		void main() {
-			gl_FragColor = texture2D(sampler, v_textureCoord) * v_color;
+			gl_FragColor = v_color;
 		}
-    `,
+	`,
 };
 
-Object.freeze(SPRITE_SHADERS);
+Object.freeze(POLYGON_SHADER);
 
-export { SPRITE_SHADERS as default };
+export { POLYGON_SHADER as default };

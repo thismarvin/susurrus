@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
-import * as Graphics from "../../../lib/graphics.js";
-import * as Utilities from "../../../lib/utilities.js";
+import * as Graphics from "../../lib/graphics.js";
+import * as Utilities from "../../lib/utilities.js";
 import * as Meshes from "./meshes.js";
 import GeometryData from "./geometryData.js";
 

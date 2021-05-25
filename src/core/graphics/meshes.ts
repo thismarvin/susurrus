@@ -1,4 +1,4 @@
-import * as Graphics from "../../../lib/graphics.js";
+import * as Graphics from "../../lib/graphics.js";
 
 export const SQUARE = _createSquare();
 export const TRIANGLE = _createTriangle();
@@ -44,8 +44,8 @@ export function createRegularPolygonMesh(totalVertices: number) {
 
 function _createSquare() {
 	return new Graphics.Mesh(
-		[0, 0, 0, 1, 0, 0, 1, -1, 0, 0, -1, 0],
-		[0, 3, 1, 1, 3, 2]
+		[0, 0, 0, 0, -1, 0, 1, -1, 0, 1, 0, 0],
+		[0, 1, 2, 0, 2, 3]
 	);
 }
 
